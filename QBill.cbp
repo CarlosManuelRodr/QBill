@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="QBill" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/QBill" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/exec/" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/QBill" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/exec/" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-w" />
+			<Add option="-fexceptions" />
+			<Add option="`wx-config --cxxflags`" />
+			<Add option="-DUNICODE" />
+			<Add option="-D_UNICODE" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+		</Linker>
+		<Unit filename="src/BinaryOps.cpp" />
+		<Unit filename="src/BinaryOps.h" />
+		<Unit filename="src/BmpWriter.cpp" />
+		<Unit filename="src/BmpWriter.h" />
+		<Unit filename="src/ConfigParser.cpp" />
+		<Unit filename="src/ConfigParser.h" />
+		<Unit filename="src/CutBill.cpp" />
+		<Unit filename="src/CutBill.h" />
+		<Unit filename="src/Matrix.h" />
+		<Unit filename="src/Palette.cpp" />
+		<Unit filename="src/Palette.h" />
+		<Unit filename="src/Plotter.cpp" />
+		<Unit filename="src/Plotter.h" />
+		<Unit filename="src/QCutBill.cpp" />
+		<Unit filename="src/QCutBill.h" />
+		<Unit filename="src/StringFuncs.cpp" />
+		<Unit filename="src/StringFuncs.h" />
+		<Unit filename="src/Styles.h" />
+		<Unit filename="src/gradient.cpp" />
+		<Unit filename="src/gradient.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/muParserX/mpDefines.h" />
+		<Unit filename="src/muParserX/mpError.cpp" />
+		<Unit filename="src/muParserX/mpError.h" />
+		<Unit filename="src/muParserX/mpFuncCmplx.cpp" />
+		<Unit filename="src/muParserX/mpFuncCmplx.h" />
+		<Unit filename="src/muParserX/mpFuncCommon.cpp" />
+		<Unit filename="src/muParserX/mpFuncCommon.h" />
+		<Unit filename="src/muParserX/mpFuncMatrix.cpp" />
+		<Unit filename="src/muParserX/mpFuncMatrix.h" />
+		<Unit filename="src/muParserX/mpFuncNonCmplx.cpp" />
+		<Unit filename="src/muParserX/mpFuncNonCmplx.h" />
+		<Unit filename="src/muParserX/mpFuncStr.cpp" />
+		<Unit filename="src/muParserX/mpFuncStr.h" />
+		<Unit filename="src/muParserX/mpFwdDecl.h" />
+		<Unit filename="src/muParserX/mpICallback.cpp" />
+		<Unit filename="src/muParserX/mpICallback.h" />
+		<Unit filename="src/muParserX/mpIOprt.cpp" />
+		<Unit filename="src/muParserX/mpIOprt.h" />
+		<Unit filename="src/muParserX/mpIPackage.cpp" />
+		<Unit filename="src/muParserX/mpIPackage.h" />
+		<Unit filename="src/muParserX/mpIPrecedence.h" />
+		<Unit filename="src/muParserX/mpIToken.cpp" />
+		<Unit filename="src/muParserX/mpIToken.h" />
+		<Unit filename="src/muParserX/mpIValReader.cpp" />
+		<Unit filename="src/muParserX/mpIValReader.h" />
+		<Unit filename="src/muParserX/mpIValue.cpp" />
+		<Unit filename="src/muParserX/mpIValue.h" />
+		<Unit filename="src/muParserX/mpIfThenElse.cpp" />
+		<Unit filename="src/muParserX/mpIfThenElse.h" />
+		<Unit filename="src/muParserX/mpMatrix.h" />
+		<Unit filename="src/muParserX/mpMatrixError.h" />
+		<Unit filename="src/muParserX/mpOprtBinAssign.cpp" />
+		<Unit filename="src/muParserX/mpOprtBinAssign.h" />
+		<Unit filename="src/muParserX/mpOprtBinCommon.cpp" />
+		<Unit filename="src/muParserX/mpOprtBinCommon.h" />
+		<Unit filename="src/muParserX/mpOprtCmplx.cpp" />
+		<Unit filename="src/muParserX/mpOprtCmplx.h" />
+		<Unit filename="src/muParserX/mpOprtIndex.cpp" />
+		<Unit filename="src/muParserX/mpOprtIndex.h" />
+		<Unit filename="src/muParserX/mpOprtMatrix.cpp" />
+		<Unit filename="src/muParserX/mpOprtMatrix.h" />
+		<Unit filename="src/muParserX/mpOprtNonCmplx.cpp" />
+		<Unit filename="src/muParserX/mpOprtNonCmplx.h" />
+		<Unit filename="src/muParserX/mpPackageCmplx.cpp" />
+		<Unit filename="src/muParserX/mpPackageCmplx.h" />
+		<Unit filename="src/muParserX/mpPackageCommon.cpp" />
+		<Unit filename="src/muParserX/mpPackageCommon.h" />
+		<Unit filename="src/muParserX/mpPackageMatrix.cpp" />
+		<Unit filename="src/muParserX/mpPackageMatrix.h" />
+		<Unit filename="src/muParserX/mpPackageNonCmplx.cpp" />
+		<Unit filename="src/muParserX/mpPackageNonCmplx.h" />
+		<Unit filename="src/muParserX/mpPackageStr.cpp" />
+		<Unit filename="src/muParserX/mpPackageStr.h" />
+		<Unit filename="src/muParserX/mpPackageUnit.cpp" />
+		<Unit filename="src/muParserX/mpPackageUnit.h" />
+		<Unit filename="src/muParserX/mpParser.cpp" />
+		<Unit filename="src/muParserX/mpParser.h" />
+		<Unit filename="src/muParserX/mpParserBase.cpp" />
+		<Unit filename="src/muParserX/mpParserBase.h" />
+		<Unit filename="src/muParserX/mpRPN.cpp" />
+		<Unit filename="src/muParserX/mpRPN.h" />
+		<Unit filename="src/muParserX/mpScriptTokens.cpp" />
+		<Unit filename="src/muParserX/mpScriptTokens.h" />
+		<Unit filename="src/muParserX/mpStack.h" />
+		<Unit filename="src/muParserX/mpTest.cpp" />
+		<Unit filename="src/muParserX/mpTest.h" />
+		<Unit filename="src/muParserX/mpTokenReader.cpp" />
+		<Unit filename="src/muParserX/mpTokenReader.h" />
+		<Unit filename="src/muParserX/mpTypes.h" />
+		<Unit filename="src/muParserX/mpValReader.cpp" />
+		<Unit filename="src/muParserX/mpValReader.h" />
+		<Unit filename="src/muParserX/mpValue.cpp" />
+		<Unit filename="src/muParserX/mpValue.h" />
+		<Unit filename="src/muParserX/mpValueCache.cpp" />
+		<Unit filename="src/muParserX/mpValueCache.h" />
+		<Unit filename="src/muParserX/mpVariable.cpp" />
+		<Unit filename="src/muParserX/mpVariable.h" />
+		<Unit filename="src/muParserX/suSortPred.h" />
+		<Unit filename="src/muParserX/utGeneric.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
