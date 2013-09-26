@@ -27,4 +27,4 @@ public:
 };
 
 simres sim_billiard(BillParams param);
-Grid QuantumBill(BillParams param, double (*disturbance)(double));
+Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log = true, std::ostream *out = NULL);

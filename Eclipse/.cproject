@@ -120,7 +120,7 @@
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
-								<outputType id="cdt.managedbuild.tool.gnu.cpp.linker.output.1919298740" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.cpp.linker.output"/>
+								<outputType id="cdt.managedbuild.tool.gnu.cpp.linker.output.1919298740" outputPrefix="../bin/" superClass="cdt.managedbuild.tool.gnu.cpp.linker.output"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.release.312055480" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.release">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1389619136" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>

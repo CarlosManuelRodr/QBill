@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include <fstream>
 #include "QCutBill.h"
 #include "muParserX/mpParser.h"
 #include <CMRMLib/CMRM.h>
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
     string paramFile;
     if(argc == 1)
     {
-        paramFile = "params.ini";
+        paramFile = "Resources/params.ini";
     }
     else
     {
@@ -95,9 +96,10 @@ int main(int argc, char *argv[])
 		wxGradient grad;
 		bool relative, colorOutput;
 		int gradMax;
-		string gradString;
+		string colorPrefix, gradString;
 		cp.BoolArgToVar(colorOutput, "Color_Output", false);
 		cp.IntArgToVar(gradMax, "Palette_Size", 300);
+		cp.StringArgToVar(colorPrefix, "Color_Prefix", "out_");
 		cp.StringArgToVar(gradString, "Color", "rgb(0,0,0);rgb(255,255,255);");
 		cp.BoolArgToVar(relative, "Relative_Color", true);
 
@@ -108,12 +110,28 @@ int main(int argc, char *argv[])
 		palette.SetRelativeColor(relative);
 
 		// Csv output.
-		bool csvOutput, skipEmpty, plotCsv;
+		bool csvOutput, skipEmpty;
 		string csvPath, csvPrefix;
 		cp.BoolArgToVar(csvOutput, "Csv_Output", false);
 		cp.StringArgToVar(csvPrefix, "Csv_Prefix", "out_");
 		cp.BoolArgToVar(skipEmpty, "Skip_Empty", false);
+
+		// Plotting.
+		bool plotCsv, makeVideo;
+		string plotter;
 		cp.BoolArgToVar(plotCsv, "Plot_Csv", false);
+		cp.BoolArgToVar(makeVideo,"Make_Video", false);
+		cp.StringArgToVar(plotter, "Plotter", "Mathematica");
+
+		// Format output directories.
+		system("sh Resources/Scripts/create_directories.sh");
+
+		// Create log.
+		ofstream file;
+		file.open("log.txt");
+		file << "QBill log - ";
+		file << cmrm::GetCurrentDateTime() << endl;
+		file << "-------------------------------" << endl;
 
         // Start simulation.
         Parser_Init(perturbation);
@@ -121,9 +139,9 @@ int main(int argc, char *argv[])
         cout << "Simulating..." << endl;
         for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
         {
-            loadBar(i, steps, steps, 30, phi);
+            if(Min_Phi != Max_Phi) loadBar(i, steps, steps, 30, phi);
             param.phi = phi;
-            Grid qb = QuantumBill(param, &Parser_Eval);
+            Grid qb = QuantumBill(param, &Parser_Eval, true, &file);
 
             if(colorOutput)
             {
@@ -157,7 +175,7 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				string outName = "out/qb_";
+				string outName = colorPrefix;
 				outName += num_to_string(param.phi);
 				outName += ".bmp";
 				BMPPlot(out, outName);
@@ -190,11 +208,17 @@ int main(int argc, char *argv[])
             i++;
         }
         cout << "Done." << endl;
+        file.close();
 
         if(plotCsv && csvOutput)
         {
         	cout << "Plotting csv.. " << endl;
-        	system("math -script Plotter.m");
+        	if(plotter == "Mathematica")
+        		system("math -script Resources/Scripts/Plotter.m");
+
+        	if(makeVideo)
+        		system("sh Resources/Scripts/make_video.sh");
+
         	cout << "Done." << endl;
         }
     }

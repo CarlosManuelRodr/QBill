@@ -39,19 +39,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: QBill
+all: ../bin/QBill
 
 # Tool invocations
-QBill: $(OBJS) $(USER_OBJS)
+../bin/QBill: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "QBill" $(OBJS) $(USER_OBJS) $(LIBS) `wx-config --libs`
+	g++ -o "../bin/QBill" $(OBJS) $(USER_OBJS) $(LIBS) `wx-config --libs`
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) QBill
+	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) ../bin/QBill
 	-@echo ' '
 
 .PHONY: all clean dependents

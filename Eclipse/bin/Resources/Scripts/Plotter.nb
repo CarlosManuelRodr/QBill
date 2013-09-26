@@ -1,0 +1,1008 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     39499,        999]
+NotebookOptionsPosition[     38860,        974]
+NotebookOutlinePosition[     39198,        989]
+CellTagsIndexPosition[     39155,        986]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", 
+   "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/out/csv\>\"", 
+   "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"files", " ", "=", " ", 
+   RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ";", " ", 
+    RowBox[{"csvFiles", " ", "=", " ", 
+     RowBox[{"{", "}"}]}], ";", " ", 
+    RowBox[{"\[Phi]s", " ", "=", " ", 
+     RowBox[{"{", "}"}]}]}], ",", " ", 
+   RowBox[{"i", "<=", 
+    RowBox[{"Length", "[", "files", "]"}]}], ",", " ", 
+   RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"FileExtension", "[", 
+       RowBox[{"files", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], " ", "\[Equal]", " ", 
+      "\"\<csv\>\""}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Obtener", " ", "valor", " ", "de", " ", "omega"}], " ", "*)"}],
+      "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"begin", " ", "=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<_\>\""}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"end", " ", "=", 
+       RowBox[{
+        RowBox[{"Last", "[", 
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<.\>\""}], "]"}], 
+         "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ph", " ", "=", " ", 
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"StringTake", "[", 
+         RowBox[{
+          RowBox[{"files", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"begin", "+", "1"}], ",", 
+            RowBox[{"end", "-", "1"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"csvFiles", ",", " ", 
+        RowBox[{"files", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"\[Phi]s", ",", " ", "ph"}], "]"}], ";"}], 
+     "\[IndentingNewLine]", ",", "False"}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"csvFiles", " ", "=", " ", 
+   RowBox[{"csvFiles", "[", 
+    RowBox[{"[", 
+     RowBox[{"Ordering", "[", "\[Phi]s", "]"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]s", " ", "=", " ", 
+   RowBox[{"Sort", "[", "\[Phi]s", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "dMax", ",", " ", "Data", ",", "scaledData", ",", "label", ",", "j"}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Data", " ", "=", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{"csvFiles", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"dMax", " ", "=", " ", 
+       RowBox[{"Max", "[", 
+        RowBox[{"Data", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "3"}], "]"}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"j", "=", "1"}], ";", " ", 
+         RowBox[{"scaledData", "=", 
+          RowBox[{"{", "}"}]}]}], ",", 
+        RowBox[{"j", "<", 
+         RowBox[{"Length", "[", "Data", "]"}]}], ",", 
+        RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"scaledData", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "2", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "3", "]"}], "]"}]}], "}"}]}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"label", " ", "=", " ", 
+       RowBox[{"\"\<\[Phi] = \>\"", " ", "<>", " ", 
+        RowBox[{"ToString", "[", 
+         RowBox[{"\[Phi]s", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Show", "[", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"ParametricPlot3D", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Sin", "[", "t", "]"}], ",", 
+             RowBox[{"Cos", "[", "t", "]"}], ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"t", ",", "0", ",", 
+             RowBox[{"2", "\[Pi]"}]}], "}"}]}], "]"}], ","}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"ListPlot3D", "[", 
+        RowBox[{"scaledData", ",", 
+         RowBox[{"PlotRange", "\[Rule]", "range"}], ",", " ", 
+         RowBox[{"PlotLabel", "\[Rule]", 
+          RowBox[{"Style", "[", 
+           RowBox[{"label", ",", "14"}], "]"}]}], ",", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}], ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<a\>\"", ",", " ", "13"}], "]"}]}], "}"}]}], ",", 
+         RowBox[{"AxesOrigin", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}]}]}], " ", "]"}], 
+       "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", 
+     RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"range", ",", 
+     RowBox[{"{", 
+      RowBox[{"Full", ",", "Automatic"}], "}"}]}], "}"}]}], 
+  "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.586559720855736*^9, 3.586559771098171*^9}, {
+   3.586559802235421*^9, 3.586559808881596*^9}, {3.586560204790678*^9, 
+   3.586560239012088*^9}, {3.586560364267959*^9, 3.5865605104672728`*^9}, {
+   3.5866184696955357`*^9, 3.586618504479178*^9}, {3.586621520538199*^9, 
+   3.586621528711184*^9}, {3.586621584980955*^9, 3.586621585584614*^9}, 
+   3.5866216187898703`*^9, {3.586621687190061*^9, 3.5866216987407503`*^9}, {
+   3.5872539253533688`*^9, 3.587253934409835*^9}, {3.588348336421193*^9, 
+   3.588348346651613*^9}, {3.5883488021292562`*^9, 3.5883488293446712`*^9}, {
+   3.5883489120081453`*^9, 3.5883489681375732`*^9}, {3.588348999099679*^9, 
+   3.5883490131795*^9}, {3.5883501367256737`*^9, 3.5883501869170113`*^9}, {
+   3.588351868654832*^9, 3.58835188366308*^9}, 3.588354163323579*^9, {
+   3.588354757476218*^9, 3.588354760333214*^9}, {3.5883553283220367`*^9, 
+   3.588355443296452*^9}, {3.5883555085610647`*^9, 3.5883555168735123`*^9}, {
+   3.58835555692693*^9, 3.588355607366899*^9}, {3.588614538701599*^9, 
+   3.5886145400095*^9}, {3.588626215545042*^9, 3.5886262777190523`*^9}, {
+   3.588626381404706*^9, 3.588626381659988*^9}, {3.588626663606909*^9, 
+   3.588626664211898*^9}, {3.5886301250115137`*^9, 3.588630173872123*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`i$$ = 4, $CellContext`range$$ = Automatic, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`i$$], 1, 11, 1}, {
+      Hold[$CellContext`range$$], {Full, Automatic}}}, Typeset`size$$ = {
+    360., {153., 158.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`i$11220$$ = 
+    0, $CellContext`range$11221$$ = False}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`i$$ = 1, $CellContext`range$$ = Full}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`i$$, $CellContext`i$11220$$, 0], 
+        Hold[$CellContext`range$$, $CellContext`range$11221$$, False]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Module[{$CellContext`dMax$, $CellContext`Data$, \
+$CellContext`scaledData$, $CellContext`label$, $CellContext`j$}, \
+$CellContext`Data$ = Import[
+           Part[$CellContext`csvFiles, $CellContext`i$$]]; $CellContext`dMax$ = 
+         Max[
+           Part[$CellContext`Data$, All, 3]]; 
+        For[$CellContext`j$ = 
+           1; $CellContext`scaledData$ = {}, $CellContext`j$ < 
+          Length[$CellContext`Data$], 
+          Increment[$CellContext`j$], 
+          AppendTo[$CellContext`scaledData$, {
+            Part[
+             Part[$CellContext`Data$, $CellContext`j$], 1], 
+            Part[
+             Part[$CellContext`Data$, $CellContext`j$], 2], 
+            Part[
+             Part[$CellContext`Data$, $CellContext`j$], 
+             3]}]]; $CellContext`label$ = StringJoin["\[Phi] = ", 
+           ToString[
+            Part[$CellContext`\[Phi]s, $CellContext`i$$]]]; Show[
+          
+          ListPlot3D[$CellContext`scaledData$, 
+           PlotRange -> $CellContext`range$$, PlotLabel -> 
+           Style[$CellContext`label$, 14], AxesLabel -> {
+             Style["x", 13], 
+             Style["y", 13], 
+             Style["a", 13]}, AxesOrigin -> {0, 0, 0}]]], 
+      "Specifications" :> {{$CellContext`i$$, 1, 11, 
+         1}, {$CellContext`range$$, {Full, Automatic}}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{407., {222., 229.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.588630144481194*^9, 3.588630174389797*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{"2", "d", " ", "map"}], " ", "*)"}]], "Input",
+ CellChangeTimes->{{3.587256244224944*^9, 3.58725625170407*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", 
+   "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/out/csv\>\"", 
+   "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"files", " ", "=", " ", 
+   RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ";", " ", 
+    RowBox[{"csvFiles", " ", "=", " ", 
+     RowBox[{"{", "}"}]}], ";", " ", 
+    RowBox[{"\[Phi]s", " ", "=", " ", 
+     RowBox[{"{", "}"}]}]}], ",", " ", 
+   RowBox[{"i", "<=", 
+    RowBox[{"Length", "[", "files", "]"}]}], ",", " ", 
+   RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"FileExtension", "[", 
+       RowBox[{"files", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], " ", "\[Equal]", " ", 
+      "\"\<csv\>\""}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Obtener", " ", "valor", " ", "de", " ", "omega"}], " ", "*)"}],
+      "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"begin", " ", "=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<_\>\""}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"end", " ", "=", 
+       RowBox[{
+        RowBox[{"Last", "[", 
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<.\>\""}], "]"}], 
+         "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ph", " ", "=", " ", 
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"StringTake", "[", 
+         RowBox[{
+          RowBox[{"files", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"begin", "+", "1"}], ",", 
+            RowBox[{"end", "-", "1"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"csvFiles", ",", " ", 
+        RowBox[{"files", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"\[Phi]s", ",", " ", "ph"}], "]"}], ";"}], 
+     "\[IndentingNewLine]", ",", "False"}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"csvFiles", " ", "=", " ", 
+   RowBox[{"csvFiles", "[", 
+    RowBox[{"[", 
+     RowBox[{"Ordering", "[", "\[Phi]s", "]"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]s", " ", "=", " ", 
+   RowBox[{"Sort", "[", "\[Phi]s", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "dMax", ",", " ", "Data", ",", "oData", ",", "label", ",", "j"}], "}"}],
+      ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Data", " ", "=", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{"csvFiles", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"j", "=", "1"}], ";", " ", 
+         RowBox[{"oData", " ", "=", 
+          RowBox[{"{", "}"}]}]}], ",", " ", 
+        RowBox[{"j", "<", 
+         RowBox[{"Length", "[", "Data", "]"}]}], ",", 
+        RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"oData", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"label", " ", "=", " ", 
+       RowBox[{"\"\<\[Phi] = \>\"", " ", "<>", " ", 
+        RowBox[{"ToString", "[", 
+         RowBox[{"\[Phi]s", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Show", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"ContourPlot", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"x", "^", "2"}], "+", 
+            RowBox[{"y", "^", "2"}]}], " ", "\[Equal]", " ", "1"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", 
+            RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"y", ",", 
+            RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+          RowBox[{"AxesOrigin", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}]}]}], "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"ListPlot", "[", 
+         RowBox[{"oData", ",", 
+          RowBox[{"PlotRange", "\[Rule]", "Full"}], ",", " ", 
+          RowBox[{"PlotLabel", "\[Rule]", 
+           RowBox[{"Style", "[", 
+            RowBox[{"label", ",", "14"}], "]"}]}], ",", 
+          RowBox[{"AxesLabel", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Style", "[", 
+              RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
+             RowBox[{"Style", "[", 
+              RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}], ",", 
+             RowBox[{"Style", "[", 
+              RowBox[{"\"\<a\>\"", ",", " ", "13"}], "]"}]}], "}"}]}], " ", 
+          ",", " ", 
+          RowBox[{"AxesOrigin", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}]}], ",", 
+          RowBox[{"DataRange", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1"}], ",", "1"}], "}"}]}], "}"}]}], ",", 
+          RowBox[{"AspectRatio", "\[Rule]", "1"}]}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", 
+     RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}]}], 
+  "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.587255683273429*^9, 3.5872556837400503`*^9}, {
+   3.5872557675363827`*^9, 3.587255773863408*^9}, 3.5872558389408913`*^9, {
+   3.587255869137577*^9, 3.5872558886726217`*^9}, {3.5872559404769297`*^9, 
+   3.5872559789288187`*^9}, {3.5872560405911407`*^9, 3.587256065345578*^9}, 
+   3.5872561008859577`*^9, {3.58834904893792*^9, 3.588349123489306*^9}, {
+   3.588349227600831*^9, 3.588349228171851*^9}, {3.5883495803384*^9, 
+   3.588349581394915*^9}, {3.588349628333887*^9, 3.588349646982113*^9}, {
+   3.5883497016934834`*^9, 3.588349706240625*^9}, {3.588349779751049*^9, 
+   3.588349786626218*^9}, {3.588349820234037*^9, 3.588349861764125*^9}, {
+   3.5883501568095617`*^9, 3.5883501587527523`*^9}, {3.588614694565358*^9, 
+   3.58861469832207*^9}, {3.5886264073526278`*^9, 3.588626422952351*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{"Mapa", " ", "de", " ", "amplitud"}], " ", "*)"}]], "Input",
+ CellChangeTimes->{{3.5872562609739523`*^9, 3.5872562676984053`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", 
+   "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/out/csv\>\"", 
+   "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"files", " ", "=", " ", 
+   RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ";", " ", 
+    RowBox[{"csvFiles", " ", "=", " ", 
+     RowBox[{"{", "}"}]}], ";", " ", 
+    RowBox[{"\[Phi]s", " ", "=", " ", 
+     RowBox[{"{", "}"}]}]}], ",", " ", 
+   RowBox[{"i", "<=", 
+    RowBox[{"Length", "[", "files", "]"}]}], ",", " ", 
+   RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"FileExtension", "[", 
+       RowBox[{"files", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], " ", "\[Equal]", " ", 
+      "\"\<csv\>\""}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Obtener", " ", "valor", " ", "de", " ", "omega"}], " ", "*)"}],
+      "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"begin", " ", "=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<_\>\""}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"end", " ", "=", 
+       RowBox[{
+        RowBox[{"Last", "[", 
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<.\>\""}], "]"}], 
+         "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ph", " ", "=", " ", 
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"StringTake", "[", 
+         RowBox[{
+          RowBox[{"files", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"begin", "+", "1"}], ",", 
+            RowBox[{"end", "-", "1"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"csvFiles", ",", " ", 
+        RowBox[{"files", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"\[Phi]s", ",", " ", "ph"}], "]"}], ";"}], 
+     "\[IndentingNewLine]", ",", "False"}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"csvFiles", " ", "=", " ", 
+   RowBox[{"csvFiles", "[", 
+    RowBox[{"[", 
+     RowBox[{"Ordering", "[", "\[Phi]s", "]"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Phi]s", " ", "=", " ", 
+    RowBox[{"Sort", "[", "\[Phi]s", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "dMax", ",", " ", "Data", ",", "sData", ",", "oData", ",", "label", ",",
+        "j"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Data", " ", "=", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{"csvFiles", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"sData", " ", "=", " ", 
+       RowBox[{"Sort", "[", 
+        RowBox[{"Data", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "3"}], "]"}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"j", "=", "1"}], ";", " ", 
+         RowBox[{"oData", " ", "=", 
+          RowBox[{"{", "}"}]}]}], ",", " ", 
+        RowBox[{"j", "<", 
+         RowBox[{"Length", "[", "Data", "]"}]}], ",", 
+        RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"oData", ",", 
+          RowBox[{"{", 
+           RowBox[{"j", ",", 
+            RowBox[{"sData", "[", 
+             RowBox[{"[", "j", "]"}], "]"}]}], "}"}]}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"label", " ", "=", " ", 
+       RowBox[{"\"\<\[Phi] = \>\"", " ", "<>", " ", 
+        RowBox[{"ToString", "[", 
+         RowBox[{"\[Phi]s", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ListPlot", "[", 
+       RowBox[{"oData", ",", 
+        RowBox[{"PlotRange", "\[Rule]", "Full"}], ",", " ", 
+        RowBox[{"PlotLabel", "\[Rule]", 
+         RowBox[{"Style", "[", 
+          RowBox[{"label", ",", "14"}], "]"}]}], ",", 
+        RowBox[{"AxesLabel", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Style", "[", 
+            RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
+           RowBox[{"Style", "[", 
+            RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}], ",", 
+           RowBox[{"Style", "[", 
+            RowBox[{"\"\<a\>\"", ",", " ", "13"}], "]"}]}], "}"}]}], " ", ",",
+         " ", 
+        RowBox[{"AxesOrigin", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0"}], "}"}]}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", 
+     RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}]}], 
+  "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.58725631079064*^9, 3.5872563289958*^9}, {
+   3.587256422080659*^9, 3.587256425093783*^9}, 3.587256525573846*^9, {
+   3.588350406530115*^9, 3.588350432198597*^9}, {3.5883505186461782`*^9, 
+   3.588350561676179*^9}, {3.5886147108317223`*^9, 3.588614713600574*^9}, {
+   3.5886264373759413`*^9, 3.588626452868149*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", 
+   "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/out/csv\>\"", 
+   "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"files", " ", "=", " ", 
+   RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ";", " ", 
+    RowBox[{"csvFiles", " ", "=", " ", 
+     RowBox[{"{", "}"}]}], ";", " ", 
+    RowBox[{"\[Phi]s", " ", "=", " ", 
+     RowBox[{"{", "}"}]}]}], ",", " ", 
+   RowBox[{"i", "<=", 
+    RowBox[{"Length", "[", "files", "]"}]}], ",", " ", 
+   RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"FileExtension", "[", 
+       RowBox[{"files", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], " ", "\[Equal]", " ", 
+      "\"\<csv\>\""}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Obtener", " ", "valor", " ", "de", " ", "omega"}], " ", "*)"}],
+      "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"begin", " ", "=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<_\>\""}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"end", " ", "=", 
+       RowBox[{
+        RowBox[{"Last", "[", 
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<.\>\""}], "]"}], 
+         "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ph", " ", "=", " ", 
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"StringTake", "[", 
+         RowBox[{
+          RowBox[{"files", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"begin", "+", "1"}], ",", 
+            RowBox[{"end", "-", "1"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"csvFiles", ",", " ", 
+        RowBox[{"files", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"\[Phi]s", ",", " ", "ph"}], "]"}], ";"}], 
+     "\[IndentingNewLine]", ",", "False"}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"csvFiles", " ", "=", " ", 
+   RowBox[{"csvFiles", "[", 
+    RowBox[{"[", 
+     RowBox[{"Ordering", "[", "\[Phi]s", "]"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]s", " ", "=", " ", 
+   RowBox[{"Sort", "[", "\[Phi]s", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "dMax", ",", " ", "Data", ",", "scaledData", ",", "label", ",", "j"}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Data", " ", "=", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{"csvFiles", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"dMax", " ", "=", " ", 
+       RowBox[{"Max", "[", 
+        RowBox[{"Data", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "3"}], "]"}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"j", "=", "1"}], ";", " ", 
+         RowBox[{"scaledData", "=", 
+          RowBox[{"{", "}"}]}]}], ",", 
+        RowBox[{"j", "<", 
+         RowBox[{"Length", "[", "Data", "]"}]}], ",", 
+        RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"scaledData", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "2", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Data", "[", 
+               RowBox[{"[", "j", "]"}], "]"}], "[", 
+              RowBox[{"[", "3", "]"}], "]"}], "/", "dMax"}]}], "}"}]}], 
+         "]"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"label", " ", "=", " ", 
+       RowBox[{"\"\<\[Phi] = \>\"", " ", "<>", " ", 
+        RowBox[{"ToString", "[", 
+         RowBox[{"\[Phi]s", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Show", "[", "\[IndentingNewLine]", 
+       RowBox[{"ListPlot", "[", 
+        RowBox[{
+         RowBox[{"scaledData", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "3"}], "]"}], "]"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", "Full"}], ",", " ", 
+         RowBox[{"PlotLabel", "\[Rule]", 
+          RowBox[{"Style", "[", 
+           RowBox[{"label", ",", "14"}], "]"}]}], ",", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}], ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<a\>\"", ",", " ", "13"}], "]"}]}], "}"}]}], ",", 
+         RowBox[{"AxesOrigin", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0"}], "}"}]}]}], " ", "]"}], 
+       "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", 
+     RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}]}], 
+  "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.5886134974184103`*^9, 3.588613502567193*^9}, {
+  3.588613576491824*^9, 3.588613579516963*^9}, {3.588613646383266*^9, 
+  3.5886136465727882`*^9}, {3.588614717340152*^9, 3.58861471927981*^9}, {
+  3.5886264673165007`*^9, 3.588626471217087*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", "Color", " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+    "SetDirectory", "[", 
+     "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/out/color\>\"\
+", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"files", " ", "=", " ", 
+     RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"For", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"i", "=", "1"}], ";", " ", 
+      RowBox[{"colorFiles", " ", "=", " ", 
+       RowBox[{"{", "}"}]}], ";", " ", 
+      RowBox[{"\[Phi]s", " ", "=", " ", 
+       RowBox[{"{", "}"}]}]}], ",", " ", 
+     RowBox[{"i", "<=", 
+      RowBox[{"Length", "[", "files", "]"}]}], ",", " ", 
+     RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"FileExtension", "[", 
+         RowBox[{"files", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}], " ", "\[Equal]", " ", 
+        "\"\<bmp\>\""}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{"Obtener", " ", "valor", " ", "de", " ", "omega"}], " ", 
+        "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"begin", " ", "=", " ", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"StringPosition", "[", 
+            RowBox[{
+             RowBox[{"files", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<_\>\""}], "]"}], 
+           "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"end", " ", "=", 
+         RowBox[{
+          RowBox[{"Last", "[", 
+           RowBox[{"StringPosition", "[", 
+            RowBox[{
+             RowBox[{"files", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<.\>\""}], "]"}], 
+           "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"ph", " ", "=", " ", 
+         RowBox[{"ToExpression", "[", 
+          RowBox[{"StringTake", "[", 
+           RowBox[{
+            RowBox[{"files", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"begin", "+", "1"}], ",", 
+              RowBox[{"end", "-", "1"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"colorFiles", ",", " ", 
+          RowBox[{"files", "[", 
+           RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"\[Phi]s", ",", " ", "ph"}], "]"}], ";"}], 
+       "\[IndentingNewLine]", ",", "False"}], "\[IndentingNewLine]", "]"}]}], 
+    "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"colorFiles", " ", "=", " ", 
+     RowBox[{"colorFiles", "[", 
+      RowBox[{"[", 
+       RowBox[{"Ordering", "[", "\[Phi]s", "]"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\[Phi]s", " ", "=", " ", 
+     RowBox[{"Sort", "[", "\[Phi]s", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Module", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"Data", ",", "scaledData", ",", "label", ",", "j"}], "}"}], 
+       ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Data", " ", "=", " ", 
+         RowBox[{"Import", "[", 
+          RowBox[{"colorFiles", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"label", " ", "=", " ", 
+         RowBox[{"\"\<\[Phi] = \>\"", " ", "<>", " ", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"\[Phi]s", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Show", "[", "\[IndentingNewLine]", 
+         RowBox[{"Data", ",", 
+          RowBox[{"PlotLabel", "\[Rule]", 
+           RowBox[{"Style", "[", 
+            RowBox[{"label", ",", "14"}], "]"}]}], ",", 
+          RowBox[{"AxesLabel", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Style", "[", 
+              RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
+             RowBox[{"Style", "[", 
+              RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}], ",", 
+             RowBox[{"Style", "[", 
+              RowBox[{"\"\<a\>\"", ",", " ", "13"}], "]"}]}], "}"}]}]}], 
+         "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", 
+       RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"range", ",", 
+       RowBox[{"{", 
+        RowBox[{"Full", ",", "Automatic"}], "}"}]}], "}"}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.58863247731916*^9, 3.588632511206235*^9}, {
+  3.588632550215487*^9, 3.588632591800701*^9}, {3.58863266118781*^9, 
+  3.588632707921109*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`i$$ = 10, $CellContext`range$$ = Full, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`i$$], 1, 11, 1}, {
+      Hold[$CellContext`range$$], {Full, Automatic}}}, Typeset`size$$ = {
+    403., {199., 204.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`i$15505$$ = 
+    0, $CellContext`range$15506$$ = False}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`i$$ = 1, $CellContext`range$$ = Full}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`i$$, $CellContext`i$15505$$, 0], 
+        Hold[$CellContext`range$$, $CellContext`range$15506$$, False]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Module[{$CellContext`Data$, $CellContext`scaledData$, \
+$CellContext`label$, $CellContext`j$}, $CellContext`Data$ = Import[
+           
+           Part[$CellContext`colorFiles, $CellContext`i$$]]; \
+$CellContext`label$ = StringJoin["\[Phi] = ", 
+           ToString[
+            Part[$CellContext`\[Phi]s, $CellContext`i$$]]]; 
+        Show[$CellContext`Data$, PlotLabel -> Style[$CellContext`label$, 14], 
+          AxesLabel -> {
+            Style["x", 13], 
+            Style["y", 13], 
+            Style["a", 13]}]], 
+      "Specifications" :> {{$CellContext`i$$, 1, 11, 
+         1}, {$CellContext`range$$, {Full, Automatic}}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{450., {257., 264.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.5886326893363247`*^9, 3.5886327083417892`*^9}}]
+}, Open  ]]
+},
+WindowSize->{773, 731},
+WindowMargins->{{108, Automatic}, {Automatic, 24}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 7801, 188, 825, "Input"],
+Cell[8383, 212, 2978, 63, 468, "Output"]
+}, Open  ]],
+Cell[11376, 278, 156, 3, 32, "Input"],
+Cell[11535, 283, 7420, 184, 781, "Input"],
+Cell[18958, 469, 175, 3, 32, "Input"],
+Cell[19136, 474, 5879, 151, 737, "Input"],
+Cell[25018, 627, 6373, 163, 803, "Input"],
+Cell[CellGroupData[{
+Cell[31416, 794, 5116, 127, 671, "Input"],
+Cell[36535, 923, 2309, 48, 538, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
