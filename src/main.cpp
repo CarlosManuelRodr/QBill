@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
         BillParams param;
         double Min_Phi, Max_Phi, Phi_Step;
         string perturbation;
+        bool Log;
 
         cp.DblArgToVar(param.W, "Omega", 2.0);
         cp.DblArgToVar(Min_Phi, "Min_phi", -1.57);
@@ -90,6 +91,7 @@ int main(int argc, char *argv[])
         cp.BoolArgToVar(param.closed, "Closed", true);
         cp.IntArgToVar(param.iter, "Iterations", 5000);
         cp.StringArgToVar(perturbation, "Perturbation", "sin(x)^2");
+        cp.BoolArgToVar(Log, "Log", false);
 
         // Color output.
         Palette palette;
@@ -128,10 +130,13 @@ int main(int argc, char *argv[])
 
 		// Create log.
 		ofstream file;
-		file.open("log.txt");
-		file << "QBill log - ";
-		file << cmrm::GetCurrentDateTime() << endl;
-		file << "-------------------------------" << endl;
+		if(Log)
+		{
+			file.open("log.txt");
+			file << "QBill log - ";
+			file << cmrm::GetCurrentDateTime() << endl;
+			file << "-------------------------------" << endl;
+		}
 
         // Start simulation.
         Parser_Init(perturbation);
@@ -141,7 +146,7 @@ int main(int argc, char *argv[])
         {
             if(Min_Phi != Max_Phi) loadBar(i, steps, steps, 30, phi);
             param.phi = phi;
-            Grid qb = QuantumBill(param, &Parser_Eval, true, &file);
+            Grid qb = QuantumBill(param, &Parser_Eval, Log, &file);
 
             if(colorOutput)
             {
@@ -208,7 +213,7 @@ int main(int argc, char *argv[])
             i++;
         }
         cout << "Done." << endl;
-        file.close();
+        if(Log) file.close();
 
         if(plotCsv && csvOutput)
         {

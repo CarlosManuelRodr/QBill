@@ -47,8 +47,8 @@ simres simular(bool log=false,bool cerrado=false, bool silent=true)
 		outf <<"# phi,gamma,delta,R,b,W"<<endl;
 		outf <<"# "<<fixed<<phi<<","<<gammax<<","<<delta<<","<<R<<","<<b<<","<<W<<endl;
 		outf<<fixed<<x<<","<<y<<endl;
-		res.intersections.push_back(Coord(x,y));
 	}
+	res.intersections.push_back(Coord(x,y));
 
 	res.colisiones = 0;
 	double const _large = 1e99;
@@ -170,8 +170,8 @@ simres simular(bool log=false,bool cerrado=false, bool silent=true)
 			{
 				outf<<fixed<<x<<","<<y<<","<<s<<","<<p<<endl;
 				outfs<<s<<endl;
-				res.intersections.push_back(Coord(x,y));
 			}
+			res.intersections.push_back(Coord(x,y));
 			res.colisiones += 1;
 		}
 		else
@@ -229,8 +229,8 @@ simres simular(bool log=false,bool cerrado=false, bool silent=true)
 			{
 				outf<<fixed<<x<<","<<y<<","<<s<<","<<p<<endl;
 				outfs<<s<<endl;
-				res.intersections.push_back(Coord(x,y));
 			}
+			res.intersections.push_back(Coord(x,y));
 			res.colisiones += 1;
 		}
 
@@ -254,5 +254,5 @@ simres sim_billiard(BillParams param)
     vy = v0*sin(param.phi);
     b = (W-R)/cos(omega - pi/2);
     max_iter = param.iter;
-    return simular(true, param.closed, false);
+    return simular(false, param.closed, false);
 }
