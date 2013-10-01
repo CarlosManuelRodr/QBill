@@ -1,33 +1,34 @@
 #!/bin/bash
 
-if [ -d out ]
+if [ -d W=$1 ]
 then
-	if [ -d out/color ]
+	if [ -d W=$1/out/color ]
 	then
-		rm -r out/color
+		rm -r W=$1/out/color
 	fi
-	mkdir out/color
+	mkdir W=$1/out/color
 
-	if [ -d out/csv ]
+	if [ -d W=$1/out/csv ]
 	then
-		rm -r out/csv
+		rm -r W=$1/out/csv
 	fi
-	mkdir out/csv
+	mkdir W=$1/out/csv
 
-	if [ -d out/plots ]
+	if [ -d W=$1/out/plots ]
 	then
-		rm -r out/plots
+		rm -r W=$1/out/plots
 	fi
-	mkdir out/plots
+	mkdir W=$1/out/plots
 
 else
-	echo 'Created out/'
-	echo 'Created out/color'
-	echo 'Created out/csv'
-	echo 'Created out/plots'
+	echo "Created W=$1/out/"
+	echo "Created W=$1/out/color"
+	echo "Created W=$1/out/csv"
+	echo "Created W=$1/out/plots"
 
-	mkdir out
-	mkdir out/color
-	mkdir out/csv
-	mkdir out/plots
+	mkdir W=$1
+	mkdir W=$1/out
+	mkdir W=$1/out/color
+	mkdir W=$1/out/csv
+	mkdir W=$1/out/plots
 fi

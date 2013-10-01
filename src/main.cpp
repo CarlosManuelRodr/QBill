@@ -9,6 +9,13 @@ using namespace mup;
 using namespace std;
 using namespace cmrm;
 
+bool silent = false;
+
+void Print(double W, string in)
+{
+	if(!silent) cout << "[W=" << num_to_string(W) << "] " << in << endl;
+}
+
 // Process has done i out of n rounds,
 // and we want a bar of width w and resolution r.
 static inline void loadBar(int x, int n, int r, int w, double phi)
@@ -125,8 +132,32 @@ int main(int argc, char *argv[])
 		cp.BoolArgToVar(makeVideo,"Make_Video", false);
 		cp.StringArgToVar(plotter, "Plotter", "Mathematica");
 
+		// Check options and overwrite parameter with argument.
+		if(argc > 2)
+		{
+			string arg;
+			for(int i= 2; i < argc; i++)
+			{
+				arg = argv[i];
+				arg = cmrm::rem_whitespaces(arg);
+
+				if(cmrm::is_there_substr(arg, string("W=")))
+				{
+					param.W = cmrm::string_to_num<double>(arg.substr(arg.find_first_of("=") + 1));
+				}
+
+				if(cmrm::is_there_substr(arg, string("--silent")) || cmrm::is_there_substr(arg, string("-s")))
+				{
+					silent = true;
+				}
+			}
+		}
+
 		// Format output directories.
-		system("sh Resources/Scripts/create_directories.sh");
+		string command;
+		command = "sh Resources/Scripts/create_directories.sh ";
+		command += cmrm::num_to_string(param.W);
+		system(command.c_str());
 
 		// Create log.
 		ofstream file;
@@ -141,10 +172,10 @@ int main(int argc, char *argv[])
         // Start simulation.
         Parser_Init(perturbation);
         int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
-        cout << "Simulating..." << endl;
+        Print(param.W, "Simulating...");
         for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
         {
-            if(Min_Phi != Max_Phi) loadBar(i, steps, steps, 30, phi);
+            if(Min_Phi != Max_Phi && !silent) loadBar(i, steps, steps, 30, phi);
             param.phi = phi;
             Grid qb = QuantumBill(param, &Parser_Eval, Log, &file);
 
@@ -180,14 +211,14 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				string outName = colorPrefix;
+				string outName = string("W=") + num_to_string(param.W) + string("/") + colorPrefix;
 				outName += num_to_string(param.phi);
 				outName += ".bmp";
 				BMPPlot(out, outName);
             }
             if(csvOutput)
             {
-            	string outName = csvPrefix;
+            	string outName = string("W=") + num_to_string(param.W) + string("/") + csvPrefix;
             	outName += num_to_string(param.phi);
             	outName += ".csv";
             	CsvWriter cw;
@@ -212,20 +243,26 @@ int main(int argc, char *argv[])
 
             i++;
         }
-        cout << "Done." << endl;
         if(Log) file.close();
 
         if(plotCsv && csvOutput)
         {
-        	cout << "Plotting csv.. " << endl;
+        	Print(param.W, "Plotting csv.. ");
         	if(plotter == "Mathematica")
-        		system("math -script Resources/Scripts/Plotter.m");
+        	{
+        		command = "MathematicaScript -script Resources/Scripts/Plotter.m ";
+        		command += cmrm::num_to_string(param.W);
+        		system(command.c_str());
+        	}
 
         	if(makeVideo)
-        		system("sh Resources/Scripts/make_video.sh");
-
-        	cout << "Done." << endl;
+        	{
+        		command = "sh Resources/Scripts/make_video.sh ";
+        		command += cmrm::num_to_string(param.W);
+        		system(command.c_str());
+        	}
         }
+        Print(param.W, "Done.");
     }
     else
     {

@@ -4,7 +4,7 @@ Clear[Evaluate[Context[] <> "*"]]
 
 baseDir = Directory[];
 
-SetDirectory[baseDir <> "/out/csv/"];
+SetDirectory[baseDir <> "/W=" <> $ScriptCommandLine[[2]] <> "/out/csv/"];
 files = FileNames[];
 csvFiles = {};
 phis = {};
@@ -36,5 +36,5 @@ For[i=1, i<=Length[csvFiles], i++,
 	];
 	label = "\[Phi] = " <> ToString[phis[[i]]];
 	image = ListPlot3D[scaledData,PlotRange->Full, PlotLabel->Style[label, 14], AxesLabel->{Style["x", 13], Style["y", 13], Style["a", 13]} ];
-	Export["out/plots/img" <>ToString[i]<>".png",image]
+	Export["W=" <> $ScriptCommandLine[[2]] <> "/out/plots/img" <> ToString[i] <>".png",image]
 ]
