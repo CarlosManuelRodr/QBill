@@ -1,3 +1,14 @@
+/**
+* @file Palette.h
+* @brief Color palettes used on the color output.
+*
+* @copyright GNU Public License v3
+* @author Carlos Manuel Rodriguez y Martinez
+* @date 10/10/2013
+*
+* This file is part of QBill: https://github.com/cmrm/QBill
+*/
+
 #ifndef _PALETTE
 #define _PALETTE
 
@@ -20,6 +31,11 @@ enum COLOR
 	green,
 	blue
 };
+
+/**
+* @class Palette
+* @brief Holds the palette configuration and return colors.
+*/
 
 class Palette
 {

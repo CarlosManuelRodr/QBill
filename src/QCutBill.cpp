@@ -6,8 +6,30 @@
 using namespace cmrm;
 using namespace std;
 
+// GridElement.
+GridElement::GridElement()
+{
+	m_amplitude = 0;
+	m_x = 0;
+	m_y = 0;
+	m_amprecord.push_back(0);
+	m_timerecord.push_back(0);
+}
+void GridElement::AddDisturbance(const double value, const double time)
+{
+	m_amprecord.push_back(value);
+	m_timerecord.push_back(time);
+	m_amplitude += value;
+}
+void GridElement::SetCoordinates(const double x, const double y)
+{
+	m_x = x;
+	m_y = y;
+}
 
-Grid::Grid(double epsilon)
+
+// Grid.
+Grid::Grid(const double epsilon)
 {
 	m_epsilon = epsilon;
 	m_size = 2.0/m_epsilon;
@@ -29,9 +51,7 @@ Grid::Grid(double epsilon)
     {
         for(int j=0; j<m_size; j++)
         {
-            m_grid[i][j].m_amplitude = 0;
-            m_grid[i][j].m_x = m_minx + i*m_xfactor;
-            m_grid[i][j].m_y = m_maxy - j*m_yfactor;
+            m_grid[i][j].SetCoordinates(m_minx + i*m_xfactor, m_maxy - j*m_yfactor);
         }
     }
 }
@@ -43,7 +63,7 @@ GridElement*& Grid::operator[](const unsigned int pos)
 {
     return m_grid[pos];
 }
-GridElement& Grid::GetGridElement(double x, double y)
+GridElement& Grid::GetGridElement(const double x, const double y)
 {
     int h = (x-m_minx)/m_xfactor;
     int v = (m_maxy-y)/m_yfactor;
@@ -54,11 +74,10 @@ GridElement& Grid::GetGridElement(double x, double y)
     else
     {
         static GridElement gNULL;
-        gNULL.m_amplitude = 0;
         return gNULL;
     }
 }
-Coord Grid::GetCoord(double x, double y)
+Coord Grid::GetCoord(const double x, const double y)
 {
     return Coord((int)((x-m_minx)/m_xfactor), (int)((m_maxy-y)/m_yfactor));
 }
@@ -67,21 +86,24 @@ int Grid::GetSize()
     return m_size;
 }
 
-Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostream *out)
+// Sim.
+Grid QuantumBill(BillParams param, double (*disturbance)(double, double, double), bool log, ostream *out)
 {
     Grid bGrid(param.gridSize);
     double m,b;
-    double d = -1;
+    double d;
     double prevD = 0;
     double x1,x2,y1,y2;
     double stepX, stepY;
     double tempX, tempY;
     double delta = param.gridSize/10.0;
+    double infty = std::numeric_limits<double>::infinity();
 
     simres result = sim_billiard(param);
-    for(unsigned int i=1; i<result.intersections.size(); i++)
+    unsigned int maxIter = result.intersections.size();
+    for(unsigned int i=1; i<maxIter; i++)
     {
-        Coord prevCoord = Coord(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+        Coord prevCoord = Coord(infty, infty);
 
         x1 = result.intersections[i-1].m_x;
         x2 = result.intersections[i].m_x;
@@ -112,7 +134,7 @@ Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostr
 							{
 								d = sqrt(pow(xPos-x1, 2) + pow(tempY-y1, 2));
 								prevCoord = bGrid.GetCoord(xPos, tempY);
-								bGrid.GetGridElement(xPos, tempY).m_amplitude += disturbance(d + prevD);
+								bGrid.GetGridElement(xPos, tempY).AddDisturbance(disturbance(d + prevD, (double)i, (double)maxIter), d + prevD);
 							}
 						}
 						prevD += d;
@@ -126,7 +148,7 @@ Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostr
 							{
 								d = sqrt(pow(xPos-x1, 2) + pow(tempY-y1, 2));
 								prevCoord = bGrid.GetCoord(xPos, tempY);
-								bGrid.GetGridElement(xPos, tempY).m_amplitude += disturbance(d + prevD);
+								bGrid.GetGridElement(xPos, tempY).AddDisturbance(disturbance(d + prevD, (double)i, (double)maxIter), d + prevD);
 							}
 						}
 						prevD += d;
@@ -144,7 +166,7 @@ Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostr
 							{
 								d = sqrt(pow(tempX-x1, 2) + pow(yPos-y1, 2));
 								prevCoord = bGrid.GetCoord(tempX, yPos);
-								bGrid.GetGridElement(tempX, yPos).m_amplitude += disturbance(d + prevD);
+								bGrid.GetGridElement(tempX, yPos).AddDisturbance(disturbance(d + prevD, (double)i, (double)maxIter), d + prevD);
 							}
 						}
 						prevD += d;
@@ -158,14 +180,14 @@ Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostr
 							{
 								d = sqrt(pow(tempX-x1, 2) + pow(yPos-y1, 2));
 								prevCoord = bGrid.GetCoord(tempX, yPos);
-								bGrid.GetGridElement(tempX, yPos).m_amplitude += disturbance(d + prevD);
+								bGrid.GetGridElement(tempX, yPos).AddDisturbance(disturbance(d + prevD, (double)i, (double)maxIter), d + prevD);
 							}
 						}
 						prevD += d;
 					}
 				}
 			}
-			// Pendiente infinita. Recorre verticalmente.
+			// Slope -> Infinity. Vertical path.
 			else
 			{
 				if(y1 != y2)
@@ -178,7 +200,7 @@ Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostr
 							{
 								d = abs(yPos-y1);
 								prevCoord = bGrid.GetCoord(x1, yPos);
-								bGrid.GetGridElement(x1, yPos).m_amplitude += disturbance(d + prevD);
+								bGrid.GetGridElement(x1, yPos).AddDisturbance(disturbance(d + prevD, (double)i, (double)maxIter), d + prevD);
 							}
 						}
 						prevD += d;
@@ -191,7 +213,7 @@ Grid QuantumBill(BillParams param, double (*disturbance)(double), bool log, ostr
 							{
 								d = abs(yPos-y1);
 								prevCoord = bGrid.GetCoord(x1, yPos);
-								bGrid.GetGridElement(x1, yPos).m_amplitude += disturbance(d + prevD);
+								bGrid.GetGridElement(x1, yPos).AddDisturbance(disturbance(d + prevD, (double)i, (double)maxIter), d + prevD);
 							}
 						}
 						prevD += d;

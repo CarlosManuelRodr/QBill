@@ -50,8 +50,13 @@ static inline void loadBar(int x, int n, int r, int w, double phi)
 }
 
 // Parser
+/*
+ * x: Evaluation distance.
+ * Iter: Total number of iterations.
+ * i: Iteration index.
+ */
 mup::ParserX parser;
-mup::Value xVal;
+mup::Value xVal, iterVal, iVal;
 void Parser_Init(string expr)
 {
 #ifdef UNICODE
@@ -61,10 +66,14 @@ void Parser_Init(string expr)
 #endif
     parser.SetExpr(wexpr);
     parser.DefineVar(_T("x"), mup::Variable(&xVal));
+    parser.DefineVar(_T("Iter"), mup::Variable(&iterVal));
+    parser.DefineVar(_T("i"), mup::Variable(&iVal));
 }
-double Parser_Eval(double x)
+double Parser_Eval(double x, double i, double iter)
 {
     xVal = x;
+    iVal = i;
+    iterVal = iter;
     return parser.Eval().GetFloat();
 }
 
@@ -103,14 +112,17 @@ int main(int argc, char *argv[])
         // Color output.
         Palette palette;
 		wxGradient grad;
-		bool relative, colorOutput;
+		bool relative, colorOutput, forceMin;
 		int gradMax;
+		double minColorValue;
 		string colorPrefix, gradString;
 		cp.BoolArgToVar(colorOutput, "Color_Output", false);
 		cp.IntArgToVar(gradMax, "Palette_Size", 300);
 		cp.StringArgToVar(colorPrefix, "Color_Prefix", "out_");
 		cp.StringArgToVar(gradString, "Color", "rgb(0,0,0);rgb(255,255,255);");
 		cp.BoolArgToVar(relative, "Relative_Color", true);
+		cp.BoolArgToVar(forceMin, "Force_Min", false);
+		cp.DblArgToVar(minColorValue, "Min_Color_Value", 0.0);
 
 		grad.setMin(0);
 		grad.setMax(gradMax);
@@ -141,9 +153,22 @@ int main(int argc, char *argv[])
 				arg = argv[i];
 				arg = cmrm::rem_whitespaces(arg);
 
+				// Param omega.
 				if(cmrm::is_there_substr(arg, string("W=")))
 				{
 					param.W = cmrm::string_to_num<double>(arg.substr(arg.find_first_of("=") + 1));
+				}
+
+				// Param perturbation.
+				if(cmrm::is_there_substr(arg, string("Perturbation=")))
+				{
+					perturbation = arg.substr(arg.find_first_of("=") + 1);
+				}
+
+				// Para iteration.
+				if(cmrm::is_there_substr(arg, string("Iterations=")))
+				{
+					param.iter = cmrm::string_to_num<int>(arg.substr(arg.find_first_of("=") + 1));
 				}
 
 				if(cmrm::is_there_substr(arg, string("--silent")) || cmrm::is_there_substr(arg, string("-s")))
@@ -197,6 +222,8 @@ int main(int argc, char *argv[])
 					palette.maxValue = maxAmplitude;
 					palette.minValue = minAmplitude;
 				}
+				if(maxAmplitude <= minAmplitude) palette.minValue = 0.0;
+				if(forceMin) palette.minValue = minColorValue;
 
 				// Draw bitmap.
 				cmrm::Matrix<Color> out(gSize, gSize);

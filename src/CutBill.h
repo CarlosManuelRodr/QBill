@@ -1,3 +1,14 @@
+/**
+* @file CutBill.h
+* @brief Implementation of the dynamics of the cut billiard.
+*
+* @copyright GNU Public License v3
+* @author José Ramón Palacios Barreda
+* @date 10/10/2013
+*
+* This file is part of QBill: https://github.com/cmrm/QBill
+*/
+
 #include <vector>
 #include <CMRMLib/CMRM.h>
 

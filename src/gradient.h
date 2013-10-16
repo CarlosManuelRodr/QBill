@@ -1,9 +1,7 @@
 /**
 * @file gradient.h
 * @brief Defines a gradient.
-*
 * @author Evan Cordell
-*
 * @date 7/19/2012
 */
 
