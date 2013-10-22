@@ -40,7 +40,6 @@ static inline void loadBar(int x, int n, int r, int w, double phi)
 
     // ANSI Control codes to go back to the
     // previous line and clear it.
-    //printf("]\n\033[F\033[J");
      cout << "] Phi: " << phi;
      printf("\n\033[F\033[J");
 #else
@@ -112,10 +111,10 @@ int main(int argc, char *argv[])
         // Color output.
         Palette palette;
 		wxGradient grad;
-		bool relative, colorOutput, forceMin;
+		bool relative, colorOutput, forceMin, makeColorVideo;
 		int gradMax;
 		double minColorValue;
-		string colorPrefix, gradString;
+		string colorPrefix, gradString, colorPlotter;
 		cp.BoolArgToVar(colorOutput, "Color_Output", false);
 		cp.IntArgToVar(gradMax, "Palette_Size", 300);
 		cp.StringArgToVar(colorPrefix, "Color_Prefix", "out_");
@@ -123,6 +122,8 @@ int main(int argc, char *argv[])
 		cp.BoolArgToVar(relative, "Relative_Color", true);
 		cp.BoolArgToVar(forceMin, "Force_Min", false);
 		cp.DblArgToVar(minColorValue, "Min_Color_Value", 0.0);
+		cp.StringArgToVar(colorPlotter, "Color_Plotter", "Legacy");
+		cp.BoolArgToVar(makeColorVideo, "Make_Color_Video", false);
 
 		grad.setMin(0);
 		grad.setMax(gradMax);
@@ -177,11 +178,17 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
+		if(colorPlotter == "Mathematica") csvOutput = true;
 
 		// Format output directories.
 		string command;
 		command = "sh Resources/Scripts/create_directories.sh ";
 		command += cmrm::num_to_string(param.W);
+		if(colorPlotter == "Legacy")
+			command += " 1";
+		else
+			command += " 0";
+
 		system(command.c_str());
 
 		// Create log.
@@ -206,42 +213,45 @@ int main(int argc, char *argv[])
 
             if(colorOutput)
             {
-            	int gSize = qb.GetSize();
-				double maxAmplitude = 0;
-				double minAmplitude = 1e50;
-				if(palette.GetRelativeColorMode())
-				{
+            	if(colorPlotter == "Legacy")
+            	{
+					int gSize = qb.GetSize();
+					double maxAmplitude = 0;
+					double minAmplitude = 1e50;
+					if(palette.GetRelativeColorMode())
+					{
+						for(int i=0; i<gSize; i++)
+						{
+							for(int j=0; j<gSize; j++)
+							{
+								if(qb[i][j].m_amplitude > maxAmplitude) maxAmplitude = qb[i][j].m_amplitude;
+								if(qb[i][j].m_amplitude < minAmplitude && qb[i][j].m_amplitude != 0.0) minAmplitude = qb[i][j].m_amplitude;
+							}
+						}
+						palette.maxValue = maxAmplitude;
+						palette.minValue = minAmplitude;
+					}
+					if(maxAmplitude <= minAmplitude) palette.minValue = 0.0;
+					if(forceMin) palette.minValue = minColorValue;
+
+					// Draw bitmap.
+					cmrm::Matrix<Color> out(gSize, gSize);
 					for(int i=0; i<gSize; i++)
 					{
 						for(int j=0; j<gSize; j++)
 						{
-							if(qb[i][j].m_amplitude > maxAmplitude) maxAmplitude = qb[i][j].m_amplitude;
-							if(qb[i][j].m_amplitude < minAmplitude && qb[i][j].m_amplitude != 0.0) minAmplitude = qb[i][j].m_amplitude;
+							if(palette.GetRelativeColorMode())
+								out[i][j] = palette.CalcColor(qb[j][i].m_amplitude);
+							else
+								out[i][j] = palette.CalcColor((qb[j][i].m_amplitude+1)*30);
 						}
 					}
-					palette.maxValue = maxAmplitude;
-					palette.minValue = minAmplitude;
-				}
-				if(maxAmplitude <= minAmplitude) palette.minValue = 0.0;
-				if(forceMin) palette.minValue = minColorValue;
 
-				// Draw bitmap.
-				cmrm::Matrix<Color> out(gSize, gSize);
-				for(int i=0; i<gSize; i++)
-				{
-					for(int j=0; j<gSize; j++)
-					{
-						if(palette.GetRelativeColorMode())
-							out[i][j] = palette.CalcColor(qb[j][i].m_amplitude);
-						else
-							out[i][j] = palette.CalcColor((qb[j][i].m_amplitude+1)*30);
-					}
-				}
-
-				string outName = string("W=") + num_to_string(param.W) + string("/") + colorPrefix;
-				outName += num_to_string(param.phi);
-				outName += ".bmp";
-				BMPPlot(out, outName);
+					string outName = string("W=") + num_to_string(param.W) + string("/") + colorPrefix;
+					outName += num_to_string(param.phi);
+					outName += ".bmp";
+					BMPPlot(out, outName);
+            	}
             }
             if(csvOutput)
             {
@@ -272,6 +282,15 @@ int main(int argc, char *argv[])
         }
         if(Log) file.close();
 
+        if(colorOutput && (colorPlotter == "Mathematica"))
+        {
+        	Print(param.W, "Plotting color plots.. ");
+        	command = "MathematicaScript -script Resources/Scripts/colorPlotter.m ";
+        	command += cmrm::num_to_string(param.W);
+        	Print(param.W, "Executting: \"" + command + "\"");
+        	system(command.c_str());
+        }
+
         if(plotCsv && csvOutput)
         {
         	Print(param.W, "Plotting csv.. ");
@@ -289,6 +308,15 @@ int main(int argc, char *argv[])
         		system(command.c_str());
         	}
         }
+
+        if(makeColorVideo)
+		{
+			command = "sh Resources/Scripts/make_color_video.sh ";
+			command += cmrm::num_to_string(param.W);
+			Print(param.W, "Executting: " + command);
+			system(command.c_str());
+		}
+
         Print(param.W, "Done.");
     }
     else

@@ -55,6 +55,16 @@ Grid::Grid(const double epsilon)
         }
     }
 }
+Grid::~Grid()
+{
+	for(int i=0; i<m_size; i++)
+	{
+		if(m_grid[i] != NULL)
+			delete[] m_grid[i];
+	}
+	if(m_grid != NULL)
+		delete[] m_grid;
+}
 GridElement** Grid::GetGrid()
 {
     return m_grid;

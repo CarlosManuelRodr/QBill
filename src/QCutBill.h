@@ -52,6 +52,7 @@ class Grid
 
 public:
     Grid(const double epsilon);
+    ~Grid();
     GridElement** GetGrid();
     GridElement*& operator[](const unsigned int pos);
     GridElement& GetGridElement(const double x, const double y);

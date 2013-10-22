@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     39499,        999]
-NotebookOptionsPosition[     38860,        974]
-NotebookOutlinePosition[     39198,        989]
-CellTagsIndexPosition[     39155,        986]
+NotebookDataLength[     63019,       1574]
+NotebookOptionsPosition[     61248,       1521]
+NotebookOutlinePosition[     61584,       1536]
+CellTagsIndexPosition[     61541,       1533]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -263,7 +263,7 @@ $CellContext`Data$ = Import[
       "Specifications" :> {{$CellContext`i$$, 1, 11, 
          1}, {$CellContext`range$$, {Full, Automatic}}}, "Options" :> {}, 
       "DefaultOptions" :> {}],
-     ImageSizeCache->{407., {222., 229.}},
+     ImageSizeCache->{407., {211., 218.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -273,7 +273,256 @@ $CellContext`Data$ = Import[
    Deployed->True,
    StripOnInput->False],
   Manipulate`InterpretManipulate[1]]], "Output",
- CellChangeTimes->{{3.588630144481194*^9, 3.588630174389797*^9}}]
+ CellChangeTimes->{{3.588630144481194*^9, 3.588630174389797*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partd"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is longer than \
+depth of object. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\
+\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partd\\\", ButtonNote -> \
+\\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5909575487919207`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partd"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is longer than \
+depth of object. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\
+\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partd\\\", ButtonNote -> \
+\\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957548794169*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "chtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"First argument \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is not a valid \
+file, directory, or URL specification. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/Import/chtype\\\", \
+ButtonNote -> \\\"Import::chtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5909575488322487`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Symbol", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(Symbol\\)\[NoBreak] called with \[NoBreak]\
+\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\
+\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/argx\\\", ButtonNote -> \
+\\\"Symbol::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957548873961*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partd"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\[Phi]s \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is longer than \
+depth of object. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\
+\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partd\\\", ButtonNote -> \
+\\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957548913474*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Part :: \
+partd\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5909575489470882`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ListPlot3D", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] called with \
+\[NoBreak]\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/argx\\\", \
+ButtonNote -> \\\"ListPlot3D::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957549015139*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Show", "::", "gtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] is not a type of \
+graphics. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Show/gtype\\\", ButtonNote -> \
+\\\"Show::gtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5909575490430517`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ListPlot3D", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] called with \
+\[NoBreak]\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/argx\\\", \
+ButtonNote -> \\\"ListPlot3D::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957549081882*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Show", "::", "gtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] is not a type of \
+graphics. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Show/gtype\\\", ButtonNote -> \
+\\\"Show::gtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957549108879*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partd"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is longer than \
+depth of object. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\
+\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partd\\\", ButtonNote -> \
+\\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957601974593*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "chtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"First argument \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is not a valid \
+file, directory, or URL specification. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/Import/chtype\\\", \
+ButtonNote -> \\\"Import::chtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957601979745*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Symbol", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(Symbol\\)\[NoBreak] called with \[NoBreak]\
+\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\
+\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/argx\\\", ButtonNote -> \
+\\\"Symbol::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957602019569*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ListPlot3D", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] called with \
+\[NoBreak]\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/argx\\\", \
+ButtonNote -> \\\"ListPlot3D::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.59095760205536*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Show", "::", "gtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] is not a type of \
+graphics. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Show/gtype\\\", ButtonNote -> \
+\\\"Show::gtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590957602077479*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partd"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is longer than \
+depth of object. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\
+\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partd\\\", ButtonNote -> \
+\\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590959658649145*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "chtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"First argument \[NoBreak]\\!\\(csvFiles \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\[NoBreak] is not a valid \
+file, directory, or URL specification. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/Import/chtype\\\", \
+ButtonNote -> \\\"Import::chtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590959658691798*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Symbol", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(Symbol\\)\[NoBreak] called with \[NoBreak]\
+\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\
+\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/argx\\\", ButtonNote -> \
+\\\"Symbol::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590959658750996*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ListPlot3D", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] called with \
+\[NoBreak]\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/argx\\\", \
+ButtonNote -> \\\"ListPlot3D::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590959658854444*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Show", "::", "gtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListPlot3D\\)\[NoBreak] is not a type of \
+graphics. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Show/gtype\\\", ButtonNote -> \
+\\\"Show::gtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590959658857646*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -799,8 +1048,8 @@ Cell[BoxData[
    RowBox[{
     RowBox[{
     "SetDirectory", "[", 
-     "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/out/color\>\"\
-", "]"}], ";"}], "\[IndentingNewLine]", 
+     "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/W=0.5/out/\
+rawColor\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"files", " ", "=", " ", 
      RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
@@ -904,41 +1153,41 @@ Cell[BoxData[
              RowBox[{"Style", "[", 
               RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
              RowBox[{"Style", "[", 
-              RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}], ",", 
-             RowBox[{"Style", "[", 
-              RowBox[{"\"\<a\>\"", ",", " ", "13"}], "]"}]}], "}"}]}]}], 
+              RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}]}], "}"}]}]}], 
          "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}], ",", 
      "\[IndentingNewLine]", 
      RowBox[{"{", 
       RowBox[{"i", ",", "1", ",", 
-       RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}], ",", 
+       RowBox[{"Length", "[", "colorFiles", "]"}], ",", "1"}], "}"}], ",", 
      RowBox[{"{", 
       RowBox[{"range", ",", 
        RowBox[{"{", 
         RowBox[{"Full", ",", "Automatic"}], "}"}]}], "}"}]}], 
     "\[IndentingNewLine]", "]"}]}]}]], "Input",
  CellChangeTimes->{{3.58863247731916*^9, 3.588632511206235*^9}, {
-  3.588632550215487*^9, 3.588632591800701*^9}, {3.58863266118781*^9, 
-  3.588632707921109*^9}}],
+   3.588632550215487*^9, 3.588632591800701*^9}, {3.58863266118781*^9, 
+   3.588632707921109*^9}, {3.590957566700274*^9, 3.590957569325655*^9}, 
+   3.590957615987073*^9, {3.590958030045082*^9, 3.5909580405969152`*^9}, {
+   3.590958543091505*^9, 3.590958555831163*^9}}],
 
 Cell[BoxData[
  TagBox[
   StyleBox[
-   DynamicModuleBox[{$CellContext`i$$ = 10, $CellContext`range$$ = Full, 
+   DynamicModuleBox[{$CellContext`i$$ = 15, $CellContext`range$$ = Full, 
     Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
     Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
     1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
-      Hold[$CellContext`i$$], 1, 11, 1}, {
+      Hold[$CellContext`i$$], 1, 105, 1}, {
       Hold[$CellContext`range$$], {Full, Automatic}}}, Typeset`size$$ = {
-    403., {199., 204.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
-    Typeset`skipInitDone$$ = True, $CellContext`i$15505$$ = 
-    0, $CellContext`range$15506$$ = False}, 
+    349., {172., 177.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`i$37710$$ = 
+    0, $CellContext`range$37711$$ = False}, 
     DynamicBox[Manipulate`ManipulateBoxes[
      1, StandardForm, 
       "Variables" :> {$CellContext`i$$ = 1, $CellContext`range$$ = Full}, 
       "ControllerVariables" :> {
-        Hold[$CellContext`i$$, $CellContext`i$15505$$, 0], 
-        Hold[$CellContext`range$$, $CellContext`range$15506$$, False]}, 
+        Hold[$CellContext`i$$, $CellContext`i$37710$$, 0], 
+        Hold[$CellContext`range$$, $CellContext`range$37711$$, False]}, 
       "OtherVariables" :> {
        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
@@ -954,12 +1203,11 @@ $CellContext`label$ = StringJoin["\[Phi] = ",
         Show[$CellContext`Data$, PlotLabel -> Style[$CellContext`label$, 14], 
           AxesLabel -> {
             Style["x", 13], 
-            Style["y", 13], 
-            Style["a", 13]}]], 
-      "Specifications" :> {{$CellContext`i$$, 1, 11, 
+            Style["y", 13]}]], 
+      "Specifications" :> {{$CellContext`i$$, 1, 105, 
          1}, {$CellContext`range$$, {Full, Automatic}}}, "Options" :> {}, 
       "DefaultOptions" :> {}],
-     ImageSizeCache->{450., {257., 264.}},
+     ImageSizeCache->{396., {241., 248.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -969,11 +1217,310 @@ $CellContext`label$ = StringJoin["\[Phi] = ",
    Deployed->True,
    StripOnInput->False],
   Manipulate`InterpretManipulate[1]]], "Output",
- CellChangeTimes->{{3.5886326893363247`*^9, 3.5886327083417892`*^9}}]
+ CellChangeTimes->{{3.5886326893363247`*^9, 3.5886327083417892`*^9}, 
+   3.59095757015947*^9, 3.59095761675771*^9, {3.590958030744294*^9, 
+   3.590958041085011*^9}, {3.590958545482102*^9, 3.590958551565075*^9}, 
+   3.590963205649663*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", 
+   "\"\</home/carlos/Documentos/Programacion/QBill/Eclipse/bin/W=0.5//out/csv\
+\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"files", " ", "=", " ", 
+   RowBox[{"FileNames", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ";", " ", 
+    RowBox[{"csvFiles", " ", "=", " ", 
+     RowBox[{"{", "}"}]}], ";", " ", 
+    RowBox[{"\[Phi]s", " ", "=", " ", 
+     RowBox[{"{", "}"}]}]}], ",", " ", 
+   RowBox[{"i", "<=", 
+    RowBox[{"Length", "[", "files", "]"}]}], ",", " ", 
+   RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"FileExtension", "[", 
+       RowBox[{"files", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], " ", "\[Equal]", " ", 
+      "\"\<csv\>\""}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Obtener", " ", "valor", " ", "de", " ", "omega"}], " ", "*)"}],
+      "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"begin", " ", "=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<_\>\""}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"end", " ", "=", 
+       RowBox[{
+        RowBox[{"Last", "[", 
+         RowBox[{"StringPosition", "[", 
+          RowBox[{
+           RowBox[{"files", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", " ", "\"\<.\>\""}], "]"}], 
+         "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ph", " ", "=", " ", 
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"StringTake", "[", 
+         RowBox[{
+          RowBox[{"files", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"begin", "+", "1"}], ",", 
+            RowBox[{"end", "-", "1"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"csvFiles", ",", " ", 
+        RowBox[{"files", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"\[Phi]s", ",", " ", "ph"}], "]"}], ";"}], 
+     "\[IndentingNewLine]", ",", "False"}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"csvFiles", " ", "=", " ", 
+   RowBox[{"csvFiles", "[", 
+    RowBox[{"[", 
+     RowBox[{"Ordering", "[", "\[Phi]s", "]"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]s", " ", "=", " ", 
+   RowBox[{"Sort", "[", "\[Phi]s", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "dMax", ",", " ", "Data", ",", "scaledData", ",", "label", ",", "j"}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Data", " ", "=", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{"csvFiles", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"dMax", " ", "=", " ", 
+       RowBox[{"Max", "[", 
+        RowBox[{"Data", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "3"}], "]"}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"j", "=", "1"}], ";", " ", 
+         RowBox[{"scaledData", "=", 
+          RowBox[{"{", "}"}]}]}], ",", 
+        RowBox[{"j", "<", 
+         RowBox[{"Length", "[", "Data", "]"}]}], ",", 
+        RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"scaledData", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "2", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"Data", "[", 
+              RowBox[{"[", "j", "]"}], "]"}], "[", 
+             RowBox[{"[", "3", "]"}], "]"}]}], "}"}]}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"label", " ", "=", " ", 
+       RowBox[{"\"\<\[Phi] = \>\"", " ", "<>", " ", 
+        RowBox[{"ToString", "[", 
+         RowBox[{"\[Phi]s", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Show", "[", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"ParametricPlot3D", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Sin", "[", "t", "]"}], ",", 
+             RowBox[{"Cos", "[", "t", "]"}], ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"t", ",", "0", ",", 
+             RowBox[{"2", "\[Pi]"}]}], "}"}]}], "]"}], ","}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"ListDensityPlot", "[", 
+        RowBox[{"scaledData", ",", 
+         RowBox[{"PlotRange", "\[Rule]", "range"}], ",", " ", 
+         RowBox[{"PlotLabel", "\[Rule]", 
+          RowBox[{"Style", "[", 
+           RowBox[{"label", ",", "14"}], "]"}]}], ",", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<x\>\"", ",", " ", "13"}], "]"}], ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<y\>\"", ",", " ", "13"}], "]"}]}], "}"}]}], ",", 
+         RowBox[{"AxesOrigin", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0"}], "}"}]}], " ", ",", 
+         RowBox[{"ColorFunction", "\[Rule]", "\"\<Rainbow\>\""}], ",", 
+         RowBox[{"PlotLegends", "\[Rule]", "Automatic"}], ",", 
+         RowBox[{"Mesh", "\[Rule]", "Automatic"}]}], "]"}], 
+       "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", 
+     RowBox[{"Length", "[", "csvFiles", "]"}], ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"range", ",", 
+     RowBox[{"{", 
+      RowBox[{"Full", ",", "Automatic"}], "}"}]}], "}"}]}], 
+  "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.590960358796948*^9, 3.590960392814356*^9}, {
+  3.590960456588167*^9, 3.590960468998707*^9}, {3.590960515134985*^9, 
+  3.590960517249695*^9}, {3.590960591175816*^9, 3.590960593734334*^9}, {
+  3.590960649209206*^9, 3.590960653572167*^9}, {3.590960707387487*^9, 
+  3.590960719828059*^9}, {3.590962289761778*^9, 3.5909622899593887`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`i$$ = 1, $CellContext`range$$ = Full, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`i$$], 1, 105, 1}, {
+      Hold[$CellContext`range$$], {Full, Automatic}}}, Typeset`size$$ = {
+    584., {48., 13.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`i$37077$$ = 
+    0, $CellContext`range$37078$$ = False}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`i$$ = 1, $CellContext`range$$ = Full}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`i$$, $CellContext`i$37077$$, 0], 
+        Hold[$CellContext`range$$, $CellContext`range$37078$$, False]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Module[{$CellContext`dMax$, $CellContext`Data$, \
+$CellContext`scaledData$, $CellContext`label$, $CellContext`j$}, \
+$CellContext`Data$ = Import[
+           Part[$CellContext`csvFiles, $CellContext`i$$]]; $CellContext`dMax$ = 
+         Max[
+           Part[$CellContext`Data$, All, 3]]; 
+        For[$CellContext`j$ = 
+           1; $CellContext`scaledData$ = {}, $CellContext`j$ < 
+          Length[$CellContext`Data$], 
+          Increment[$CellContext`j$], 
+          AppendTo[$CellContext`scaledData$, {
+            Part[
+             Part[$CellContext`Data$, $CellContext`j$], 1], 
+            Part[
+             Part[$CellContext`Data$, $CellContext`j$], 2], 
+            Part[
+             Part[$CellContext`Data$, $CellContext`j$], 
+             3]}]]; $CellContext`label$ = StringJoin["\[Phi] = ", 
+           ToString[
+            Part[$CellContext`\[Phi]s, $CellContext`i$$]]]; Show[
+          
+          ListDensityPlot[$CellContext`scaledData$, 
+           PlotRange -> $CellContext`range$$, PlotLabel -> 
+           Style[$CellContext`label$, 14], AxesLabel -> {
+             Style["x", 13], 
+             Style["y", 13]}, AxesOrigin -> {0, 0}, ColorFunction -> 
+           "Rainbow", PlotLegends -> Automatic, Mesh -> Automatic]]], 
+      "Specifications" :> {{$CellContext`i$$, 1, 105, 
+         1}, {$CellContext`range$$, {Full, Automatic}}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{631., {86., 93.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.5909603761648808`*^9, 3.5909603936536503`*^9}, 
+   3.5909605182425537`*^9, 3.590960595297752*^9, 3.590960654522447*^9, {
+   3.590960708908587*^9, 3.590960720675886*^9}, 3.5909622906399317`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "nffil"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"File not found during \[NoBreak]\\!\\(Import\\)\[NoBreak]. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/Import/nffil\\\", \
+ButtonNote -> \\\"Import::nffil\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5909632068464193`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Symbol", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(Symbol\\)\[NoBreak] called with \[NoBreak]\
+\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\
+\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/argx\\\", ButtonNote -> \
+\\\"Symbol::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.59096320702341*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ListDensityPlot", "::", "argx"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListDensityPlot\\)\[NoBreak] called with \
+\[NoBreak]\\!\\(0\\)\[NoBreak] arguments; 1 argument is expected. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/argx\\\", \
+ButtonNote -> \\\"ListDensityPlot::argx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590963207076288*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Show", "::", "gtype"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\(ListDensityPlot\\)\[NoBreak] is not a type \
+of graphics. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Show/gtype\\\", ButtonNote -> \
+\\\"Show::gtype\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.590963207142249*^9}]
 }, Open  ]]
 },
-WindowSize->{773, 731},
-WindowMargins->{{108, Automatic}, {Automatic, 24}},
+WindowSize->{772, 848},
+WindowMargins->{{Automatic, -7}, {Automatic, 0}},
 FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
 StyleDefinitions->"Default.nb"
 ]
@@ -990,16 +1537,44 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[579, 22, 7801, 188, 825, "Input"],
-Cell[8383, 212, 2978, 63, 468, "Output"]
+Cell[8383, 212, 2978, 63, 446, "Output"],
+Cell[11364, 277, 516, 11, 24, "Message"],
+Cell[11883, 290, 514, 11, 24, "Message"],
+Cell[12400, 303, 540, 11, 24, "Message"],
+Cell[12943, 316, 493, 10, 24, "Message"],
+Cell[13439, 328, 513, 11, 24, "Message"],
+Cell[13955, 341, 530, 11, 24, "Message"],
+Cell[14488, 354, 505, 10, 24, "Message"],
+Cell[14996, 366, 444, 10, 24, "Message"],
+Cell[15443, 378, 505, 10, 24, "Message"],
+Cell[15951, 390, 442, 10, 24, "Message"],
+Cell[16396, 402, 514, 11, 24, "Message"],
+Cell[16913, 415, 538, 11, 24, "Message"],
+Cell[17454, 428, 493, 10, 24, "Message"],
+Cell[17950, 440, 504, 10, 24, "Message"],
+Cell[18457, 452, 442, 10, 24, "Message"],
+Cell[18902, 464, 514, 11, 24, "Message"],
+Cell[19419, 477, 538, 11, 24, "Message"],
+Cell[19960, 490, 493, 10, 24, "Message"],
+Cell[20456, 502, 505, 10, 24, "Message"],
+Cell[20964, 514, 442, 10, 24, "Message"]
 }, Open  ]],
-Cell[11376, 278, 156, 3, 32, "Input"],
-Cell[11535, 283, 7420, 184, 781, "Input"],
-Cell[18958, 469, 175, 3, 32, "Input"],
-Cell[19136, 474, 5879, 151, 737, "Input"],
-Cell[25018, 627, 6373, 163, 803, "Input"],
+Cell[21421, 527, 156, 3, 32, "Input"],
+Cell[21580, 532, 7420, 184, 781, "Input"],
+Cell[29003, 718, 175, 3, 32, "Input"],
+Cell[29181, 723, 5879, 151, 737, "Input"],
+Cell[35063, 876, 6373, 163, 803, "Input"],
 Cell[CellGroupData[{
-Cell[31416, 794, 5116, 127, 671, "Input"],
-Cell[36535, 923, 2309, 48, 538, "Output"]
+Cell[41461, 1043, 5197, 127, 693, "Input"],
+Cell[46661, 1172, 2450, 50, 506, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[49148, 1227, 6992, 177, 869, "Input"],
+Cell[56143, 1406, 3178, 65, 196, "Output"],
+Cell[59324, 1473, 440, 9, 24, "Message"],
+Cell[59767, 1484, 492, 10, 24, "Message"],
+Cell[60262, 1496, 520, 10, 24, "Message"],
+Cell[60785, 1508, 447, 10, 24, "Message"]
 }, Open  ]]
 }
 ]
