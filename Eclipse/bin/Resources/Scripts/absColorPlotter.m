@@ -1,4 +1,4 @@
-(* QBill plotter *)
+(* QBill color plotter *)
 
 Clear[Evaluate[Context[] <> "*"]]
 
@@ -26,15 +26,19 @@ csvFiles = csvFiles[[Ordering[phis]]];
 phis = Sort[phis];
 For[i=1, i<=Length[csvFiles], i++,
 	(* Escribir progreso *)
-	progress = "Plotting file " <> ToString[i] <> "/" <> ToString[Length[csvFiles]];
+	progress = "Plotting color file " <> ToString[i] <> "/" <> ToString[Length[csvFiles]];
 	Print[progress];
 
 	Data = Import[csvFiles[[i]]];
-	dMax = Max[Data[[All, 3]]];
-	For[j = 1; scaledData = {}, j < Length[Data], j++,
-		AppendTo[scaledData, {Data[[j]][[1]], Data[[j]][[2]], Data[[j]][[3]]/dMax}]
+
+	scaledData = {};
+	dMax = Max[Abs[Data[[All, 3]]]];
+	For[j = 1, j < Length[Data], j++,
+		AppendTo[scaledData, {Data[[j]][[1]], Data[[j]][[2]], Abs[Data[[j]][[3]]]/dMax}]
 	];
+
 	label = "\[Phi] = " <> ToString[phis[[i]]];
-	image = ListPlot3D[scaledData,PlotRange->Full, PlotLabel->Style[label, 14], AxesLabel->{Style["x", 13], Style["y", 13], Style["a", 13]} ];
-	Export["W=" <> $ScriptCommandLine[[2]] <> "/out/plots3d/img" <> ToString[i] <>".png",image]
+	image = ListDensityPlot[scaledData, PlotRange->Full, PlotLabel->Style[label, 14], AxesLabel->{Style["x", 13], Style["y", 13]}, 
+							AxesOrigin -> {0, 0} , ColorFunction -> "Rainbow", PlotLegends -> Automatic, Mesh -> Automatic, BaseStyle -> {FontSize -> 14}];
+	Export["W=" <> $ScriptCommandLine[[2]] <> "/out/nModesPlots/img" <> ToString[i] <>".png",image]
 ]

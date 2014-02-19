@@ -45,7 +45,7 @@ all: ../bin/QBill
 ../bin/QBill: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "../bin/QBill" $(OBJS) $(USER_OBJS) $(LIBS) `wx-config --libs`
+	g++ -o "../bin/QBill" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

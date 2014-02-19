@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
-using namespace cmrm;
+#include "StringFuncs.h"
 using namespace std;
 
 // GridElement.
@@ -55,6 +55,32 @@ Grid::Grid(const double epsilon)
         }
     }
 }
+Grid::Grid(const int size)
+{
+	m_size = size;
+	m_epsilon = 2.0/(double)m_size;
+
+	m_minx = -1.0;
+	m_maxx = 1.0;
+	m_miny = -1.0;
+	m_maxy = 1.0;
+	m_xfactor = (m_maxx-m_minx)/(m_size-1);
+	m_yfactor = (m_maxy-m_miny)/(m_size-1);
+
+	m_grid = new GridElement*[m_size];
+	for(int i=0; i<m_size; i++)
+	{
+		m_grid[i] = new GridElement[m_size];
+	}
+
+	for(int i=0; i<m_size; i++)
+	{
+		for(int j=0; j<m_size; j++)
+		{
+			m_grid[i][j].SetCoordinates(m_minx + i*m_xfactor, m_maxy - j*m_yfactor);
+		}
+	}
+}
 Grid::~Grid()
 {
 	for(int i=0; i<m_size; i++)
@@ -94,6 +120,51 @@ Coord Grid::GetCoord(const double x, const double y)
 int Grid::GetSize()
 {
     return m_size;
+}
+Grid Grid::Normalize(double max_value)
+{
+	double maxAmplitude = 0;
+	double minAmplitude = std::numeric_limits<double>::max();
+
+	for(int i=0; i<m_size; i++)
+	{
+		for(int j=0; j<m_size; j++)
+		{
+			if(m_grid[i][j].m_amplitude > maxAmplitude)
+				maxAmplitude = m_grid[i][j].m_amplitude;
+
+			if(m_grid[i][j].m_amplitude < minAmplitude && m_grid[i][j].m_amplitude != 0.0)
+				minAmplitude = m_grid[i][j].m_amplitude;
+		}
+	}
+
+	Grid out(m_size);
+	double maxValue = maxAmplitude;
+	double minValue = minAmplitude;
+	if(maxAmplitude <= minAmplitude) minValue = 0.0;
+	double diff = maxValue-minValue;
+
+	for(int i=0; i<m_size; i++)
+	{
+		for(int j=0; j<m_size; j++)
+		{
+			out[i][j].m_amplitude = max_value*(m_grid[i][j].m_amplitude-minValue)/diff;
+		}
+	}
+	return out;
+}
+Grid Grid::Absolute()
+{
+	// Take the absolute value of all it's elements.
+	Grid out(m_size);
+	for(int i=0; i<m_size; i++)
+	{
+		for(int j=0; j<m_size; j++)
+		{
+			out[i][j].m_amplitude = abs(m_grid[i][j].m_amplitude);
+		}
+	}
+	return out;
 }
 
 // Sim.

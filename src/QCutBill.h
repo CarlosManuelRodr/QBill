@@ -14,9 +14,9 @@
 #define _QCUTBILL
 
 #include <vector>
-#include <CMRMLib/CMRM.h>
-#include "Palette.h"
+#include <fstream>
 #include "CutBill.h"
+#include "Types.h"
 
 /**
 * @class GridElement
@@ -52,12 +52,16 @@ class Grid
 
 public:
     Grid(const double epsilon);
+    Grid(const int size);
     ~Grid();
     GridElement** GetGrid();
     GridElement*& operator[](const unsigned int pos);
     GridElement& GetGridElement(const double x, const double y);
-    cmrm::Coord GetCoord(const double x, const double y);
+    Coord GetCoord(const double x, const double y);
     int GetSize();
+
+    Grid Normalize(double max_value = 1);		///< Normalize all elements of the grid to values ranging from 0 to max_value.
+    Grid Absolute();		///< Return a grid with no negatives.
 };
 
 simres sim_billiard(BillParams param);		///< Launch the simulation of the trayectories on the Cut-Billiard.

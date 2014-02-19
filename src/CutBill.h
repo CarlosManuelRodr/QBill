@@ -10,7 +10,7 @@
 */
 
 #include <vector>
-#include <CMRMLib/CMRM.h>
+#include "Types.h"
 
 #ifndef _CUTBILL
 #define _CUTBILL
@@ -27,7 +27,7 @@ class simres
 public:
 	int colisiones;
 	int salida;
-	std::vector<cmrm::Coord> intersections;
+	std::vector<Coord> intersections;
 };
 
 simres sim_billiard(BillParams param);

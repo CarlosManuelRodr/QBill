@@ -2,14 +2,28 @@
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
+#include <ctime>
 #include "QCutBill.h"
 #include "muParserX/mpParser.h"
-#include <CMRMLib/CMRM.h>
-using namespace mup;
+#include "ConfigParser.h"
+#include "CsvParser.h"
+#include "Matrix.h"
+#include "Plotter.h"
+#include "System.h"
 using namespace std;
-using namespace cmrm;
 
 bool silent = false;
+
+const string GetCurrentDateTime()
+{
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+    return buf;
+}
 
 void Print(double W, string in)
 {
@@ -18,7 +32,7 @@ void Print(double W, string in)
 
 // Process has done i out of n rounds,
 // and we want a bar of width w and resolution r.
-static inline void loadBar(int x, int n, int r, int w, double phi)
+static inline void LoadBar(int x, int n, int r, int w, double phi)
 {
 #ifdef __linux__
     // Only update r times.
@@ -64,9 +78,9 @@ void Parser_Init(string expr)
 	string wexpr = expr;
 #endif
     parser.SetExpr(wexpr);
-    parser.DefineVar(_T("x"), mup::Variable(&xVal));
-    parser.DefineVar(_T("Iter"), mup::Variable(&iterVal));
-    parser.DefineVar(_T("i"), mup::Variable(&iVal));
+    parser.DefineVar(L"x", mup::Variable(&xVal));
+    parser.DefineVar(L"Iter", mup::Variable(&iterVal));
+    parser.DefineVar(L"i", mup::Variable(&iVal));
 }
 double Parser_Eval(double x, double i, double iter)
 {
@@ -75,6 +89,7 @@ double Parser_Eval(double x, double i, double iter)
     iterVal = iter;
     return parser.Eval().GetFloat();
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -91,7 +106,7 @@ int main(int argc, char *argv[])
     ConfigParser cp(paramFile);
     if(cp.FileOpened())
     {
-        // Billiard params.
+        // Get billiard params from file.
         BillParams param;
         double Min_Phi, Max_Phi, Phi_Step;
         string perturbation;
@@ -109,87 +124,104 @@ int main(int argc, char *argv[])
         cp.BoolArgToVar(Log, "Log", false);
 
         // Color output.
-        Palette palette;
-		wxGradient grad;
-		bool relative, colorOutput, forceMin, makeColorVideo;
-		int gradMax;
-		double minColorValue;
-		string colorPrefix, gradString, colorPlotter;
+		bool colorOutput, makeColorVideo, normalizeColor;
+		string colorPrefix, colorPlotter;
 		cp.BoolArgToVar(colorOutput, "Color_Output", false);
-		cp.IntArgToVar(gradMax, "Palette_Size", 300);
-		cp.StringArgToVar(colorPrefix, "Color_Prefix", "out_");
-		cp.StringArgToVar(gradString, "Color", "rgb(0,0,0);rgb(255,255,255);");
-		cp.BoolArgToVar(relative, "Relative_Color", true);
-		cp.BoolArgToVar(forceMin, "Force_Min", false);
-		cp.DblArgToVar(minColorValue, "Min_Color_Value", 0.0);
-		cp.StringArgToVar(colorPlotter, "Color_Plotter", "Legacy");
 		cp.BoolArgToVar(makeColorVideo, "Make_Color_Video", false);
+		cp.BoolArgToVar(normalizeColor, "Normalize_Color", false);
+		cp.StringArgToVar(colorPrefix, "Color_Prefix", "img_");
+		cp.StringArgToVar(colorPlotter, "Color_Plotter", "Internal");
 
-		grad.setMin(0);
-		grad.setMax(gradMax);
-		grad.fromString(gradString);
-		palette.SetGradient(grad);
-		palette.SetRelativeColor(relative);
+		// Absolute output.
+		bool absoluteOutput;
+		string absColorPlotter, absColorPrefix;
+		cp.BoolArgToVar(absoluteOutput, "Absolute_Output", false);
+		cp.StringArgToVar(absColorPlotter, "Abs_Color_Plotter", "Internal");
+		cp.StringArgToVar(absColorPrefix, "Abs_Color_Prefix", "img_");
 
 		// Csv output.
 		bool csvOutput, skipEmpty;
 		string csvPath, csvPrefix;
 		cp.BoolArgToVar(csvOutput, "Csv_Output", false);
 		cp.StringArgToVar(csvPrefix, "Csv_Prefix", "out_");
-		cp.BoolArgToVar(skipEmpty, "Skip_Empty", false);
+		cp.BoolArgToVar(skipEmpty, "Skip_Empty", true);
 
 		// Plotting.
 		bool plotCsv, makeVideo;
-		string plotter;
 		cp.BoolArgToVar(plotCsv, "Plot_Csv", false);
 		cp.BoolArgToVar(makeVideo,"Make_Video", false);
-		cp.StringArgToVar(plotter, "Plotter", "Mathematica");
 
-		// Check options and overwrite parameter with argument.
+		// Check options and overwrite parameter with argument if there is any.
 		if(argc > 2)
 		{
 			string arg;
 			for(int i= 2; i < argc; i++)
 			{
 				arg = argv[i];
-				arg = cmrm::rem_whitespaces(arg);
+				arg = rem_whitespaces(arg);
 
 				// Param omega.
-				if(cmrm::is_there_substr(arg, string("W=")))
+				if(is_there_substr(arg, string("W=")))
 				{
-					param.W = cmrm::string_to_num<double>(arg.substr(arg.find_first_of("=") + 1));
+					param.W = string_to_num<double>(arg.substr(arg.find_first_of("=") + 1));
 				}
 
 				// Param perturbation.
-				if(cmrm::is_there_substr(arg, string("Perturbation=")))
+				if(is_there_substr(arg, string("Perturbation=")))
 				{
 					perturbation = arg.substr(arg.find_first_of("=") + 1);
 				}
 
 				// Para iteration.
-				if(cmrm::is_there_substr(arg, string("Iterations=")))
+				if(is_there_substr(arg, string("Iterations=")))
 				{
-					param.iter = cmrm::string_to_num<int>(arg.substr(arg.find_first_of("=") + 1));
+					param.iter = string_to_num<int>(arg.substr(arg.find_first_of("=") + 1));
 				}
 
-				if(cmrm::is_there_substr(arg, string("--silent")) || cmrm::is_there_substr(arg, string("-s")))
+				if(is_there_substr(arg, string("--silent")) || is_there_substr(arg, string("-s")))
 				{
 					silent = true;
 				}
 			}
 		}
-		if(colorPlotter == "Mathematica") csvOutput = true;
+		if(colorOutput || absoluteOutput || plotCsv) csvOutput = true;
 
 		// Format output directories.
-		string command;
+		/*string command;
 		command = "sh Resources/Scripts/create_directories.sh ";
-		command += cmrm::num_to_string(param.W);
-		if(colorPlotter == "Legacy")
-			command += " 1";
-		else
-			command += " 0";
+		command += num_to_string(param.W);
+		command += " 0";
+		system(command.c_str());*/
 
-		system(command.c_str());
+		string temp;
+		string omega_folder = string("W=") + num_to_string(param.W);
+		if(directory_exist(omega_folder))
+		{
+			temp = omega_folder + "/out/colorPlots";
+			if(directory_exist(temp)) { rm(temp); }
+
+			temp = omega_folder + "/out/nModesPlots";
+			if(directory_exist(temp)) { rm(temp); }
+
+			temp = omega_folder + "/out/csv";
+			if(directory_exist(temp)) { rm(temp); }
+
+			temp = omega_folder + "/out/plots3d";
+			if(directory_exist(temp)) { rm(temp); }
+
+			mkdir(omega_folder + "/out/colorPlots");
+			mkdir(omega_folder + "/out/nModesPlots");
+			mkdir(omega_folder + "/out/csv");
+			mkdir(omega_folder + "/out/plots3d");
+		}
+		else
+		{
+			mkdir(omega_folder);
+			mkdir(omega_folder + "/out/colorPlots");
+			mkdir(omega_folder + "/out/nModesPlots");
+			mkdir(omega_folder + "/out/csv");
+			mkdir(omega_folder + "/out/plots3d");
+		}
 
 		// Create log.
 		ofstream file;
@@ -197,7 +229,7 @@ int main(int argc, char *argv[])
 		{
 			file.open("log.txt");
 			file << "QBill log - ";
-			file << cmrm::GetCurrentDateTime() << endl;
+			file << GetCurrentDateTime() << endl;
 			file << "-------------------------------" << endl;
 		}
 
@@ -207,52 +239,11 @@ int main(int argc, char *argv[])
         Print(param.W, "Simulating...");
         for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
         {
-            if(Min_Phi != Max_Phi && !silent) loadBar(i, steps, steps, 30, phi);
+            if( (Min_Phi != Max_Phi) && !silent) LoadBar(i, steps, steps, 30, phi);
             param.phi = phi;
             Grid qb = QuantumBill(param, &Parser_Eval, Log, &file);
 
-            if(colorOutput)
-            {
-            	if(colorPlotter == "Legacy")
-            	{
-					int gSize = qb.GetSize();
-					double maxAmplitude = 0;
-					double minAmplitude = 1e50;
-					if(palette.GetRelativeColorMode())
-					{
-						for(int i=0; i<gSize; i++)
-						{
-							for(int j=0; j<gSize; j++)
-							{
-								if(qb[i][j].m_amplitude > maxAmplitude) maxAmplitude = qb[i][j].m_amplitude;
-								if(qb[i][j].m_amplitude < minAmplitude && qb[i][j].m_amplitude != 0.0) minAmplitude = qb[i][j].m_amplitude;
-							}
-						}
-						palette.maxValue = maxAmplitude;
-						palette.minValue = minAmplitude;
-					}
-					if(maxAmplitude <= minAmplitude) palette.minValue = 0.0;
-					if(forceMin) palette.minValue = minColorValue;
-
-					// Draw bitmap.
-					cmrm::Matrix<Color> out(gSize, gSize);
-					for(int i=0; i<gSize; i++)
-					{
-						for(int j=0; j<gSize; j++)
-						{
-							if(palette.GetRelativeColorMode())
-								out[i][j] = palette.CalcColor(qb[j][i].m_amplitude);
-							else
-								out[i][j] = palette.CalcColor((qb[j][i].m_amplitude+1)*30);
-						}
-					}
-
-					string outName = string("W=") + num_to_string(param.W) + string("/") + colorPrefix;
-					outName += num_to_string(param.phi);
-					outName += ".bmp";
-					BMPPlot(out, outName);
-            	}
-            }
+            // Standard output.
             if(csvOutput)
             {
             	string outName = string("W=") + num_to_string(param.W) + string("/") + csvPrefix;
@@ -278,41 +269,101 @@ int main(int argc, char *argv[])
             	cw.Close();
             }
 
+            // Internal color plot.
+            if(colorOutput && colorPlotter == "Internal")
+            {
+            	// Draw bitmap.
+				int g_size = qb.GetSize();
+				Matrix<Color> out(g_size, g_size);
+				Grid plot_qb = qb.Normalize(60);
+
+				for(int i=0; i<g_size; i++)
+				{
+					for(int j=0; j<g_size; j++)
+					{
+						out[i][j] = CalcColor(plot_qb[j][i].m_amplitude);
+					}
+				}
+
+				string outName = string("W=") + num_to_string(param.W) + string("/") + colorPrefix;
+				outName += num_to_string(param.phi);
+				outName += ".bmp";
+				BMPPlot(out, outName);
+            }
+
+            // Internal abs plot.
+            if(absoluteOutput && absColorPlotter == "Internal")
+            {
+            	// Draw bitmap.
+				int g_size = qb.GetSize();
+				Matrix<Color> out(g_size, g_size);
+				Grid plot_qb = qb.Absolute().Normalize(60);
+
+				for(int i=0; i<g_size; i++)
+				{
+					for(int j=0; j<g_size; j++)
+					{
+						out[i][j] = CalcColor(plot_qb[j][i].m_amplitude);
+					}
+				}
+
+				string outName = string("W=") + num_to_string(param.W) + string("/") + absColorPrefix;
+				outName += num_to_string(param.phi);
+				outName += ".bmp";
+				BMPPlot(out, outName);
+            }
+
             i++;
         }
         if(Log) file.close();
 
-        if(colorOutput && (colorPlotter == "Mathematica"))
+        // Mathematica color plot.
+        string command;
+        if(colorOutput && colorPlotter == "Mathematica")
         {
         	Print(param.W, "Plotting color plots.. ");
         	command = "MathematicaScript -script Resources/Scripts/colorPlotter.m ";
-        	command += cmrm::num_to_string(param.W);
+        	command += num_to_string(param.W);
+        	if(normalizeColor)
+        		command += " True";
+        	else
+        		command += " False";
+
         	Print(param.W, "Executting: \"" + command + "\"");
         	system(command.c_str());
         }
 
+        // Mathematica Abs Plot.
+        if(absoluteOutput && absColorPlotter == "Mathematica")
+        {
+        	Print(param.W, "Plotting absolute color plots.. ");
+			command = "MathematicaScript -script Resources/Scripts/absColorPlotter.m ";
+			command += num_to_string(param.W);
+			Print(param.W, "Executting: \"" + command + "\"");
+			system(command.c_str());
+        }
+
+        // 3D Plot. Only available in Mathematica.
         if(plotCsv && csvOutput)
         {
         	Print(param.W, "Plotting csv.. ");
-        	if(plotter == "Mathematica")
-        	{
-        		command = "MathematicaScript -script Resources/Scripts/Plotter.m ";
-        		command += cmrm::num_to_string(param.W);
-        		system(command.c_str());
-        	}
+			command = "MathematicaScript -script Resources/Scripts/Plotter.m ";
+			command += num_to_string(param.W);
+			system(command.c_str());
 
         	if(makeVideo)
         	{
         		command = "sh Resources/Scripts/make_video.sh ";
-        		command += cmrm::num_to_string(param.W);
+        		command += num_to_string(param.W);
         		system(command.c_str());
         	}
         }
 
+        // Create video of the color plots with FFMpeg.
         if(makeColorVideo)
 		{
 			command = "sh Resources/Scripts/make_color_video.sh ";
-			command += cmrm::num_to_string(param.W);
+			command += num_to_string(param.W);
 			Print(param.W, "Executting: " + command);
 			system(command.c_str());
 		}

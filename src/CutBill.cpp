@@ -8,7 +8,6 @@
 #include <cmath>
 #include "CutBill.h"
 using namespace std;
-using namespace cmrm;
 typedef std::numeric_limits< double > dbl;
 
 // Otros

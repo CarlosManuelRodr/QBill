@@ -1,4 +1,4 @@
-(* QBill plotter *)
+(* QBill color plotter *)
 
 Clear[Evaluate[Context[] <> "*"]]
 
@@ -30,10 +30,17 @@ For[i=1, i<=Length[csvFiles], i++,
 	Print[progress];
 
 	Data = Import[csvFiles[[i]]];
-	dMax = Max[Data[[All, 3]]];
-	For[j = 1; scaledData = {}, j < Length[Data], j++,
-		AppendTo[scaledData, {Data[[j]][[1]], Data[[j]][[2]], Data[[j]][[3]]/dMax}]
+
+	scaledData = {};
+	If[$ScriptCommandLine[[3]] == "True",
+		dMax = Max[Data[[All, 3]]];
+		For[j = 1, j < Length[Data], j++,
+			AppendTo[scaledData, {Data[[j]][[1]], Data[[j]][[2]], Data[[j]][[3]]/dMax}]
+		];,
+
+		scaledData = Data;
 	];
+
 	label = "\[Phi] = " <> ToString[phis[[i]]];
 	image = ListDensityPlot[scaledData,PlotRange->Full, PlotLabel->Style[label, 14], AxesLabel->{Style["x", 13], Style["y", 13]}, AxesOrigin -> {0, 0} , ColorFunction -> "Rainbow", PlotLegends -> Automatic, Mesh -> Automatic];
 	Export["W=" <> $ScriptCommandLine[[2]] <> "/out/colorPlots/img" <> ToString[i] <>".png",image]
