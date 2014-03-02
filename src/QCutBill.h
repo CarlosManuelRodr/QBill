@@ -18,6 +18,7 @@
 #include "CutBill.h"
 #include "Types.h"
 
+
 /**
 * @class GridElement
 * @brief Element of the grid. Stores the actual data retrieved from the simulation.
@@ -27,6 +28,7 @@ class GridElement
 {
 public:
     double m_amplitude;
+    double m_time;
     std::vector<double> m_amprecord, m_timerecord;
 
     double m_x, m_y;
@@ -48,23 +50,26 @@ class Grid
     double m_epsilon;		///< Size of the grid element.
     double m_minx, m_maxx, m_miny, m_maxy;		///< Coordinates of the grid.
     double m_xfactor, m_yfactor;		///< Conversion factors: Coordinates <==> Grid element.
-    int m_size;		///< Size of the grid. Number of elements in a row or column.
+    unsigned int m_size;		///< Size of the grid. Number of elements in a row or column.
 
 public:
-    Grid(const double epsilon);
     Grid(const int size);
     ~Grid();
+
     GridElement** GetGrid();
-    GridElement*& operator[](const unsigned int pos);
     GridElement& GetGridElement(const double x, const double y);
     Coord GetCoord(const double x, const double y);
     int GetSize();
 
     Grid Normalize(double max_value = 1);		///< Normalize all elements of the grid to values ranging from 0 to max_value.
     Grid Absolute();		///< Return a grid with no negatives.
+
+    GridElement*& operator[](const unsigned int pos);
+    Grid operator+(Grid &in);
+    Grid& operator+=(Grid &in);
 };
 
-simres sim_billiard(BillParams param);		///< Launch the simulation of the trayectories on the Cut-Billiard.
-Grid QuantumBill(BillParams param, double (*disturbance)(double, double, double), bool log = true, std::ostream *out = NULL);
+Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(double, double), bool real_collision = false,
+				 bool log = false, std::ostream *out = NULL);
 
 #endif

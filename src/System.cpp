@@ -35,7 +35,7 @@ void mkdir(const string arg)
 void rm(const string arg)
 {
 #ifdef __linux__
-    string exec = string("rm -f ") + format_inside_quotes(arg);
+    string exec = string("rm -rf ") + format_inside_quotes(arg);
     int r = system(exec.c_str()); assert(r >= 0);
 #elif _WIN32
     std::ifstream infile(arg);

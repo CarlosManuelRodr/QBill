@@ -1,0 +1,90 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      2619,         80]
+NotebookOptionsPosition[      2309,         64]
+NotebookOutlinePosition[      2647,         79]
+CellTagsIndexPosition[      2604,         76]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Horizontal", " ", "test"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Data", " ", "=", " ", 
+     RowBox[{
+     "Import", "[", 
+      "\"\</home/carlos/Documentos/Programacion/QBill/Projects/Eclipse/Log/\
+error_horizontal.csv\>\"", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"ListPlot", "[", "Data", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6027157777461023`*^9, 3.6027157950949087`*^9}, {
+  3.602725980633247*^9, 3.602725988463051*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {{}, 
+    {RGBColor[0.24720000000000014`, 0.24, 0.6], PointBox[CompressedData["
+1:eJw10F1IU2EAxvGDCW3moouQQdDHtGZNqOYqs2xPpR2dtulRp+mNBFkNo05e
+2UUclpSb1UVBtCKRPqDDWKBQmUmlRDpWMvtyVmNa5mYKBhJdZPSBjwcOhx//
+i/O+z5qDx6VDSYIgmP+9/798YLu3OGe9fMk6z2X0TVoPvVnX1K366dVoa27x
+GuVOOgObT3gjsu4hnYn+iHZjr/qYzsLpHR7NH8MzehNma7TRtXIfbcaRU56O
+kqfPaQuiPu3ZRl0/vRXSI0/NtdognYMGzcVQlxqiczFmXNoe+/mK3gl/upi7
+KD1M70J99rnbabYhGvz/a3o3Aq4icfvVN/QenuctvRcGb3BF3cQ7Op/nG6YL
+4OptfeK2ROh9yBgKZV6pHaFFxEaXXFbdH+hC+L4X/+5RP9JFWKcf3PIy/Im2
+8T5RuhjXt9lTZlfG6BLeb5TejxbT4ZnzDxZsh8N6t3W5bYx2IEscQFt0waXQ
+OhI/jPLneSuliDs1/o7kL+xl3INWyuA9eXSuzzTOLnEfWpFQ4Fbr30tf2cu5
+F62UY/JGSle8aYK9Ai/ubDgm6+LsFbgVsBl+tdNCJZT7ruFmS4K9EmLQ35g6
+QAtO7jvJ7kTSyFR01QwtVHHvb+xV6EmYCrPTptircWauYbxbpZVq1CVf8OXn
+TbMfQF5qwD4Ynrb+BeRn5Cc=
+      "]]}, {}}, {}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->True,
+  AxesLabel->{None, None},
+  AxesOrigin->{0, 0},
+  Method->{},
+  PlotRange->{{0, 100.}, {0, 0.900489}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{2., 2.}, {0.01800978, 0.01800978}}]], "Output",
+ CellChangeTimes->{{3.602715791522382*^9, 3.6027158172758427`*^9}}]
+}, Open  ]]
+},
+WindowSize->{740, 728},
+WindowMargins->{{Automatic, 100}, {-9, Automatic}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 536, 13, 126, "Input"],
+Cell[1118, 37, 1175, 24, 237, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

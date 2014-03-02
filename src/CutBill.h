@@ -15,14 +15,16 @@
 #ifndef _CUTBILL
 #define _CUTBILL
 
+const double pi = 3.14159265358979323846;
+
 struct BillParams
 {
-    double W, phi, delta, gridSize;
+    double W, phi, delta, gridElementSize;
     bool closed;
     int iter;
 };
 
-class simres
+class Simres
 {
 public:
 	int colisiones;
@@ -30,7 +32,7 @@ public:
 	std::vector<Coord> intersections;
 };
 
-simres sim_billiard(BillParams param);
-simres simular(bool log,bool cerrado, bool silent);
+Simres Sim_Billiard(BillParams param);
+Simres Simulate(bool log,bool cerrado, bool silent);
 
 #endif

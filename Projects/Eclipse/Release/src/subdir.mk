@@ -13,6 +13,7 @@ CPP_SRCS += \
 /home/carlos/Documentos/Programacion/QBill/src/QCutBill.cpp \
 /home/carlos/Documentos/Programacion/QBill/src/StringFuncs.cpp \
 /home/carlos/Documentos/Programacion/QBill/src/System.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/Tests.cpp \
 /home/carlos/Documentos/Programacion/QBill/src/Types.cpp \
 /home/carlos/Documentos/Programacion/QBill/src/main.cpp 
 
@@ -26,6 +27,7 @@ OBJS += \
 ./src/QCutBill.o \
 ./src/StringFuncs.o \
 ./src/System.o \
+./src/Tests.o \
 ./src/Types.o \
 ./src/main.o 
 
@@ -39,6 +41,7 @@ CPP_DEPS += \
 ./src/QCutBill.d \
 ./src/StringFuncs.d \
 ./src/System.d \
+./src/Tests.d \
 ./src/Types.d \
 ./src/main.d 
 
@@ -101,6 +104,13 @@ src/StringFuncs.o: /home/carlos/Documentos/Programacion/QBill/src/StringFuncs.cp
 	@echo ' '
 
 src/System.o: /home/carlos/Documentos/Programacion/QBill/src/System.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C++ Compiler'
+	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+src/Tests.o: /home/carlos/Documentos/Programacion/QBill/src/Tests.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"

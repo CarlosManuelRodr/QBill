@@ -11,7 +11,6 @@ using namespace std;
 typedef std::numeric_limits< double > dbl;
 
 // Otros
-double pi = 3.14159265358979323846;
 double radians(double x){return x*pi/180.0;}
 double degrees(double x){return x*180.0/pi;}
 
@@ -33,12 +32,12 @@ double alpha; // Ángulo entre la normal de la frontera y el eje x
 int a;        // Apertura de salida
 
 
-simres simular(bool log=false,bool cerrado=false, bool silent=true)
+Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
 {
 	ofstream outf, outfs;
 	outf.precision(dbl::digits10-2);
 	outfs.precision(dbl::digits10-2);
-	simres res;
+	Simres res;
 	if(log)
 	{
 		outf.open ("data/bcc_tray.dat");
@@ -242,7 +241,7 @@ simres simular(bool log=false,bool cerrado=false, bool silent=true)
 	return res;
 }
 
-simres sim_billiard(BillParams param)
+Simres Sim_Billiard(BillParams param)
 {
     W = param.W;
     phi = param.phi;
@@ -253,5 +252,5 @@ simres sim_billiard(BillParams param)
     vy = v0*sin(param.phi);
     b = (W-R)/cos(omega - pi/2);
     max_iter = param.iter;
-    return simular(false, param.closed, false);
+    return Simulate(false, param.closed, false);
 }
