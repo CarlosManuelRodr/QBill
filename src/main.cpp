@@ -317,11 +317,23 @@ int main(int argc, char *argv[])
 
         // Start simulation.
 		unsigned int grid_size = 2.0/param.gridElementSize;
-		Grid total = Grid(grid_size);
+		//Grid total(grid_size);
         Parser_Init(perturbation);
         int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
         Print(param.W, "Simulating...");
-        for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
+
+        QBillParams q_params;
+        q_params.min_phi = Min_Phi;
+        q_params.max_phi = Max_Phi;
+        q_params.phi_step = Phi_Step;
+        q_params.grid_size = grid_size;
+        q_params.disturbance = &Parser_Eval;
+        q_params.real_collision = realistic_collision;
+        q_params.log = Log;
+
+        Grid total = Quantum_Wave(param, q_params, &file);
+
+        /*for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
         {
             if( (Min_Phi != Max_Phi) && !silent) { LoadBar(i, steps, steps, 30, phi); }
             param.phi = phi;
@@ -345,7 +357,7 @@ int main(int argc, char *argv[])
             }
 
             i++;
-        }
+        }*/
         if(calc_total)
         {
         	if(csvOutput) { Write_Csv(total, param.W, "Total", csvPrefix, skipEmpty); }

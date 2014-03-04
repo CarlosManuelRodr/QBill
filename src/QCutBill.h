@@ -18,6 +18,15 @@
 #include "CutBill.h"
 #include "Types.h"
 
+struct QBillParams
+{
+	unsigned int grid_size;
+	double min_phi, max_phi, phi_step;
+	double (*disturbance)(double, double);
+	bool real_collision;
+	bool log;
+};
+
 
 /**
 * @class GridElement
@@ -71,5 +80,7 @@ public:
 
 Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(double, double), bool real_collision = false,
 				 bool log = false, std::ostream *out = NULL);
+
+Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out = NULL);
 
 #endif

@@ -160,7 +160,7 @@ Grid& Grid::operator+=(Grid &in)
 	bool empty2 = true;
 
 	unsigned int size = in.GetSize();
-	for(unsigned int i=0; i<size; i++)
+	/*for(unsigned int i=0; i<size; i++)
 	{
 		for(unsigned int j=0; j<size; j++)
 		{
@@ -194,7 +194,7 @@ Grid& Grid::operator+=(Grid &in)
 				m_grid[i][j].m_time = 0.0;
 			}
 		}
-	}
+	}*/
 
 	// Sum amplitudes.
 	for(unsigned int i=0; i<size; i++)
@@ -202,7 +202,7 @@ Grid& Grid::operator+=(Grid &in)
 		for(unsigned int j=0; j<size; j++)
 		{
 			m_grid[i][j].m_amplitude += in[i][j].m_amplitude;
-			if(in[i][j].m_time > m_grid[i][j].m_time) { m_grid[i][j].m_time = in[i][j].m_time; }
+			//if(in[i][j].m_time > m_grid[i][j].m_time) { m_grid[i][j].m_time = in[i][j].m_time; }
 		}
 	}
 	return *this;
@@ -369,4 +369,220 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
         }
     }
     return bGrid;
+}
+
+Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
+{
+	// Generate list of collisions.
+	vector<Simres> tray_list;
+	for(double i=q_params.min_phi; i<=q_params.max_phi; i += q_params.phi_step)
+	{
+		params.phi = i;
+		tray_list.push_back(Sim_Billiard(params));
+	}
+
+	// Search for the shortest trayectory.
+	double shortest_tray = numeric_limits<double>::infinity();
+	unsigned int shortest_index = 0;
+	for(unsigned int i=0; i<tray_list.size(); i++)
+	{
+		if(tray_list[i].total_distance < shortest_tray)
+		{
+			shortest_tray = tray_list[i].total_distance;
+			shortest_index = i;
+		}
+	}
+
+	// Cheap and dirty cut.
+	for(unsigned int i=0; i<tray_list.size(); i++)
+	{
+		if(i == shortest_index) continue;
+
+		double x1,x2,y1,y2;
+		if(tray_list[i].intersections.size() > 0)
+		{
+			double accumulated_dist = 0;
+			for(unsigned int j=1; j<tray_list[i].intersections.size(); j++)
+			{
+				x1 = tray_list[i].intersections[j-1].m_x;
+				x2 = tray_list[i].intersections[j].m_x;
+				y1 = tray_list[i].intersections[j-1].m_y;
+				y2 = tray_list[i].intersections[j].m_y;
+				accumulated_dist += sqrt(pow(x2-x1, 2.0) + pow(y2-y1, 2.0));
+				if(accumulated_dist > shortest_tray)
+				{
+					tray_list[i].intersections.erase(tray_list[i].intersections.begin()+j+1,
+													 tray_list[i].intersections.end());
+
+					// Calculate slope.
+					double m = (y2-y1)/(x2-x1);
+					double diff = accumulated_dist - shortest_tray;
+				}
+			}
+		}
+	}
+
+	// Simulate wave for each phi.
+	Grid out_grid(q_params.grid_size);
+	for(unsigned int i=0; i<tray_list.size(); i++)
+	{
+		cout << i << "/" << tray_list.size() << endl;
+		double m,b;
+		double d;
+		double prevD = 0;
+		double phase = 0;
+		double x1,x2,y1,y2;
+		double stepX, stepY;
+		double tempX, tempY;
+		double grid_element_size = 2.0/(double)q_params.grid_size;
+		double delta = grid_element_size/10.0;
+		double infty = std::numeric_limits<double>::infinity();
+		Grid bGrid(q_params.grid_size);
+		Coord prevCoord = Coord(infty, infty);
+
+		unsigned int maxIter = tray_list[i].intersections.size();
+		for(unsigned int j=maxIter-1; j>0; j--)
+		{
+			x1 = tray_list[i].intersections[j-1].m_x;
+			x2 = tray_list[i].intersections[j].m_x;
+			y1 = tray_list[i].intersections[j-1].m_y;
+			y2 = tray_list[i].intersections[j].m_y;
+			m = (y2-y1)/(x2-x1);
+			b = y1 - m*x1;
+			stepX = abs(x2-x1)*delta;
+			stepY = abs(y2-y1)*delta;
+			d = -1;
+
+			if(abs(x2-x1) > 10e-6 || abs(y2-y1) > 10e-6)
+			{
+				if(x2 != x1)
+				{
+					double cuad = atan(abs(m));
+					while((cuad - 1.57079) > 0) cuad -= 1.57079;
+
+					// Slope < 45 degrees
+					if(cuad < 0.78539)
+					{
+						if(x2 > x1)
+						{
+							for(double xPos = x1; xPos < x2; xPos += stepX)
+							{
+								tempY = m*xPos + b;
+								if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+								{
+									d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
+									prevCoord = bGrid.GetCoord(xPos, tempY);
+									bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+						}
+						else
+						{
+							for(double xPos = x1; xPos > x2; xPos -= stepX)
+							{
+								tempY = m*xPos + b;
+								if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+								{
+									d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
+									prevCoord = bGrid.GetCoord(xPos, tempY);
+									bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+						}
+					}
+					// Slope > 45 degrees
+					else
+					{
+						if(y2 > y1)
+						{
+							for(double yPos = y1; yPos < y2; yPos += stepY)
+							{
+								tempX = (yPos-b)/m;
+								if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+								{
+									d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
+									prevCoord = bGrid.GetCoord(tempX, yPos);
+									bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+						}
+						else
+						{
+							for(double yPos = y1; yPos > y2; yPos -= stepY)
+							{
+								tempX = (yPos-b)/m;
+								if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+								{
+									d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
+									prevCoord = bGrid.GetCoord(tempX, yPos);
+									bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+						}
+					}
+					prevD += sqrt(pow(x2-x1, 2.0) + pow(y2-y1, 2.0));
+				}
+				// Slope -> Infinity. Vertical path.
+				else
+				{
+					if(y1 != y2)
+					{
+						if(y2 > y1)
+						{
+							for(double yPos = y1; yPos < y2; yPos += stepY)
+							{
+								if(bGrid.GetCoord(x1, yPos) != prevCoord)
+								{
+									d = abs(yPos-y1);
+									prevCoord = bGrid.GetCoord(x1, yPos);
+									bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+						}
+						else
+						{
+							for(double yPos = y1; yPos > y2; yPos -= stepY)
+							{
+								if(bGrid.GetCoord(x1, yPos) != prevCoord)
+								{
+									d = abs(yPos-y1);
+									prevCoord = bGrid.GetCoord(x1, yPos);
+									bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+						}
+						prevD += abs(y2-y1);
+					}
+				}
+
+				if(q_params.log)
+				{
+					if(d < 0)
+					{
+						*out << "[i=" << num_to_string(i) << ", x1=" << num_to_string(x1)
+							 << ", x2=" << num_to_string(x2) << ", y1=" << num_to_string(y1)
+							 << ", y2=" << num_to_string(y2) << "]  Negative d: " << num_to_string(d)
+							 << endl;
+
+					}
+				}
+
+				// Phase change on realistic collision.
+				if(q_params.real_collision) phase += pi;
+			}
+			else
+			{
+				if(q_params.log)
+				{
+					*out << "[i=" << num_to_string(i) << ", x1=" << num_to_string(x1)
+						 << ", x2=" << num_to_string(x2) << ", y1=" << num_to_string(y1)
+						 << ", y2=" << num_to_string(y2) << "]  Very small collision"
+						 << endl;
+
+				}
+			}
+		}
+		out_grid += bGrid;
+	}
+	return out_grid;
 }

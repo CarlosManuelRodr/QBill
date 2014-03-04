@@ -27,9 +27,12 @@ struct BillParams
 class Simres
 {
 public:
+	Simres();
+
 	int colisiones;
 	int salida;
 	std::vector<Coord> intersections;
+	double total_distance;
 };
 
 Simres Sim_Billiard(BillParams param);

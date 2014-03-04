@@ -10,6 +10,14 @@
 using namespace std;
 typedef std::numeric_limits< double > dbl;
 
+// Simres
+Simres::Simres()
+{
+	colisiones = 0;
+	salida = 0;
+	total_distance = 0.0;
+}
+
 // Otros
 double radians(double x){return x*pi/180.0;}
 double degrees(double x){return x*180.0/pi;}
@@ -243,6 +251,7 @@ Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
 
 Simres Sim_Billiard(BillParams param)
 {
+	Simres out;
     W = param.W;
     phi = param.phi;
     x = R*cos(radians(param.delta));
@@ -252,5 +261,16 @@ Simres Sim_Billiard(BillParams param)
     vy = v0*sin(param.phi);
     b = (W-R)/cos(omega - pi/2);
     max_iter = param.iter;
-    return Simulate(false, param.closed, false);
+    out = Simulate(false, param.closed, false);
+
+    // Calculate total distance.
+    if(out.intersections.size() > 0)
+    {
+		for(unsigned int i=1; i<out.intersections.size(); i++)
+		{
+			out.total_distance += sqrt(pow(out.intersections[i].m_x-out.intersections[i-1].m_x, 2.0) +
+					                   pow(out.intersections[i].m_y-out.intersections[i-1].m_y, 2.0));
+		}
+    }
+    return out;
 }
