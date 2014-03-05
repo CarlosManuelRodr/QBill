@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include "StringFuncs.h"
+#include "System.h"
 using namespace std;
 
 // GridElement.
@@ -393,7 +394,7 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		}
 	}
 
-	// Cheap and dirty cut.
+	// Cut.
 	for(unsigned int i=0; i<tray_list.size(); i++)
 	{
 		if(i == shortest_index) continue;
@@ -402,6 +403,7 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		if(tray_list[i].intersections.size() > 0)
 		{
 			double accumulated_dist = 0;
+			double prev_accum_dist = 0;
 			for(unsigned int j=1; j<tray_list[i].intersections.size(); j++)
 			{
 				x1 = tray_list[i].intersections[j-1].m_x;
@@ -416,8 +418,16 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 
 					// Calculate slope.
 					double m = (y2-y1)/(x2-x1);
-					double diff = accumulated_dist - shortest_tray;
+					double b = y1 - m*x1;
+					double diff = shortest_tray - prev_accum_dist;
+					if(x2 > x1)
+						x2 = tray_list[i].intersections[j].m_x = diff/sqrt(1+pow(m, 2.0)) + x1;
+					else
+						x2 = tray_list[i].intersections[j].m_x = -diff/sqrt(1+pow(m, 2.0)) + x1;
+
+					tray_list[i].intersections[j].m_y = m*x2 + b;
 				}
+				prev_accum_dist = accumulated_dist;
 			}
 		}
 	}
@@ -426,7 +436,6 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 	Grid out_grid(q_params.grid_size);
 	for(unsigned int i=0; i<tray_list.size(); i++)
 	{
-		cout << i << "/" << tray_list.size() << endl;
 		double m,b;
 		double d;
 		double prevD = 0;
@@ -436,17 +445,19 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		double tempX, tempY;
 		double grid_element_size = 2.0/(double)q_params.grid_size;
 		double delta = grid_element_size/10.0;
-		double infty = std::numeric_limits<double>::infinity();
+		double infty = numeric_limits<double>::infinity();
 		Grid bGrid(q_params.grid_size);
 		Coord prevCoord = Coord(infty, infty);
+
+		LoadBar(i, tray_list.size(), tray_list.size(), 30, infty);
 
 		unsigned int maxIter = tray_list[i].intersections.size();
 		for(unsigned int j=maxIter-1; j>0; j--)
 		{
-			x1 = tray_list[i].intersections[j-1].m_x;
-			x2 = tray_list[i].intersections[j].m_x;
-			y1 = tray_list[i].intersections[j-1].m_y;
-			y2 = tray_list[i].intersections[j].m_y;
+			x2 = tray_list[i].intersections[j-1].m_x;
+			x1 = tray_list[i].intersections[j].m_x;
+			y2 = tray_list[i].intersections[j-1].m_y;
+			y1 = tray_list[i].intersections[j].m_y;
 			m = (y2-y1)/(x2-x1);
 			b = y1 - m*x1;
 			stepX = abs(x2-x1)*delta;
@@ -584,5 +595,6 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		}
 		out_grid += bGrid;
 	}
+
 	return out_grid;
 }

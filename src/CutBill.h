@@ -20,6 +20,7 @@ const double pi = 3.14159265358979323846;
 struct BillParams
 {
     double W, phi, delta, gridElementSize;
+    double injection_x, injection_y;
     bool closed;
     int iter;
 };

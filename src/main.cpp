@@ -2,7 +2,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
-#include <ctime>
 #include "QCutBill.h"
 #include "muParserX/mpParser.h"
 #include "ConfigParser.h"
@@ -12,89 +11,6 @@
 #include "System.h"
 #include "Tests.h"
 using namespace std;
-
-bool silent = false;
-
-// System.
-const string GetCurrentDateTime()
-{
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
-    tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
-
-    return buf;
-}
-
-void Print(double W, string in)
-{
-	if(!silent) cout << "[W=" << num_to_string(W) << "] " << in << endl;
-}
-
-// Process has done i out of n rounds,
-// and we want a bar of width w and resolution r.
-static inline void LoadBar(int x, int n, int r, int w, double phi)
-{
-#ifdef __linux__
-    // Only update r times.
-    if ( x % (n/r) != 0 ) return;
-
-    // Calculuate the ratio of complete-to-incomplete.
-    float ratio = x/(float)n;
-    int   c     = ratio * w;
-
-    // Show the percentage complete.
-    printf("%3d%% [", (int)(ratio*100) );
-
-    // Show the load bar.
-    for (int x=0; x<c; x++)
-       printf("=");
-
-    for (int x=c; x<w; x++)
-       printf(" ");
-
-    // ANSI Control codes to go back to the
-    // previous line and clear it.
-     cout << "] Phi: " << phi;
-     printf("\n\033[F\033[J");
-#else
-	system("cls");
-	cout << 100*(x/(float)n) << " %   Phi: " << phi << endl;
-#endif
-}
-void Setup_Directories(double omega)
-{
-	string temp;
-	string omega_folder = string("W=") + num_to_string(omega);
-	if(directory_exist(omega_folder))
-	{
-		temp = omega_folder + "/out/colorPlots";
-		if(directory_exist(temp)) { rm(temp); }
-
-		temp = omega_folder + "/out/nModesPlots";
-		if(directory_exist(temp)) { rm(temp); }
-
-		temp = omega_folder + "/out/csv";
-		if(directory_exist(temp)) { rm(temp); }
-
-		temp = omega_folder + "/out/plots3d";
-		if(directory_exist(temp)) { rm(temp); }
-
-		mkdir(omega_folder + "/out/colorPlots");
-		mkdir(omega_folder + "/out/nModesPlots");
-		mkdir(omega_folder + "/out/csv");
-		mkdir(omega_folder + "/out/plots3d");
-	}
-	else
-	{
-		mkdir(omega_folder);
-		mkdir(omega_folder + "/out/colorPlots");
-		mkdir(omega_folder + "/out/nModesPlots");
-		mkdir(omega_folder + "/out/csv");
-		mkdir(omega_folder + "/out/plots3d");
-	}
-}
 
 // Parser
 /*
@@ -173,7 +89,7 @@ void Write_Abs_Bitmap(Grid& gd, double omega, string phi, string prefix)
 	// Draw bitmap.
 	int g_size = gd.GetSize();
 	Matrix<Color> out(g_size, g_size);
-	Grid plot_qb = gd.Absolute().Normalize(60);
+	Grid plot_qb = gd.Absolute().Normalize(45);
 
 	for(int i=0; i<g_size; i++)
 	{
@@ -212,9 +128,11 @@ int main(int argc, char *argv[])
         // Get billiard params from file.
         BillParams param;
         double Min_Phi, Max_Phi, Phi_Step;
-        string perturbation;
-        bool Log, realistic_collision, calc_total, gen_indiv_data;
+        string perturbation, sim_mode;
+        bool Log, realistic_collision;
+        bool default_directories;
 
+        cp.StringArgToVar(sim_mode, "Sim_Mode", "Wave");
         cp.DblArgToVar(param.W, "Omega", 2.0);
         cp.DblArgToVar(Min_Phi, "Min_phi", -1.57);
         cp.DblArgToVar(Max_Phi, "Max_phi", 1.57);
@@ -223,11 +141,12 @@ int main(int argc, char *argv[])
         cp.DblArgToVar(param.gridElementSize, "Grid_Element_Size", 0.005);
         cp.BoolArgToVar(param.closed, "Closed", true);
         cp.IntArgToVar(param.iter, "Iterations", 5000);
+        cp.DblArgToVar(param.injection_x, "Injection_X", 1.0);
+        cp.DblArgToVar(param.injection_y, "Injection_Y", 0.0);
         cp.StringArgToVar(perturbation, "Perturbation", "sin(x)^2");
         cp.BoolArgToVar(realistic_collision, "Realistic_Collision", false);
-        cp.BoolArgToVar(calc_total, "Calculate_Total", true);
-        cp.BoolArgToVar(gen_indiv_data, "Gen_Individual_Data", true);
         cp.BoolArgToVar(Log, "Log", false);
+        cp.BoolArgToVar(default_directories, "Default_Directories", true);
 
         // Color output.
 		bool colorOutput, makeColorVideo, normalizeColor;
@@ -278,10 +197,15 @@ int main(int argc, char *argv[])
 					perturbation = arg.substr(arg.find_first_of("=") + 1);
 				}
 
-				// Para iteration.
+				// Param iteration.
 				if(is_there_substr(arg, string("Iterations=")))
 				{
 					param.iter = string_to_num<int>(arg.substr(arg.find_first_of("=") + 1));
+				}
+
+				if(is_there_substr(arg, string("Abs_Color_Prefix")))
+				{
+					absColorPrefix = arg.substr(arg.find_first_of("=") + 1);
 				}
 
 				if(is_there_substr(arg, string("--silent")) || is_there_substr(arg, string("-s")))
@@ -291,7 +215,6 @@ int main(int argc, char *argv[])
 			}
 		}
 		if(colorOutput || absoluteOutput || plotCsv) csvOutput = true;
-		if(gen_indiv_data == false) calc_total = true;
 
 		// Tests.
 		if(Make_Tests)
@@ -303,7 +226,7 @@ int main(int argc, char *argv[])
 		}
 
 		// Format output directories.
-		Setup_Directories(param.W);
+		if(default_directories) { Setup_Directories(param.W); }
 
 		// Create log.
 		ofstream file;
@@ -317,35 +240,22 @@ int main(int argc, char *argv[])
 
         // Start simulation.
 		unsigned int grid_size = 2.0/param.gridElementSize;
-		//Grid total(grid_size);
         Parser_Init(perturbation);
         int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
         Print(param.W, "Simulating...");
 
-        QBillParams q_params;
-        q_params.min_phi = Min_Phi;
-        q_params.max_phi = Max_Phi;
-        q_params.phi_step = Phi_Step;
-        q_params.grid_size = grid_size;
-        q_params.disturbance = &Parser_Eval;
-        q_params.real_collision = realistic_collision;
-        q_params.log = Log;
-
-        Grid total = Quantum_Wave(param, q_params, &file);
-
-        /*for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
+        if(sim_mode == "Linear")
         {
-            if( (Min_Phi != Max_Phi) && !silent) { LoadBar(i, steps, steps, 30, phi); }
-            param.phi = phi;
+			for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
+			{
+				if( (Min_Phi != Max_Phi) && !silent) { LoadBar(i, steps, steps, 30, phi); }
+				param.phi = phi;
 
-            Simres result = Sim_Billiard(param);	// Classical trayectories.
-            Grid qb = Quantum_Bill(grid_size, result, &Parser_Eval, realistic_collision, Log, &file);	// Quantum grid.
+				Simres result = Sim_Billiard(param);	// Classical trayectories.
+				Grid qb = Quantum_Bill(grid_size, result, &Parser_Eval, realistic_collision, Log, &file);	// Quantum grid.
 
-            if(calc_total) { total += qb; }
-            string str_phi = num_to_string(phi);
+				string str_phi = num_to_string(phi);
 
-            if(gen_indiv_data)
-            {
 				// Standard output.
 				if(csvOutput) { Write_Csv(qb, param.W, str_phi, csvPrefix, skipEmpty); }
 
@@ -354,70 +264,83 @@ int main(int argc, char *argv[])
 
 				// Internal abs plot.
 				if(absoluteOutput && absColorPlotter == "Internal") { Write_Abs_Bitmap(qb, param.W, str_phi, absColorPrefix); }
-            }
 
-            i++;
-        }*/
-        if(calc_total)
+				i++;
+			}
+
+			// Mathematica color plot.
+			string command;
+			if(colorOutput && colorPlotter == "Mathematica")
+			{
+				Print(param.W, "Plotting color plots.. ");
+				command = "MathematicaScript -script Resources/Scripts/colorPlotter.m ";
+				command += num_to_string(param.W);
+				if(normalizeColor)
+					command += " True";
+				else
+					command += " False";
+
+				Print(param.W, "Executting: \"" + command + "\"");
+				system(command.c_str());
+			}
+
+			// Mathematica Abs Plot.
+			if(absoluteOutput && absColorPlotter == "Mathematica")
+			{
+				Print(param.W, "Plotting absolute color plots.. ");
+				command = "MathematicaScript -script Resources/Scripts/absColorPlotter.m ";
+				command += num_to_string(param.W);
+				Print(param.W, "Executting: \"" + command + "\"");
+				system(command.c_str());
+			}
+
+			// 3D Plot. Only available in Mathematica.
+			if(plotCsv && csvOutput)
+			{
+				Print(param.W, "Plotting csv.. ");
+				command = "MathematicaScript -script Resources/Scripts/Plotter.m ";
+				command += num_to_string(param.W);
+				system(command.c_str());
+
+				if(makeVideo)
+				{
+					command = "sh Resources/Scripts/make_video.sh ";
+					command += num_to_string(param.W);
+					system(command.c_str());
+				}
+			}
+
+			// Create video of the color plots with FFMpeg.
+			if(makeColorVideo)
+			{
+				command = "sh Resources/Scripts/make_color_video.sh ";
+				command += num_to_string(param.W);
+				Print(param.W, "Executting: " + command);
+				system(command.c_str());
+			}
+        }
+        else if(sim_mode == "Wave")
         {
+        	QBillParams q_params;
+			q_params.min_phi = Min_Phi;
+			q_params.max_phi = Max_Phi;
+			q_params.phi_step = Phi_Step;
+			q_params.grid_size = grid_size;
+			q_params.disturbance = &Parser_Eval;
+			q_params.real_collision = realistic_collision;
+			q_params.log = Log;
+        	Grid total = Quantum_Wave(param, q_params, &file);
+
         	if(csvOutput) { Write_Csv(total, param.W, "Total", csvPrefix, skipEmpty); }
 			if(colorOutput && colorPlotter == "Internal") { Write_Bitmap(total, param.W, "Total", colorPrefix); }
 			if(absoluteOutput && absColorPlotter == "Internal") { Write_Abs_Bitmap(total, param.W, "Total", absColorPrefix); }
         }
+        else
+        {
+        	Print(param.W, "Unavailable simulation mode: " + sim_mode);
+        }
 
         if(Log) file.close();
-
-        // Mathematica color plot.
-        string command;
-        if(colorOutput && colorPlotter == "Mathematica")
-        {
-        	Print(param.W, "Plotting color plots.. ");
-        	command = "MathematicaScript -script Resources/Scripts/colorPlotter.m ";
-        	command += num_to_string(param.W);
-        	if(normalizeColor)
-        		command += " True";
-        	else
-        		command += " False";
-
-        	Print(param.W, "Executting: \"" + command + "\"");
-        	system(command.c_str());
-        }
-
-        // Mathematica Abs Plot.
-        if(absoluteOutput && absColorPlotter == "Mathematica")
-        {
-        	Print(param.W, "Plotting absolute color plots.. ");
-			command = "MathematicaScript -script Resources/Scripts/absColorPlotter.m ";
-			command += num_to_string(param.W);
-			Print(param.W, "Executting: \"" + command + "\"");
-			system(command.c_str());
-        }
-
-        // 3D Plot. Only available in Mathematica.
-        if(plotCsv && csvOutput)
-        {
-        	Print(param.W, "Plotting csv.. ");
-			command = "MathematicaScript -script Resources/Scripts/Plotter.m ";
-			command += num_to_string(param.W);
-			system(command.c_str());
-
-        	if(makeVideo)
-        	{
-        		command = "sh Resources/Scripts/make_video.sh ";
-        		command += num_to_string(param.W);
-        		system(command.c_str());
-        	}
-        }
-
-        // Create video of the color plots with FFMpeg.
-        if(makeColorVideo)
-		{
-			command = "sh Resources/Scripts/make_color_video.sh ";
-			command += num_to_string(param.W);
-			Print(param.W, "Executting: " + command);
-			system(command.c_str());
-		}
-
         Print(param.W, "Done.");
     }
     else

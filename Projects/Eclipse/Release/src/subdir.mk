@@ -4,18 +4,18 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/BinaryOps.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/BmpWriter.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/ConfigParser.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/CsvParser.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/CutBill.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/Plotter.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/QCutBill.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/StringFuncs.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/System.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/Tests.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/Types.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/main.cpp 
+/home/carlos/Documentos/Programacion/QBill/src/BinaryOps.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/BmpWriter.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/ConfigParser.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/CsvParser.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/CutBill.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/Plotter.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/QCutBill.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/StringFuncs.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/System.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/Tests.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/Types.cpp \
+/home/carlos/Documentos/Programacion/QBill/src/main.cpp 
 
 OBJS += \
 ./src/BinaryOps.o \
@@ -47,84 +47,84 @@ CPP_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-src/BinaryOps.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/BinaryOps.cpp
+src/BinaryOps.o: /home/carlos/Documentos/Programacion/QBill/src/BinaryOps.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/BmpWriter.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/BmpWriter.cpp
+src/BmpWriter.o: /home/carlos/Documentos/Programacion/QBill/src/BmpWriter.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/ConfigParser.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/ConfigParser.cpp
+src/ConfigParser.o: /home/carlos/Documentos/Programacion/QBill/src/ConfigParser.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/CsvParser.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/CsvParser.cpp
+src/CsvParser.o: /home/carlos/Documentos/Programacion/QBill/src/CsvParser.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/CutBill.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/CutBill.cpp
+src/CutBill.o: /home/carlos/Documentos/Programacion/QBill/src/CutBill.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/Plotter.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/Plotter.cpp
+src/Plotter.o: /home/carlos/Documentos/Programacion/QBill/src/Plotter.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/QCutBill.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/QCutBill.cpp
+src/QCutBill.o: /home/carlos/Documentos/Programacion/QBill/src/QCutBill.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/StringFuncs.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/StringFuncs.cpp
+src/StringFuncs.o: /home/carlos/Documentos/Programacion/QBill/src/StringFuncs.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/System.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/System.cpp
+src/System.o: /home/carlos/Documentos/Programacion/QBill/src/System.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/Tests.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/Tests.cpp
+src/Tests.o: /home/carlos/Documentos/Programacion/QBill/src/Tests.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/Types.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/Types.cpp
+src/Types.o: /home/carlos/Documentos/Programacion/QBill/src/Types.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
-src/main.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/main.cpp
+src/main.o: /home/carlos/Documentos/Programacion/QBill/src/main.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"

@@ -1,7 +1,11 @@
 #include "System.h"
+#include "StringFuncs.h"
 #include <cassert>
 #include <cstdlib>
 #include <fstream>
+#include <ctime>
+#include <iostream>
+#include <limits>
 using namespace std;
 
 #ifdef _WIN32
@@ -14,6 +18,9 @@ using namespace std;
 #include <dirent.h>
 #include <pwd.h>
 #endif
+
+// Global.
+bool silent = false;
 
 string format_inside_quotes(const string in)
 {
@@ -47,8 +54,6 @@ void rm(const string arg)
     }
 #endif
 }
-
-// Directories and files.
 bool directory_exist( string dir )
 {
 	const char* pzPath = dir.c_str();
@@ -82,4 +87,93 @@ bool file_exist(const char *fileName)
 {
     std::ifstream infile(fileName);
     return infile.good();
+}
+void Setup_Directories(double omega)
+{
+	string temp;
+	string omega_folder = string("W=") + num_to_string(omega);
+	if(directory_exist(omega_folder))
+	{
+		temp = omega_folder + "/out/colorPlots";
+		if(directory_exist(temp)) { rm(temp); }
+
+		temp = omega_folder + "/out/nModesPlots";
+		if(directory_exist(temp)) { rm(temp); }
+
+		temp = omega_folder + "/out/csv";
+		if(directory_exist(temp)) { rm(temp); }
+
+		temp = omega_folder + "/out/plots3d";
+		if(directory_exist(temp)) { rm(temp); }
+
+		mkdir(omega_folder + "/out/colorPlots");
+		mkdir(omega_folder + "/out/nModesPlots");
+		mkdir(omega_folder + "/out/csv");
+		mkdir(omega_folder + "/out/plots3d");
+	}
+	else
+	{
+		mkdir(omega_folder);
+		mkdir(omega_folder + "/out/colorPlots");
+		mkdir(omega_folder + "/out/nModesPlots");
+		mkdir(omega_folder + "/out/csv");
+		mkdir(omega_folder + "/out/plots3d");
+	}
+}
+
+
+// Printing.
+const string GetCurrentDateTime()
+{
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+    return buf;
+}
+
+void Print(double W, string in)
+{
+	if(!silent) cout << "[W=" << num_to_string(W) << "] " << in << endl;
+}
+
+// Process has done i out of n rounds,
+// and we want a bar of width w and resolution r.
+void LoadBar(int x, int n, int r, int w, double phi)
+{
+#ifdef __linux__
+    // Only update r times.
+    if ( x % (n/r) != 0 ) return;
+
+    // Calculuate the ratio of complete-to-incomplete.
+    float ratio = x/(float)n;
+    int   c     = ratio * w;
+
+    // Show the percentage complete.
+    printf("%3d%% [", (int)(ratio*100) );
+
+    // Show the load bar.
+    for (int x=0; x<c; x++)
+       printf("=");
+
+    for (int x=c; x<w; x++)
+       printf(" ");
+
+    // ANSI Control codes to go back to the
+    // previous line and clear it.
+    if(phi != numeric_limits<double>::infinity())
+    {
+    	cout << "] Phi: " << phi;
+    }
+    else
+    {
+    	cout << "]";
+    }
+    printf("\n\033[F\033[J");
+#else
+	system("cls");
+	cout << 100*(x/(float)n) << " %   Phi: " << phi << endl;
+#endif
 }
