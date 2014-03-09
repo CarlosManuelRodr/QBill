@@ -75,7 +75,14 @@ void Test_Quantum()
 	test.intersections.push_back(Coord(-1.0, 0.0));
 	test.intersections.push_back(Coord(1.0, 0.0));
 	test.intersections.push_back(Coord(-1.0, 0.0));
-	Grid gd = Quantum_Bill(200, test, &Square_Test_Sin, false, false, NULL);
+
+	QBillParams q_params;
+	q_params.grid_size = 200;
+	q_params.disturbance = &Square_Test_Sin;
+	q_params.real_collision = false;
+	q_params.skip_same = false;
+	q_params.log = false;
+	Grid gd = Quantum_Bill(test, q_params, NULL);
 
 	bool test_ok = true;
 	double max_error = 0.01;
@@ -86,33 +93,30 @@ void Test_Quantum()
 			if(abs(gd[i][j].m_amplitude) > max_error)
 			{
 				test_ok = false;
-				//cout << gd[i][j].m_amplitude << endl;
+			}
+		}
+	}
+
+
+	// Calculate mean error.
+	double active_elements = 0.0;
+	double values = 0.0;
+	for(unsigned int i=0; i<gd.GetSize(); i++)
+	{
+		for(unsigned j=0; j<gd.GetSize(); j++)
+		{
+			if(gd[i][j].m_amplitude != 0)
+			{
+				active_elements++;
+				values += abs(gd[i][j].m_amplitude);
 			}
 		}
 	}
 
 	if(test_ok)
-		cout << "Test Quantum: Horizontal test OK" << endl;
+		cout << "Test Quantum: Horizontal test OK. Mean error: " << num_to_string(values/active_elements) << endl;
 	else
-	{
-		// Calculate error.
-		double active_elements = 0.0;
-		double values = 0.0;
-
-		for(unsigned int i=0; i<gd.GetSize(); i++)
-		{
-			for(unsigned j=0; j<gd.GetSize(); j++)
-			{
-				if(gd[i][j].m_amplitude != 0)
-				{
-					active_elements++;
-					values += abs(gd[i][j].m_amplitude);
-				}
-			}
-		}
-
 		cout << "Test Quantum: Horizontal test FAILED with mean error: " << num_to_string(values/active_elements) << endl;;
-	}
 
 	// Vertical test.
 	test.colisiones = 3;
@@ -139,7 +143,14 @@ void Plot_Quantum_Error(unsigned int iter, unsigned int grid_size)
 				else
 					test.intersections.push_back(Coord(1.0, 0.0));
 			}
-			Grid gd = Quantum_Bill(grid_size, test, &Square_Test_Sin, false, false, NULL);
+
+			QBillParams q_params;
+			q_params.grid_size = grid_size;
+			q_params.disturbance = &Square_Test_Sin;
+			q_params.real_collision = false;
+			q_params.skip_same = false;
+			q_params.log = false;
+			Grid gd = Quantum_Bill(test, q_params, NULL);
 
 			// Calculate error.
 			double active_elements = 0.0;

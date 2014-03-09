@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
         BillParams param;
         double Min_Phi, Max_Phi, Phi_Step;
         string perturbation, sim_mode;
-        bool Log, realistic_collision;
+        bool Log, realistic_collision, skip_same;
         bool default_directories;
 
         cp.StringArgToVar(sim_mode, "Sim_Mode", "Wave");
@@ -145,6 +145,7 @@ int main(int argc, char *argv[])
         cp.DblArgToVar(param.injection_y, "Injection_Y", 0.0);
         cp.StringArgToVar(perturbation, "Perturbation", "sin(x)^2");
         cp.BoolArgToVar(realistic_collision, "Realistic_Collision", false);
+        cp.BoolArgToVar(skip_same, "Skip_Same", false);
         cp.BoolArgToVar(Log, "Log", false);
         cp.BoolArgToVar(default_directories, "Default_Directories", true);
 
@@ -240,6 +241,15 @@ int main(int argc, char *argv[])
 
         // Start simulation.
 		unsigned int grid_size = 2.0/param.gridElementSize;
+		QBillParams q_params;
+		q_params.min_phi = Min_Phi;
+		q_params.max_phi = Max_Phi;
+		q_params.phi_step = Phi_Step;
+		q_params.grid_size = grid_size;
+		q_params.disturbance = &Parser_Eval;
+		q_params.real_collision = realistic_collision;
+		q_params.skip_same = skip_same;
+		q_params.log = Log;
         Parser_Init(perturbation);
         int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
         Print(param.W, "Simulating...");
@@ -252,7 +262,7 @@ int main(int argc, char *argv[])
 				param.phi = phi;
 
 				Simres result = Sim_Billiard(param);	// Classical trayectories.
-				Grid qb = Quantum_Bill(grid_size, result, &Parser_Eval, realistic_collision, Log, &file);	// Quantum grid.
+				Grid qb = Quantum_Bill(result, q_params, &file);	// Quantum grid.
 
 				string str_phi = num_to_string(phi);
 
@@ -321,14 +331,6 @@ int main(int argc, char *argv[])
         }
         else if(sim_mode == "Wave")
         {
-        	QBillParams q_params;
-			q_params.min_phi = Min_Phi;
-			q_params.max_phi = Max_Phi;
-			q_params.phi_step = Phi_Step;
-			q_params.grid_size = grid_size;
-			q_params.disturbance = &Parser_Eval;
-			q_params.real_collision = realistic_collision;
-			q_params.log = Log;
         	Grid total = Quantum_Wave(param, q_params, &file);
 
         	if(csvOutput) { Write_Csv(total, param.W, "Total", csvPrefix, skipEmpty); }

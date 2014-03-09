@@ -14,6 +14,7 @@ GridElement::GridElement()
 	m_time = 0;
 	m_x = 0;
 	m_y = 0;
+	m_assignations = 0;
 	m_amprecord.push_back(0);
 	m_timerecord.push_back(0);
 }
@@ -23,6 +24,7 @@ void GridElement::AddDisturbance(const double value, const double time)
 	m_timerecord.push_back(time);
 	m_amplitude += value;
 	m_time = time;
+	m_assignations++;
 }
 void GridElement::SetCoordinates(const double x, const double y)
 {
@@ -67,6 +69,18 @@ Grid::~Grid()
 	}
 	if(m_grid != NULL)
 		delete[] m_grid;
+}
+void Grid::AssignNorm()
+{
+	double norm;
+	for(int i=0; i<m_size; i++)
+	{
+		for(int j=0; j<m_size; j++)
+		{
+			norm = (double)m_grid[i][j].m_assignations;
+			if(m_grid[i][j].m_amplitude != 0) { m_grid[i][j].m_amplitude /= norm; }
+		}
+	}
 }
 GridElement** Grid::GetGrid()
 {
@@ -203,6 +217,7 @@ Grid& Grid::operator+=(Grid &in)
 		for(unsigned int j=0; j<size; j++)
 		{
 			m_grid[i][j].m_amplitude += in[i][j].m_amplitude;
+			m_grid[i][j].m_assignations += in[i][j].m_assignations;
 			//if(in[i][j].m_time > m_grid[i][j].m_time) { m_grid[i][j].m_time = in[i][j].m_time; }
 		}
 	}
@@ -211,8 +226,7 @@ Grid& Grid::operator+=(Grid &in)
 
 
 // Sim.
-Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(double, double), bool real_collision,
-				 bool log, ostream *out)
+Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 {
     double m,b;
     double d;
@@ -221,10 +235,10 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
     double x1,x2,y1,y2;
     double stepX, stepY;
     double tempX, tempY;
-    double grid_element_size = 2.0/(double)grid_size;
+    double grid_element_size = 2.0/(double)q_params.grid_size;
     double delta = grid_element_size/10.0;
     double infty = std::numeric_limits<double>::infinity();
-    Grid bGrid(grid_size);
+    Grid bGrid(q_params.grid_size);
     Coord prevCoord = Coord(infty, infty);
 
     unsigned int maxIter = tray.intersections.size();
@@ -255,11 +269,20 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 						for(double xPos = x1; xPos < x2; xPos += stepX)
 						{
 							tempY = m*xPos + b;
-							if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+
+							if(q_params.skip_same)
+							{
+								if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+								{
+									d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
+									prevCoord = bGrid.GetCoord(xPos, tempY);
+									bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+							else
 							{
 								d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
-								prevCoord = bGrid.GetCoord(xPos, tempY);
-								bGrid.GetGridElement(xPos, tempY).AddDisturbance(disturbance(d + prevD, phase), d + prevD);
+								bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 							}
 						}
 					}
@@ -268,11 +291,20 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 						for(double xPos = x1; xPos > x2; xPos -= stepX)
 						{
 							tempY = m*xPos + b;
-							if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+
+							if(q_params.skip_same)
+							{
+								if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+								{
+									d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
+									prevCoord = bGrid.GetCoord(xPos, tempY);
+									bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+							else
 							{
 								d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
-								prevCoord = bGrid.GetCoord(xPos, tempY);
-								bGrid.GetGridElement(xPos, tempY).AddDisturbance(disturbance(d + prevD, phase), d + prevD);
+								bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 							}
 						}
 					}
@@ -285,11 +317,20 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 						for(double yPos = y1; yPos < y2; yPos += stepY)
 						{
 							tempX = (yPos-b)/m;
-							if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+
+							if(q_params.skip_same)
+							{
+								if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+								{
+									d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
+									prevCoord = bGrid.GetCoord(tempX, yPos);
+									bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+							else
 							{
 								d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
-								prevCoord = bGrid.GetCoord(tempX, yPos);
-								bGrid.GetGridElement(tempX, yPos).AddDisturbance(disturbance(d + prevD, phase), d + prevD);
+								bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 							}
 						}
 					}
@@ -298,11 +339,20 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 						for(double yPos = y1; yPos > y2; yPos -= stepY)
 						{
 							tempX = (yPos-b)/m;
-							if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+
+							if(q_params.skip_same)
+							{
+								if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+								{
+									d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
+									prevCoord = bGrid.GetCoord(tempX, yPos);
+									bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+							else
 							{
 								d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
-								prevCoord = bGrid.GetCoord(tempX, yPos);
-								bGrid.GetGridElement(tempX, yPos).AddDisturbance(disturbance(d + prevD, phase), d + prevD);
+								bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 							}
 						}
 					}
@@ -318,11 +368,19 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 					{
 						for(double yPos = y1; yPos < y2; yPos += stepY)
 						{
-							if(bGrid.GetCoord(x1, yPos) != prevCoord)
+							if(q_params.skip_same)
+							{
+								if(bGrid.GetCoord(x1, yPos) != prevCoord)
+								{
+									d = abs(yPos-y1);
+									prevCoord = bGrid.GetCoord(x1, yPos);
+									bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+							else
 							{
 								d = abs(yPos-y1);
-								prevCoord = bGrid.GetCoord(x1, yPos);
-								bGrid.GetGridElement(x1, yPos).AddDisturbance(disturbance(d + prevD, phase), d + prevD);
+								bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 							}
 						}
 					}
@@ -330,11 +388,19 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 					{
 						for(double yPos = y1; yPos > y2; yPos -= stepY)
 						{
-							if(bGrid.GetCoord(x1, yPos) != prevCoord)
+							if(q_params.skip_same)
+							{
+								if(bGrid.GetCoord(x1, yPos) != prevCoord)
+								{
+									d = abs(yPos-y1);
+									prevCoord = bGrid.GetCoord(x1, yPos);
+									bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+								}
+							}
+							else
 							{
 								d = abs(yPos-y1);
-								prevCoord = bGrid.GetCoord(x1, yPos);
-								bGrid.GetGridElement(x1, yPos).AddDisturbance(disturbance(d + prevD, phase), d + prevD);
+								bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 							}
 						}
 					}
@@ -342,7 +408,7 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 				}
 			}
 
-			if(log)
+			if(q_params.log)
 			{
 				if(d < 0)
 				{
@@ -355,11 +421,11 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
 			}
 
 			// Phase change on realistic collision.
-			if(real_collision) phase += pi;
+			if(q_params.real_collision) phase += pi;
         }
         else
         {
-        	if(log)
+        	if(q_params.log)
         	{
         		*out << "[i=" << num_to_string(i) << ", x1=" << num_to_string(x1)
 					 << ", x2=" << num_to_string(x2) << ", y1=" << num_to_string(y1)
@@ -369,6 +435,8 @@ Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(dou
         	}
         }
     }
+
+    if(!q_params.skip_same) { bGrid.AssignNorm(); }
     return bGrid;
 }
 
@@ -452,12 +520,12 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		LoadBar(i, tray_list.size(), tray_list.size(), 30, infty);
 
 		unsigned int maxIter = tray_list[i].intersections.size();
-		for(unsigned int j=maxIter-1; j>0; j--)
+		for(unsigned int j=1; j<maxIter; j++)
 		{
-			x2 = tray_list[i].intersections[j-1].m_x;
-			x1 = tray_list[i].intersections[j].m_x;
-			y2 = tray_list[i].intersections[j-1].m_y;
-			y1 = tray_list[i].intersections[j].m_y;
+			x1 = tray_list[i].intersections[j-1].m_x;
+			x2 = tray_list[i].intersections[j].m_x;
+			y1 = tray_list[i].intersections[j-1].m_y;
+			y2 = tray_list[i].intersections[j].m_y;
 			m = (y2-y1)/(x2-x1);
 			b = y1 - m*x1;
 			stepX = abs(x2-x1)*delta;
@@ -471,7 +539,7 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 					double cuad = atan(abs(m));
 					while((cuad - 1.57079) > 0) cuad -= 1.57079;
 
-					// Slope < 45 degrees
+					// Slope < 45 degrees.
 					if(cuad < 0.78539)
 					{
 						if(x2 > x1)
@@ -479,10 +547,19 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 							for(double xPos = x1; xPos < x2; xPos += stepX)
 							{
 								tempY = m*xPos + b;
-								if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+
+								if(q_params.skip_same)
+								{
+									if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+									{
+										d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
+										prevCoord = bGrid.GetCoord(xPos, tempY);
+										bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+									}
+								}
+								else
 								{
 									d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
-									prevCoord = bGrid.GetCoord(xPos, tempY);
 									bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 								}
 							}
@@ -492,16 +569,25 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 							for(double xPos = x1; xPos > x2; xPos -= stepX)
 							{
 								tempY = m*xPos + b;
-								if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+
+								if(q_params.skip_same)
+								{
+									if(bGrid.GetCoord(xPos, tempY) != prevCoord)
+									{
+										d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
+										prevCoord = bGrid.GetCoord(xPos, tempY);
+										bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+									}
+								}
+								else
 								{
 									d = sqrt(pow(xPos-x1, 2.0) + pow(tempY-y1, 2.0));
-									prevCoord = bGrid.GetCoord(xPos, tempY);
 									bGrid.GetGridElement(xPos, tempY).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 								}
 							}
 						}
 					}
-					// Slope > 45 degrees
+					// Slope > 45 degrees.
 					else
 					{
 						if(y2 > y1)
@@ -509,10 +595,19 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 							for(double yPos = y1; yPos < y2; yPos += stepY)
 							{
 								tempX = (yPos-b)/m;
-								if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+
+								if(q_params.skip_same)
+								{
+									if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+									{
+										d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
+										prevCoord = bGrid.GetCoord(tempX, yPos);
+										bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+									}
+								}
+								else
 								{
 									d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
-									prevCoord = bGrid.GetCoord(tempX, yPos);
 									bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 								}
 							}
@@ -522,10 +617,19 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 							for(double yPos = y1; yPos > y2; yPos -= stepY)
 							{
 								tempX = (yPos-b)/m;
-								if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+
+								if(q_params.skip_same)
+								{
+									if(bGrid.GetCoord(tempX, yPos) != prevCoord)
+									{
+										d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
+										prevCoord = bGrid.GetCoord(tempX, yPos);
+										bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+									}
+								}
+								else
 								{
 									d = sqrt(pow(tempX-x1, 2.0) + pow(yPos-y1, 2.0));
-									prevCoord = bGrid.GetCoord(tempX, yPos);
 									bGrid.GetGridElement(tempX, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 								}
 							}
@@ -542,10 +646,18 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 						{
 							for(double yPos = y1; yPos < y2; yPos += stepY)
 							{
-								if(bGrid.GetCoord(x1, yPos) != prevCoord)
+								if(q_params.skip_same)
+								{
+									if(bGrid.GetCoord(x1, yPos) != prevCoord)
+									{
+										d = abs(yPos-y1);
+										prevCoord = bGrid.GetCoord(x1, yPos);
+										bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+									}
+								}
+								else
 								{
 									d = abs(yPos-y1);
-									prevCoord = bGrid.GetCoord(x1, yPos);
 									bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 								}
 							}
@@ -554,10 +666,18 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 						{
 							for(double yPos = y1; yPos > y2; yPos -= stepY)
 							{
-								if(bGrid.GetCoord(x1, yPos) != prevCoord)
+								if(q_params.skip_same)
+								{
+									if(bGrid.GetCoord(x1, yPos) != prevCoord)
+									{
+										d = abs(yPos-y1);
+										if(q_params.skip_same) { prevCoord = bGrid.GetCoord(x1, yPos); }
+										bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
+									}
+								}
+								else
 								{
 									d = abs(yPos-y1);
-									prevCoord = bGrid.GetCoord(x1, yPos);
 									bGrid.GetGridElement(x1, yPos).AddDisturbance(q_params.disturbance(d + prevD, phase), d + prevD);
 								}
 							}
@@ -585,7 +705,7 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 			{
 				if(q_params.log)
 				{
-					*out << "[i=" << num_to_string(i) << ", x1=" << num_to_string(x1)
+					*out << "[i=" << num_to_string(j) << ", x1=" << num_to_string(x1)
 						 << ", x2=" << num_to_string(x2) << ", y1=" << num_to_string(y1)
 						 << ", y2=" << num_to_string(y2) << "]  Very small collision"
 						 << endl;
@@ -596,5 +716,6 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		out_grid += bGrid;
 	}
 
+	if(!q_params.skip_same) { out_grid.AssignNorm(); }
 	return out_grid;
 }

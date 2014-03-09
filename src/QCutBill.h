@@ -23,7 +23,7 @@ struct QBillParams
 	unsigned int grid_size;
 	double min_phi, max_phi, phi_step;
 	double (*disturbance)(double, double);
-	bool real_collision;
+	bool real_collision, skip_same;
 	bool log;
 };
 
@@ -36,11 +36,11 @@ struct QBillParams
 class GridElement
 {
 public:
+	double m_x, m_y;
     double m_amplitude;
     double m_time;
+    int m_assignations;
     std::vector<double> m_amprecord, m_timerecord;
-
-    double m_x, m_y;
 
     GridElement();
     void AddDisturbance(const double value, const double time);
@@ -65,6 +65,9 @@ public:
     Grid(const int size);
     ~Grid();
 
+    // Internal modification.
+    void AssignNorm();
+
     GridElement** GetGrid();
     GridElement& GetGridElement(const double x, const double y);
     Coord GetCoord(const double x, const double y);
@@ -78,9 +81,7 @@ public:
     Grid& operator+=(Grid &in);
 };
 
-Grid Quantum_Bill(unsigned int grid_size, Simres tray, double (*disturbance)(double, double), bool real_collision = false,
-				 bool log = false, std::ostream *out = NULL);
-
+Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out = NULL);
 Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out = NULL);
 
 #endif

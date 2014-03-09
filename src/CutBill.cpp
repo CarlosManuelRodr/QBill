@@ -260,12 +260,10 @@ Simres Sim_Billiard(BillParams param)
 	Simres out;
     W = param.W;
     phi = param.phi;
-    //x = R*cos(radians(param.delta));
-    //y = 0;/
     x = param.injection_x;
     y = param.injection_y;
     w = W/R;
-    vx = v0*cos(param.phi);
+    vx = -v0*cos(param.phi);
     vy = v0*sin(param.phi);
     b = (W-R)/cos(omega - pi/2);
     max_iter = param.iter;
