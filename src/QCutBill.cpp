@@ -436,7 +436,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
         }
     }
 
-    if(!q_params.skip_same) { bGrid.AssignNorm(); }
+    if(q_params.normalize) { bGrid.AssignNorm(); }
     return bGrid;
 }
 
@@ -716,6 +716,6 @@ Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out)
 		out_grid += bGrid;
 	}
 
-	if(!q_params.skip_same) { out_grid.AssignNorm(); }
+	//if(!q_params.skip_same) { out_grid.AssignNorm(); }
 	return out_grid;
 }

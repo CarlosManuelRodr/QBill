@@ -23,7 +23,7 @@ struct QBillParams
 	unsigned int grid_size;
 	double min_phi, max_phi, phi_step;
 	double (*disturbance)(double, double);
-	bool real_collision, skip_same;
+	bool real_collision, skip_same, normalize;
 	bool log;
 };
 

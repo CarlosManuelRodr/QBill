@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
         BillParams param;
         double Min_Phi, Max_Phi, Phi_Step;
         string perturbation, sim_mode;
-        bool Log, realistic_collision, skip_same;
+        bool Log, realistic_collision, skip_same, normalize;
         bool default_directories;
 
         cp.StringArgToVar(sim_mode, "Sim_Mode", "Wave");
@@ -146,6 +146,7 @@ int main(int argc, char *argv[])
         cp.StringArgToVar(perturbation, "Perturbation", "sin(x)^2");
         cp.BoolArgToVar(realistic_collision, "Realistic_Collision", false);
         cp.BoolArgToVar(skip_same, "Skip_Same", false);
+        cp.BoolArgToVar(normalize, "Normalize", false);
         cp.BoolArgToVar(Log, "Log", false);
         cp.BoolArgToVar(default_directories, "Default_Directories", true);
 
@@ -249,6 +250,7 @@ int main(int argc, char *argv[])
 		q_params.disturbance = &Parser_Eval;
 		q_params.real_collision = realistic_collision;
 		q_params.skip_same = skip_same;
+		q_params.normalize = normalize;
 		q_params.log = Log;
         Parser_Init(perturbation);
         int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
