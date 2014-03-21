@@ -7,9 +7,71 @@
 using namespace std;
 
 // Testing aux.
+double diag_const = pi/sqrt(2.0);
+
 double Square_Test_Sin(double x, double unused1)
 {
 	return sin(pi*x);
+}
+double Square_Diag_Test_Sin(double x, double unused1)
+{
+	return sin(diag_const*x);
+}
+double Square_Test_Linear(double x, double unused1)
+{
+	while((x - 2.0) > 0.0) { x -= 2.0; }
+	if(x < 1.0) return 1.0;
+	else return -1.0;
+}
+vector<Coord> Generate_Test_Coords(Coord first, Coord last, int iterations)
+{
+	vector<Coord> out;
+	if(iterations % 2 == 0) iterations++;
+
+	for(unsigned i=0; i<iterations; i++)
+	{
+		if(i % 2 == 0)
+			out.push_back(first);
+		else
+			out.push_back(last);
+	}
+	return out;
+}
+bool Test_Quantum_Grid(Grid &gd)
+{
+	bool test_ok = true;
+	double max_error = 0.01;
+	for(unsigned int i=0; i<gd.GetSize(); i++)
+	{
+		for(unsigned j=0; j<gd.GetSize(); j++)
+		{
+			if(abs(gd[i][j].m_amplitude) > max_error)
+			{
+				test_ok = false;
+			}
+		}
+	}
+	return test_ok;
+}
+double Test_Quantum_Grid_Error(Grid &gd)
+{
+	// Calculate mean error.
+	double active_elements = 0.0;
+	double values = 0.0;
+	for(unsigned int i=0; i<gd.GetSize(); i++)
+	{
+		for(unsigned j=0; j<gd.GetSize(); j++)
+		{
+			if(gd[i][j].m_amplitude != 0.0)
+			{
+				active_elements++;
+				values += abs(gd[i][j].m_amplitude);
+			}
+		}
+	}
+
+	if(active_elements == 0.0) { active_elements++; }
+	return values/active_elements;
 }
 
 // Test.
@@ -48,6 +110,50 @@ void Test_Grid()
 	else
 		cout << "Test Grid: Sum operator FAILED" << endl;
 
+	// Assignment Operator.
+	bool assign_ok = true;
+	Grid target(300);
+	target = first;
+	if(target.GetSize() == first.GetSize())
+	{
+		for(unsigned int i=0; i<target.GetSize(); i++)
+		{
+			for(unsigned j=0; j<target.GetSize(); j++)
+			{
+				if(target[i][j].m_amplitude != first[i][j].m_amplitude)
+				{
+					assign_ok = false;
+				}
+			}
+		}
+	}
+	else
+	{
+		assign_ok = false;
+	}
+	target = last;
+	if(target.GetSize() == last.GetSize())
+	{
+		for(unsigned int i=0; i<target.GetSize(); i++)
+		{
+			for(unsigned j=0; j<target.GetSize(); j++)
+			{
+				if(target[i][j].m_amplitude != last[i][j].m_amplitude)
+				{
+					assign_ok = false;
+				}
+			}
+		}
+	}
+	else
+	{
+		assign_ok = false;
+	}
+	if(assign_ok)
+		cout << "Test Grid: Assignment operator OK" << endl;
+	else
+		cout << "Test Grid: Assignment operator FAILED" << endl;
+
 	// Compound Assignment Operator +=.
 	first += last;
 	sum_ok = true;
@@ -66,115 +172,203 @@ void Test_Grid()
 	else
 		cout << "Test Grid: Compound assignment operator += FAILED" << endl;
 }
-void Test_Quantum()
+void Test_Quantum(QBillParams q_params, BillParams params)
 {
 	Simres test;
 
 	// Horizontal test.
-	test.colisiones = 3;
-	test.intersections.push_back(Coord(-1.0, 0.0));
-	test.intersections.push_back(Coord(1.0, 0.0));
-	test.intersections.push_back(Coord(-1.0, 0.0));
+	test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), params.iter);
+	q_params.disturbance = &Square_Test_Sin;
+	q_params.real_collision = false;
+	//q_params.skip_same = false;
+	q_params.log = false;
+	Grid gd = Quantum_Bill(test, q_params, NULL);
+	if(q_params.normalize) { gd.AssignNorm(); }
+	bool h_test = Test_Quantum_Grid(gd);
+	double h_test_error = Test_Quantum_Grid_Error(gd);
 
-	QBillParams q_params;
-	q_params.grid_size = 200;
+	if(h_test)
+		cout << "Test Quantum: Horizontal test OK. Mean error: " << num_to_string(h_test_error) << endl;
+	else
+		cout << "Test Quantum: Horizontal test FAILED with mean error: " << num_to_string(h_test_error) << endl;
+
+	// Vertical test.
+	test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0, 1.0), params.iter);
+	gd = Quantum_Bill(test, q_params, NULL);
+	bool v_test = Test_Quantum_Grid(gd);
+	double v_test_error = Test_Quantum_Grid_Error(gd);
+
+	if(v_test)
+		cout << "Test Quantum: Vertical test OK. Mean error: " << num_to_string(v_test_error) << endl;
+	else
+		cout << "Test Quantum: Vertical test FAILED with mean error: " << num_to_string(v_test_error) << endl;
+
+	// Diagonal north-east test.
+	test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 1.0), params.iter);
+	q_params.disturbance = &Square_Diag_Test_Sin;
+	gd = Quantum_Bill(test, q_params, NULL);
+	if(q_params.normalize) { gd.AssignNorm(); }
+	bool dne_test = Test_Quantum_Grid(gd);
+	double dne_test_error = Test_Quantum_Grid_Error(gd);
+
+	if(dne_test)
+		cout << "Test Quantum: Diagonal north-east test OK. Mean error: " << num_to_string(dne_test_error) << endl;
+	else
+		cout << "Test Quantum: Diagonal north-east test FAILED with mean error: " << num_to_string(dne_test_error) << endl;
+
+	// Diagonal south-east test.
+	test.intersections = Generate_Test_Coords(Coord(0.0, 1.0), Coord(1.0, 0.0), params.iter);
+	q_params.disturbance = &Square_Diag_Test_Sin;
+	gd = Quantum_Bill(test, q_params, NULL);
+	if(q_params.normalize) { gd.AssignNorm(); }
+	bool dse_test = Test_Quantum_Grid(gd);
+	double dse_test_error = Test_Quantum_Grid_Error(gd);
+
+	if(dse_test)
+		cout << "Test Quantum: Diagonal south-east test OK. Mean error: " << num_to_string(dse_test_error) << endl;
+	else
+		cout << "Test Quantum: Diagonal south-east test FAILED with mean error: " << num_to_string(dse_test_error) << endl;
+
+	// High slope.
+	q_params.disturbance = &Square_Test_Sin;
+	test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0000001, 1.0), params.iter);
+	gd = Quantum_Bill(test, q_params, NULL);
+	if(q_params.normalize) { gd.AssignNorm(); }
+	bool hs_test = Test_Quantum_Grid(gd);
+	double hs_test_error = Test_Quantum_Grid_Error(gd);
+
+	if(hs_test)
+		cout << "Test Quantum: High slope test OK. Mean error: " << num_to_string(hs_test_error) << endl;
+	else
+		cout << "Test Quantum: High slope test FAILED with mean error: " << num_to_string(hs_test_error) << endl;
+
+	// Linear test.
+	q_params.disturbance = &Square_Test_Linear;
+	test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 0.0), params.iter);
+	gd = Quantum_Bill(test, q_params, NULL);
+	if(q_params.normalize) { gd.AssignNorm(); }
+	bool l_test = Test_Quantum_Grid(gd);
+	double l_test_error = Test_Quantum_Grid_Error(gd);
+
+	if(l_test)
+		cout << "Test Quantum: Linear test OK. Mean error: " << num_to_string(l_test_error) << endl;
+	else
+		cout << "Test Quantum: Linear test FAILED with mean error: " << num_to_string(l_test_error) << endl;
+}
+void Plot_Quantum_Error(QBillParams q_params, BillParams params)
+{
+	Simres test;
 	q_params.disturbance = &Square_Test_Sin;
 	q_params.real_collision = false;
 	q_params.skip_same = false;
 	q_params.log = false;
-	Grid gd = Quantum_Bill(test, q_params, NULL);
 
-	bool test_ok = true;
-	double max_error = 0.01;
-	for(unsigned int i=0; i<gd.GetSize(); i++)
+	// Horizontal test.
+	vector<Coord> h_error_list;
+	for(unsigned int i=0; i<=params.iter; i++)
 	{
-		for(unsigned j=0; j<gd.GetSize(); j++)
+		// Check if testable.
+		if(i % 2 != 0)
 		{
-			if(abs(gd[i][j].m_amplitude) > max_error)
-			{
-				test_ok = false;
-			}
-		}
-	}
-
-
-	// Calculate mean error.
-	double active_elements = 0.0;
-	double values = 0.0;
-	for(unsigned int i=0; i<gd.GetSize(); i++)
-	{
-		for(unsigned j=0; j<gd.GetSize(); j++)
-		{
-			if(gd[i][j].m_amplitude != 0)
-			{
-				active_elements++;
-				values += abs(gd[i][j].m_amplitude);
-			}
-		}
-	}
-
-	if(test_ok)
-		cout << "Test Quantum: Horizontal test OK. Mean error: " << num_to_string(values/active_elements) << endl;
-	else
-		cout << "Test Quantum: Horizontal test FAILED with mean error: " << num_to_string(values/active_elements) << endl;;
-
-	// Vertical test.
-	test.colisiones = 3;
-	test.intersections.clear();
-	test.intersections.push_back(Coord(0.0, -1.0));
-	test.intersections.push_back(Coord(0.0, 1.0));
-	test.intersections.push_back(Coord(0.0, -1.0));
-	//gd = Quantum_Bill(200, test, &Square_Test_Sin, false, false, NULL);
-}
-void Plot_Quantum_Error(unsigned int iter, unsigned int grid_size)
-{
-	vector<Coord> error_list;
-	Simres test;
-	for(unsigned int i=0; i<=iter; i++)
-	{
-		// Check if testeable.
-		if(i % 2 == 0)
-		{
-			test.intersections.clear();
-			for(unsigned j=0; j<=i; j++)
-			{
-				if(j % 2 == 0)
-					test.intersections.push_back(Coord(-1.0, 0.0));
-				else
-					test.intersections.push_back(Coord(1.0, 0.0));
-			}
-
-			QBillParams q_params;
-			q_params.grid_size = grid_size;
-			q_params.disturbance = &Square_Test_Sin;
-			q_params.real_collision = false;
-			q_params.skip_same = false;
-			q_params.log = false;
+			test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-
-			// Calculate error.
-			double active_elements = 0.0;
-			double values = 0.0;
-
-			for(unsigned int i=0; i<gd.GetSize(); i++)
-			{
-				for(unsigned j=0; j<gd.GetSize(); j++)
-				{
-					if(gd[i][j].m_amplitude != 0)
-					{
-						active_elements++;
-						values += abs(gd[i][j].m_amplitude);
-					}
-				}
-			}
-			error_list.push_back(Coord(i, values/active_elements));
+			if(q_params.normalize) { gd.AssignNorm(); }
+			h_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
 
 	CsvWriter cw("Log/error_horizontal.csv");
-	for(unsigned int i=0; i<error_list.size(); i++)
+	for(unsigned int i=0; i<h_error_list.size(); i++)
 	{
-		cw.Push(error_list[i].m_x, error_list[i].m_y);
+		cw.Push(h_error_list[i].m_x, h_error_list[i].m_y);
 	}
 	cw.Close();
+	cout << "Horizontal test error saved to: Log/error_horizontal.csv" << endl;
+
+	// Vertical test.
+	vector<Coord> v_error_list;
+	for(unsigned int i=0; i<=params.iter; i++)
+	{
+		if(i % 2 != 0)
+		{
+			test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0, 1.0), i);
+			Grid gd = Quantum_Bill(test, q_params, NULL);
+			if(q_params.normalize) { gd.AssignNorm(); }
+			v_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+		}
+	}
+
+	cw.Open("Log/error_vertical.csv");
+	for(unsigned int i=0; i<v_error_list.size(); i++)
+	{
+		cw.Push(v_error_list[i].m_x, v_error_list[i].m_y);
+	}
+	cw.Close();
+	cout << "Vertical test error saved to: Log/error_vertical.csv" << endl;
+
+	// Diagonal north-east test.
+	q_params.disturbance = &Square_Diag_Test_Sin;
+	vector<Coord> dne_error_list;
+	for(unsigned int i=0; i<=params.iter; i++)
+	{
+		if(i % 2 != 0)
+		{
+			test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 1.0), i);
+			Grid gd = Quantum_Bill(test, q_params, NULL);
+			if(q_params.normalize) { gd.AssignNorm(); }
+			dne_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+		}
+	}
+
+	cw.Open("Log/error_diag_ne.csv");
+	for(unsigned int i=0; i<dne_error_list.size(); i++)
+	{
+		cw.Push(dne_error_list[i].m_x, dne_error_list[i].m_y);
+	}
+	cw.Close();
+	cout << "Diagonal NE test error saved to: Log/error_diag_ne.csv" << endl;
+
+	// Diagonal south-east test.
+	q_params.disturbance = &Square_Diag_Test_Sin;
+	vector<Coord> dse_error_list;
+	for(unsigned int i=0; i<=params.iter; i++)
+	{
+		if(i % 2 != 0)
+		{
+			test.intersections = Generate_Test_Coords(Coord(0.0, 1.0), Coord(1.0, 0.0), i);
+			Grid gd = Quantum_Bill(test, q_params, NULL);
+			if(q_params.normalize) { gd.AssignNorm(); }
+			dse_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+		}
+	}
+
+	cw.Open("Log/error_diag_se.csv");
+	for(unsigned int i=0; i<dse_error_list.size(); i++)
+	{
+		cw.Push(dse_error_list[i].m_x, dse_error_list[i].m_y);
+	}
+	cw.Close();
+	cout << "Diagonal SE test error saved to: Log/error_diag_se.csv" << endl;
+
+	// Linear test.
+	q_params.disturbance = &Square_Test_Linear;
+	vector<Coord> l_error_list;
+	for(unsigned int i=0; i<=params.iter; i++)
+	{
+		if(i % 2 != 0)
+		{
+			test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 0.0), i);
+			Grid gd = Quantum_Bill(test, q_params, NULL);
+			if(q_params.normalize) { gd.AssignNorm(); }
+			l_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+		}
+	}
+
+	cw.Open("Log/error_diag_l.csv");
+	for(unsigned int i=0; i<l_error_list.size(); i++)
+	{
+		cw.Push(l_error_list[i].m_x, l_error_list[i].m_y);
+	}
+	cw.Close();
+	cout << "Linear test error saved to: Log/error_diag_l.csv" << endl;
 }

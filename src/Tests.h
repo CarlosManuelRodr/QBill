@@ -1,6 +1,6 @@
 /**
 * @file Tests.h
-* @brief Quantum cut billiard simulation classes and functions.
+* @brief Tests for the Quantum billiard.
 *
 * @copyright GNU Public License v3
 * @author Carlos Manuel Rodriguez y Martinez
@@ -12,9 +12,10 @@
 #pragma once
 #ifndef _QBILLTESTS
 #define _QBILLTESTS
+#include "QCutBill.h"
 
-void Test_Grid();
-void Test_Quantum();
-void Plot_Quantum_Error(unsigned int iter = 500, unsigned int grid_size = 200);
+void Test_Grid();		///< Test Grid operators.
+void Test_Quantum(QBillParams q_params, BillParams params);	///< Test Quantum billiard error.
+void Plot_Quantum_Error(QBillParams q_params, BillParams params);
 
 #endif

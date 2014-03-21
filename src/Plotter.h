@@ -20,7 +20,7 @@
 
 typedef class BMPPixel Color;
 
-// Auxiliar.
+// Auxiliary.
 Color CalcColor(unsigned int colorNum);
 
 // Functions.

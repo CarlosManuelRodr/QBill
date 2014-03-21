@@ -17,7 +17,7 @@ const int blueInt = 255;
 const int blueMed = 21;
 const int blueDes = 9;
 
-// Auxiliar functions.
+// Auxiliary functions.
 double NormalDist(int x, double mean, double stdDev)
 {
 	return exp(-(pow(x-mean,2)/(2*pow(stdDev,2))));

@@ -108,7 +108,7 @@ void Write_Abs_Bitmap(Grid& gd, double omega, string phi, string prefix)
 
 int main(int argc, char *argv[])
 {
-    // Load param file
+    // Load param file.
     string paramFile;
     if(argc == 1)
     {
@@ -122,8 +122,9 @@ int main(int argc, char *argv[])
     if(cp.FileOpened())
     {
     	// Debug mode.
-    	bool Make_Tests;
-    	cp.BoolArgToVar(Make_Tests, "Make_Tests", false);
+    	bool make_tests, gen_error_data;
+    	cp.BoolArgToVar(make_tests, "Make_Tests", false);
+    	cp.BoolArgToVar(gen_error_data, "Gen_Error_Data", false);
 
         // Get billiard params from file.
         BillParams param;
@@ -151,11 +152,10 @@ int main(int argc, char *argv[])
         cp.BoolArgToVar(default_directories, "Default_Directories", true);
 
         // Color output.
-		bool colorOutput, makeColorVideo, normalizeColor;
+		bool colorOutput, makeColorVideo;
 		string colorPrefix, colorPlotter;
 		cp.BoolArgToVar(colorOutput, "Color_Output", false);
 		cp.BoolArgToVar(makeColorVideo, "Make_Color_Video", false);
-		cp.BoolArgToVar(normalizeColor, "Normalize_Color", false);
 		cp.StringArgToVar(colorPrefix, "Color_Prefix", "img_");
 		cp.StringArgToVar(colorPlotter, "Color_Plotter", "Internal");
 
@@ -173,10 +173,10 @@ int main(int argc, char *argv[])
 		cp.StringArgToVar(csvPrefix, "Csv_Prefix", "out_");
 		cp.BoolArgToVar(skipEmpty, "Skip_Empty", true);
 
-		// Plotting.
-		bool plotCsv, makeVideo;
-		cp.BoolArgToVar(plotCsv, "Plot_Csv", false);
-		cp.BoolArgToVar(makeVideo,"Make_Video", false);
+		// Plot 3D.
+		bool plot3D_output, makePlot3DVideo;
+		cp.BoolArgToVar(plot3D_output, "Plot3D_Output", false);
+		cp.BoolArgToVar(makePlot3DVideo,"Make_Plot3D_Video", false);
 
 		// Check options and overwrite parameter with argument if there is any.
 		if(argc > 2)
@@ -216,14 +216,27 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-		if(colorOutput || absoluteOutput || plotCsv) csvOutput = true;
+		if(colorOutput || absoluteOutput || plot3D_output) csvOutput = true;
+
+		// Set data.
+		unsigned int grid_size = 2.0/param.gridElementSize;
+		QBillParams q_params;
+		q_params.min_phi = Min_Phi;
+		q_params.max_phi = Max_Phi;
+		q_params.phi_step = Phi_Step;
+		q_params.grid_size = grid_size;
+		q_params.disturbance = &Parser_Eval;
+		q_params.real_collision = realistic_collision;
+		q_params.skip_same = skip_same;
+		q_params.normalize = normalize;
+		q_params.log = Log;
 
 		// Tests.
-		if(Make_Tests)
+		if(make_tests)
 		{
 			Test_Grid();
-			Test_Quantum();
-			Plot_Quantum_Error(param.iter, 2.0/param.gridElementSize);
+			Test_Quantum(q_params, param);
+			if(gen_error_data) Plot_Quantum_Error(q_params, param);
 			return 0;
 		}
 
@@ -241,17 +254,6 @@ int main(int argc, char *argv[])
 		}
 
         // Start simulation.
-		unsigned int grid_size = 2.0/param.gridElementSize;
-		QBillParams q_params;
-		q_params.min_phi = Min_Phi;
-		q_params.max_phi = Max_Phi;
-		q_params.phi_step = Phi_Step;
-		q_params.grid_size = grid_size;
-		q_params.disturbance = &Parser_Eval;
-		q_params.real_collision = realistic_collision;
-		q_params.skip_same = skip_same;
-		q_params.normalize = normalize;
-		q_params.log = Log;
         Parser_Init(perturbation);
         int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
         Print(param.W, "Simulating...");
@@ -287,11 +289,6 @@ int main(int argc, char *argv[])
 				Print(param.W, "Plotting color plots.. ");
 				command = "MathematicaScript -script Resources/Scripts/colorPlotter.m ";
 				command += num_to_string(param.W);
-				if(normalizeColor)
-					command += " True";
-				else
-					command += " False";
-
 				Print(param.W, "Executting: \"" + command + "\"");
 				system(command.c_str());
 			}
@@ -307,14 +304,14 @@ int main(int argc, char *argv[])
 			}
 
 			// 3D Plot. Only available in Mathematica.
-			if(plotCsv && csvOutput)
+			if(plot3D_output && csvOutput)
 			{
 				Print(param.W, "Plotting csv.. ");
 				command = "MathematicaScript -script Resources/Scripts/Plotter.m ";
 				command += num_to_string(param.W);
 				system(command.c_str());
 
-				if(makeVideo)
+				if(makePlot3DVideo)
 				{
 					command = "sh Resources/Scripts/make_video.sh ";
 					command += num_to_string(param.W);

@@ -76,6 +76,7 @@ public:
     Grid Normalize(double max_value = 1);		///< Normalize all elements of the grid to values ranging from 0 to max_value.
     Grid Absolute();		///< Return a grid with no negatives.
 
+    Grid& operator=(const Grid& other);
     GridElement*& operator[](const unsigned int pos);
     Grid operator+(Grid &in);
     Grid& operator+=(Grid &in);
