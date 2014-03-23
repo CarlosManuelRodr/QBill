@@ -39,11 +39,19 @@ double Parser_Eval(double x, double phi)
 }
 
 // Writing functions.
-void Write_Csv(Grid& gd, double omega, string phi, string prefix, bool skip_empty)
+void Write_Csv(Grid& gd, double omega, string phi = "", string prefix = "", bool skip_empty = false)
 {
-	string outName = string("W=") + num_to_string(omega) + string("/") + prefix;
-	outName += phi;
-	outName += ".csv";
+	string outName;
+	if(prefix.empty())
+	{
+		outName = string("csv_") + phi + ".csv";
+	}
+	else
+	{
+		outName = string("W=") + num_to_string(omega) + string("/") + prefix;
+		outName += phi;
+		outName += ".csv";
+	}
 	CsvWriter cw;
 	cw.Open(outName);
 
@@ -63,7 +71,7 @@ void Write_Csv(Grid& gd, double omega, string phi, string prefix, bool skip_empt
 	}
 	cw.Close();
 }
-void Write_Bitmap(Grid& gd, double omega, string phi, string prefix)
+void Write_Bitmap(Grid& gd, double omega, string phi = "", string prefix = "")
 {
 	// Draw bitmap.
 	int g_size = gd.GetSize();
@@ -78,13 +86,21 @@ void Write_Bitmap(Grid& gd, double omega, string phi, string prefix)
 		}
 	}
 
-	string outName = string("W=") + num_to_string(omega) + string("/") + prefix;
-	outName += phi;
-	outName += ".bmp";
+	string outName;
+	if(prefix.empty())
+	{
+		outName = string("color_") + phi + ".bmp";
+	}
+	else
+	{
+		outName = string("W=") + num_to_string(omega) + string("/") + prefix;
+		outName += phi;
+		outName += ".bmp";
+	}
 	BMPPlot(out, outName);
 }
 
-void Write_Abs_Bitmap(Grid& gd, double omega, string phi, string prefix)
+void Write_Abs_Bitmap(Grid& gd, double omega, string phi = "", string prefix = "")
 {
 	// Draw bitmap.
 	int g_size = gd.GetSize();
@@ -99,9 +115,17 @@ void Write_Abs_Bitmap(Grid& gd, double omega, string phi, string prefix)
 		}
 	}
 
-	string outName = string("W=") + num_to_string(omega) + string("/") + prefix;
-	outName += phi;
-	outName += ".bmp";
+	string outName;
+	if(prefix.empty())
+	{
+		outName = string("abs_") + phi + ".bmp";
+	}
+	else
+	{
+		outName = string("W=") + num_to_string(omega) + string("/") + prefix;
+		outName += phi;
+		outName += ".bmp";
+	}
 	BMPPlot(out, outName);
 }
 
@@ -128,16 +152,11 @@ int main(int argc, char *argv[])
 
         // Get billiard params from file.
         BillParams param;
-        double Min_Phi, Max_Phi, Phi_Step;
         string perturbation, sim_mode;
         bool Log, realistic_collision, skip_same, normalize;
         bool default_directories;
 
-        cp.StringArgToVar(sim_mode, "Sim_Mode", "Wave");
-        cp.DblArgToVar(param.W, "Omega", 2.0);
-        cp.DblArgToVar(Min_Phi, "Min_phi", -1.57);
-        cp.DblArgToVar(Max_Phi, "Max_phi", 1.57);
-        cp.DblArgToVar(Phi_Step, "Phi_step", 0.3);
+        cp.StringArgToVar(sim_mode, "Sim_Mode", "Linear");
         cp.DblArgToVar(param.delta, "Delta", 10.0);
         cp.DblArgToVar(param.gridElementSize, "Grid_Element_Size", 0.005);
         cp.BoolArgToVar(param.closed, "Closed", true);
@@ -150,6 +169,14 @@ int main(int argc, char *argv[])
         cp.BoolArgToVar(normalize, "Normalize", false);
         cp.BoolArgToVar(Log, "Log", false);
         cp.BoolArgToVar(default_directories, "Default_Directories", true);
+
+        // Simulation range.
+        double min_phi, max_phi, phi_step, phi;
+        cp.DblArgToVar(phi, "Phi", 0.56);
+        cp.DblArgToVar(param.W, "Omega", 2.0);
+		cp.DblArgToVar(min_phi, "Min_phi", -1.57);
+		cp.DblArgToVar(max_phi, "Max_phi", 1.57);
+		cp.DblArgToVar(phi_step, "Phi_step", 0.3);
 
         // Color output.
 		bool colorOutput, makeColorVideo;
@@ -216,14 +243,15 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-		if(colorOutput || absoluteOutput || plot3D_output) csvOutput = true;
+		if(colorOutput || absoluteOutput || plot3D_output) { csvOutput = true; }
+		if(sim_mode == "Single") { default_directories = false; }
 
 		// Set data.
 		unsigned int grid_size = 2.0/param.gridElementSize;
 		QBillParams q_params;
-		q_params.min_phi = Min_Phi;
-		q_params.max_phi = Max_Phi;
-		q_params.phi_step = Phi_Step;
+		q_params.min_phi = min_phi;
+		q_params.max_phi = max_phi;
+		q_params.phi_step = phi_step;
 		q_params.grid_size = grid_size;
 		q_params.disturbance = &Parser_Eval;
 		q_params.real_collision = realistic_collision;
@@ -255,20 +283,20 @@ int main(int argc, char *argv[])
 
         // Start simulation.
         Parser_Init(perturbation);
-        int i = 0, steps = (int)((Max_Phi-Min_Phi)/Phi_Step);
+        int i = 0, steps = (int)((max_phi-min_phi)/phi_step);
         Print(param.W, "Simulating...");
 
         if(sim_mode == "Linear")
         {
-			for(double phi = Min_Phi; phi <= Max_Phi; phi += Phi_Step)
+			for(double ph = min_phi; ph <= max_phi; ph += phi_step)
 			{
-				if( (Min_Phi != Max_Phi) && !silent) { LoadBar(i, steps, steps, 30, phi); }
-				param.phi = phi;
+				if( (min_phi != max_phi) && !silent) { LoadBar(i, steps, steps, 30, ph); }
+				param.phi = ph;
 
 				Simres result = Sim_Billiard(param);	// Classical trayectories.
 				Grid qb = Quantum_Bill(result, q_params, &file);	// Quantum grid.
 
-				string str_phi = num_to_string(phi);
+				string str_phi = num_to_string(ph);
 
 				// Standard output.
 				if(csvOutput) { Write_Csv(qb, param.W, str_phi, csvPrefix, skipEmpty); }
@@ -327,6 +355,21 @@ int main(int argc, char *argv[])
 				Print(param.W, "Executting: " + command);
 				system(command.c_str());
 			}
+        }
+        else if(sim_mode == "Single")
+        {
+        	param.phi = phi;
+        	Simres result = Sim_Billiard(param);	// Classical trayectories.
+			Grid qb = Quantum_Bill(result, q_params, &file);	// Quantum grid.
+
+			// Standard output.
+			if(csvOutput) { Write_Csv(qb, param.W, num_to_string(phi)); }
+
+			// Internal color plot.
+			if(colorOutput && colorPlotter == "Internal") { Write_Bitmap(qb, param.W, num_to_string(phi)); }
+
+			// Internal abs plot.
+			if(absoluteOutput && absColorPlotter == "Internal") { Write_Abs_Bitmap(qb, param.W, num_to_string(phi)); }
         }
         else if(sim_mode == "Wave")
         {

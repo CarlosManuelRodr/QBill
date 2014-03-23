@@ -43,8 +43,8 @@ Grid::Grid(const int size)
 	m_maxx = 1.0;
 	m_miny = -1.0;
 	m_maxy = 1.0;
-	m_xfactor = (m_maxx-m_minx)/(m_size-1);
-	m_yfactor = (m_maxy-m_miny)/(m_size-1);
+	m_xfactor = (m_maxx-m_minx)/(m_size-1.0);
+	m_yfactor = (m_maxy-m_miny)/(m_size-1.0);
 
 	m_grid = new GridElement*[m_size];
 	for(int i=0; i<m_size; i++)
@@ -88,8 +88,8 @@ GridElement** Grid::GetGrid()
 }
 GridElement& Grid::GetGridElement(const double x, const double y)
 {
-    int h = (x-m_minx)/m_xfactor;
-    int v = (m_maxy-y)/m_yfactor;
+    int h = floor((x-m_minx)/m_xfactor);
+    int v = floor((m_maxy-y)/m_yfactor);
     if(h < m_size && v < m_size)
     {
         return m_grid[h][v];
@@ -102,7 +102,7 @@ GridElement& Grid::GetGridElement(const double x, const double y)
 }
 Coord Grid::GetCoord(const double x, const double y)
 {
-    return Coord((int)((x-m_minx)/m_xfactor), (int)((m_maxy-y)/m_yfactor));
+    return Coord(floor((x-m_minx)/m_xfactor), floor((m_maxy-y)/m_yfactor));
 }
 int Grid::GetSize()
 {
@@ -170,21 +170,13 @@ Grid& Grid::operator=(const Grid& other)
 		m_maxx = 1.0;
 		m_miny = -1.0;
 		m_maxy = 1.0;
-		m_xfactor = (m_maxx-m_minx)/(m_size-1);
-		m_yfactor = (m_maxy-m_miny)/(m_size-1);
+		m_xfactor = (m_maxx-m_minx)/(m_size-1.0);
+		m_yfactor = (m_maxy-m_miny)/(m_size-1.0);
 
 		m_grid = new GridElement*[m_size];
 		for(int i=0; i<m_size; i++)
 		{
 			m_grid[i] = new GridElement[m_size];
-		}
-
-		for(int i=0; i<m_size; i++)
-		{
-			for(int j=0; j<m_size; j++)
-			{
-				m_grid[i][j].SetCoordinates(m_minx + i*m_xfactor, m_maxy - j*m_yfactor);
-			}
 		}
 	}
 
@@ -285,7 +277,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 				{
 					if(x2 > x1)
 					{
-						for(double xPos = x1; xPos < x2; xPos += stepX)
+						for(double xPos = x1; xPos <= x2; xPos += stepX)
 						{
 							tempY = m*xPos + b;
 
@@ -307,7 +299,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 					}
 					else
 					{
-						for(double xPos = x1; xPos > x2; xPos -= stepX)
+						for(double xPos = x1; xPos >= x2; xPos -= stepX)
 						{
 							tempY = m*xPos + b;
 
@@ -333,7 +325,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 				{
 					if(y2 > y1)
 					{
-						for(double yPos = y1; yPos < y2; yPos += stepY)
+						for(double yPos = y1; yPos <= y2; yPos += stepY)
 						{
 							tempX = (yPos-b)/m;
 
@@ -355,7 +347,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 					}
 					else
 					{
-						for(double yPos = y1; yPos > y2; yPos -= stepY)
+						for(double yPos = y1; yPos >= y2; yPos -= stepY)
 						{
 							tempX = (yPos-b)/m;
 
@@ -385,7 +377,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 				{
 					if(y2 > y1)
 					{
-						for(double yPos = y1; yPos < y2; yPos += stepY)
+						for(double yPos = y1; yPos <= y2; yPos += stepY)
 						{
 							if(q_params.skip_same)
 							{
@@ -405,7 +397,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 					}
 					else
 					{
-						for(double yPos = y1; yPos > y2; yPos -= stepY)
+						for(double yPos = y1; yPos >= y2; yPos -= stepY)
 						{
 							if(q_params.skip_same)
 							{

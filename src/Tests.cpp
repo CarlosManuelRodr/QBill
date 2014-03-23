@@ -4,6 +4,7 @@
 #include "CsvParser.h"
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
 // Testing aux.
@@ -19,8 +20,8 @@ double Square_Diag_Test_Sin(double x, double unused1)
 }
 double Square_Test_Linear(double x, double unused1)
 {
-	while((x - 2.0) > 0.0) { x -= 2.0; }
-	if(x < 1.0) return 1.0;
+	while((x - 4.0) > 0.0) { x -= 4.0; }
+	if(x < 2.0) return 1.0;
 	else return -1.0;
 }
 vector<Coord> Generate_Test_Coords(Coord first, Coord last, int iterations)
@@ -171,6 +172,32 @@ void Test_Grid()
 		cout << "Test Grid: Compound assignment operator += OK" << endl;
 	else
 		cout << "Test Grid: Compound assignment operator += FAILED" << endl;
+
+	// Test grid coordinates.
+	Grid gd = Grid(400);
+	double grid_element_size = 2.0/400.0;
+	double delta = grid_element_size/10.0;
+	double x1 = -1.0;
+	double x2 = 1.0;
+	double stepX = abs(x2-x1)*delta;
+	Coord cd, prev;
+	int repeat = 0;
+	vector<int> coord_repeat;
+
+	for(double xPos = x1; xPos <= x2; xPos += stepX)
+	{
+		cd = gd.GetCoord(xPos, 0.0);
+		if(cd == prev || xPos == x1) { repeat++; }
+		else
+		{
+			coord_repeat.push_back(repeat);
+			repeat = 1;
+		}
+		prev = cd;
+	}
+	int min = *min_element(coord_repeat.begin(), coord_repeat.end());
+	int max = *max_element(coord_repeat.begin(), coord_repeat.end());
+	cout << "Test Grid: Coordinates repeated " << max-min << endl;
 }
 void Test_Quantum(QBillParams q_params, BillParams params)
 {
@@ -180,10 +207,8 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 	test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), params.iter);
 	q_params.disturbance = &Square_Test_Sin;
 	q_params.real_collision = false;
-	//q_params.skip_same = false;
 	q_params.log = false;
 	Grid gd = Quantum_Bill(test, q_params, NULL);
-	if(q_params.normalize) { gd.AssignNorm(); }
 	bool h_test = Test_Quantum_Grid(gd);
 	double h_test_error = Test_Quantum_Grid_Error(gd);
 
@@ -207,7 +232,6 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 	test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 1.0), params.iter);
 	q_params.disturbance = &Square_Diag_Test_Sin;
 	gd = Quantum_Bill(test, q_params, NULL);
-	if(q_params.normalize) { gd.AssignNorm(); }
 	bool dne_test = Test_Quantum_Grid(gd);
 	double dne_test_error = Test_Quantum_Grid_Error(gd);
 
@@ -220,7 +244,6 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 	test.intersections = Generate_Test_Coords(Coord(0.0, 1.0), Coord(1.0, 0.0), params.iter);
 	q_params.disturbance = &Square_Diag_Test_Sin;
 	gd = Quantum_Bill(test, q_params, NULL);
-	if(q_params.normalize) { gd.AssignNorm(); }
 	bool dse_test = Test_Quantum_Grid(gd);
 	double dse_test_error = Test_Quantum_Grid_Error(gd);
 
@@ -233,7 +256,6 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 	q_params.disturbance = &Square_Test_Sin;
 	test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0000001, 1.0), params.iter);
 	gd = Quantum_Bill(test, q_params, NULL);
-	if(q_params.normalize) { gd.AssignNorm(); }
 	bool hs_test = Test_Quantum_Grid(gd);
 	double hs_test_error = Test_Quantum_Grid_Error(gd);
 
@@ -244,9 +266,8 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 
 	// Linear test.
 	q_params.disturbance = &Square_Test_Linear;
-	test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 0.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), params.iter);
 	gd = Quantum_Bill(test, q_params, NULL);
-	if(q_params.normalize) { gd.AssignNorm(); }
 	bool l_test = Test_Quantum_Grid(gd);
 	double l_test_error = Test_Quantum_Grid_Error(gd);
 
@@ -272,7 +293,6 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		{
 			test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			if(q_params.normalize) { gd.AssignNorm(); }
 			h_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
@@ -293,7 +313,6 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		{
 			test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0, 1.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			if(q_params.normalize) { gd.AssignNorm(); }
 			v_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
@@ -315,7 +334,6 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		{
 			test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 1.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			if(q_params.normalize) { gd.AssignNorm(); }
 			dne_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
@@ -337,7 +355,6 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		{
 			test.intersections = Generate_Test_Coords(Coord(0.0, 1.0), Coord(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			if(q_params.normalize) { gd.AssignNorm(); }
 			dse_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
@@ -357,9 +374,8 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 	{
 		if(i % 2 != 0)
 		{
-			test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 0.0), i);
+			test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			if(q_params.normalize) { gd.AssignNorm(); }
 			l_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}

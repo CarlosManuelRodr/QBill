@@ -11,6 +11,12 @@ Coord::Coord(double x, double y)
 	m_x = x;
 	m_y = y;
 }
+Coord& Coord::operator=(const Coord& other)
+{
+	m_x = other.m_x;
+	m_y = other.m_y;
+	return *this;
+}
 bool Coord::operator==(const Coord& other)
 {
     if(other.m_x == m_x && other.m_y == m_y) return true;
