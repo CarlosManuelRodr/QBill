@@ -41,7 +41,7 @@ vector<Coord> Generate_Test_Coords(Coord first, Coord last, int iterations)
 bool Test_Quantum_Grid(Grid &gd)
 {
 	bool test_ok = true;
-	double max_error = 0.01;
+	double max_error = 0.05;
 	for(unsigned int i=0; i<gd.GetSize(); i++)
 	{
 		for(unsigned j=0; j<gd.GetSize(); j++)
@@ -63,7 +63,7 @@ double Test_Quantum_Grid_Error(Grid &gd)
 	{
 		for(unsigned j=0; j<gd.GetSize(); j++)
 		{
-			if(gd[i][j].m_amplitude != 0.0)
+			if(gd[i][j].m_assignations != 0.0)
 			{
 				active_elements++;
 				values += abs(gd[i][j].m_amplitude);
@@ -303,7 +303,7 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		cw.Push(h_error_list[i].m_x, h_error_list[i].m_y);
 	}
 	cw.Close();
-	cout << "Horizontal test error saved to: Log/error_horizontal.csv" << endl;
+	cout << "Test Quantum Error: Horizontal test error saved to: Log/error_horizontal.csv" << endl;
 
 	// Vertical test.
 	vector<Coord> v_error_list;
@@ -323,7 +323,7 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		cw.Push(v_error_list[i].m_x, v_error_list[i].m_y);
 	}
 	cw.Close();
-	cout << "Vertical test error saved to: Log/error_vertical.csv" << endl;
+	cout << "Test Quantum Error: Vertical test error saved to: Log/error_vertical.csv" << endl;
 
 	// Diagonal north-east test.
 	q_params.disturbance = &Square_Diag_Test_Sin;
@@ -344,7 +344,7 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		cw.Push(dne_error_list[i].m_x, dne_error_list[i].m_y);
 	}
 	cw.Close();
-	cout << "Diagonal NE test error saved to: Log/error_diag_ne.csv" << endl;
+	cout << "Test Quantum Error: Diagonal NE test error saved to: Log/error_diag_ne.csv" << endl;
 
 	// Diagonal south-east test.
 	q_params.disturbance = &Square_Diag_Test_Sin;
@@ -365,7 +365,7 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		cw.Push(dse_error_list[i].m_x, dse_error_list[i].m_y);
 	}
 	cw.Close();
-	cout << "Diagonal SE test error saved to: Log/error_diag_se.csv" << endl;
+	cout << "Test Quantum Error: Diagonal SE test error saved to: Log/error_diag_se.csv" << endl;
 
 	// Linear test.
 	q_params.disturbance = &Square_Test_Linear;
@@ -386,5 +386,5 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 		cw.Push(l_error_list[i].m_x, l_error_list[i].m_y);
 	}
 	cw.Close();
-	cout << "Linear test error saved to: Log/error_diag_l.csv" << endl;
+	cout << "Test Quantum Error: Linear test error saved to: Log/error_diag_l.csv" << endl;
 }

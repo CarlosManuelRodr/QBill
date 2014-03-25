@@ -273,7 +273,7 @@ Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out)
 				while((cuad - 1.57079) > 0) cuad -= 1.57079;
 
 				// Slope < 45 degrees
-				if(cuad < 0.78539)
+				if(cuad <= 0.78539)
 				{
 					if(x2 > x1)
 					{
