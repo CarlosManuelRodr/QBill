@@ -50,7 +50,7 @@ Color CalcColor(unsigned int colorNum)
 	return Color(r,g,b);
 }
 
-void BMPPlot(const vector<Coord> data, const string filename)
+void BMPPlot(const vector< Coord<double> > data, const string filename)
 {
 	vector<double> dblVector;
 	for(unsigned int i=0; i<data.size(); i++)

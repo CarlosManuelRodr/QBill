@@ -32,7 +32,7 @@ public:
 
 	int colisiones;
 	int salida;
-	std::vector<Coord> intersections;
+	std::vector< Coord<double> > intersections;
 	double total_distance;
 };
 

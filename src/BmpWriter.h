@@ -2,12 +2,12 @@
 * @file BmpWriter.h
 * @brief A class to write Bmp files.
 *
-* I made this implementation to avoid problems with memory on insanely large files.
+* I made this implementation to avoid memory allocation problems on insanely large files.
 * @copyright GNU Public License v3
 * @author Carlos Manuel Rodriguez y Martinez
 * @date 7/18/2012
 *
-* This file is part of CMRMLib: https://github.com/cmrm/CMRMLib
+* This file is part of QBill: https://github.com/cmrm/QBill
 */
 
 #pragma once
@@ -15,7 +15,7 @@
 #define __bmpWriter
 
 #include <fstream>
-#include "BinaryOps.h"
+#include "Types.h"
 
 struct BMPHeader
 {

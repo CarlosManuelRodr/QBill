@@ -6,7 +6,6 @@
 #include "muParserX/mpParser.h"
 #include "ConfigParser.h"
 #include "CsvParser.h"
-#include "Matrix.h"
 #include "Plotter.h"
 #include "System.h"
 #include "Tests.h"
@@ -154,9 +153,10 @@ int main(int argc, char *argv[])
         BillParams param;
         string perturbation, sim_mode;
         bool Log, realistic_collision, skip_same, normalize;
-        bool default_directories;
+        bool default_directories, bresenham_algorithm;
 
         cp.StringArgToVar(sim_mode, "Sim_Mode", "Linear");
+        cp.BoolArgToVar(bresenham_algorithm, "Bresenham_Algorithm", false);
         cp.DblArgToVar(param.delta, "Delta", 10.0);
         cp.DblArgToVar(param.gridElementSize, "Grid_Element_Size", 0.005);
         cp.BoolArgToVar(param.closed, "Closed", true);
@@ -257,6 +257,7 @@ int main(int argc, char *argv[])
 		q_params.real_collision = realistic_collision;
 		q_params.skip_same = skip_same;
 		q_params.normalize = normalize;
+		q_params.bresenham = bresenham_algorithm;
 		q_params.log = Log;
 
 		// Tests.
@@ -286,7 +287,7 @@ int main(int argc, char *argv[])
         int i = 0, steps = (int)((max_phi-min_phi)/phi_step);
         Print(param.W, "Simulating...");
 
-        if(sim_mode == "Linear")
+        if(sim_mode == "Semiclassic")
         {
 			for(double ph = min_phi; ph <= max_phi; ph += phi_step)
 			{
@@ -384,7 +385,7 @@ int main(int argc, char *argv[])
         	Print(param.W, "Unavailable simulation mode: " + sim_mode);
         }
 
-        if(Log) file.close();
+        if(Log) { file.close(); }
         Print(param.W, "Done.");
     }
     else

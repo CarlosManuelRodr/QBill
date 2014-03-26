@@ -14,7 +14,6 @@ CPP_SRCS += \
 /home/carlos/Documentos/Tesis/Codigo/QBill/src/StringFuncs.cpp \
 /home/carlos/Documentos/Tesis/Codigo/QBill/src/System.cpp \
 /home/carlos/Documentos/Tesis/Codigo/QBill/src/Tests.cpp \
-/home/carlos/Documentos/Tesis/Codigo/QBill/src/Types.cpp \
 /home/carlos/Documentos/Tesis/Codigo/QBill/src/main.cpp 
 
 OBJS += \
@@ -28,7 +27,6 @@ OBJS += \
 ./src/StringFuncs.o \
 ./src/System.o \
 ./src/Tests.o \
-./src/Types.o \
 ./src/main.o 
 
 CPP_DEPS += \
@@ -42,7 +40,6 @@ CPP_DEPS += \
 ./src/StringFuncs.d \
 ./src/System.d \
 ./src/Tests.d \
-./src/Types.d \
 ./src/main.d 
 
 
@@ -111,13 +108,6 @@ src/System.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/System.cpp
 	@echo ' '
 
 src/Tests.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/Tests.cpp
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C++ Compiler'
-	g++ -DUNICODE -D_UNICODE -O0 -g3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-src/Types.o: /home/carlos/Documentos/Tesis/Codigo/QBill/src/Types.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -DUNICODE -D_UNICODE -O0 -g3 -w -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"

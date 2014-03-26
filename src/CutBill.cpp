@@ -54,7 +54,7 @@ Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
 		outf <<"# "<<fixed<<phi<<","<<gammax<<","<<delta<<","<<R<<","<<b<<","<<W<<endl;
 		outf<<fixed<<x<<","<<y<<endl;
 	}
-	res.intersections.push_back(Coord(x,y));
+	res.intersections.push_back(Coord<double>(x,y));
 
 	res.colisiones = 0;
 	double const _large = 1e99;
@@ -183,7 +183,7 @@ Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
 				outf<<fixed<<x<<","<<y<<","<<s<<","<<p<<endl;
 				outfs<<s<<endl;
 			}
-			res.intersections.push_back(Coord(x,y));
+			res.intersections.push_back(Coord<double>(x,y));
 			res.colisiones += 1;
 		}
 		else
@@ -242,7 +242,7 @@ Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
 				outf<<fixed<<x<<","<<y<<","<<s<<","<<p<<endl;
 				outfs<<s<<endl;
 			}
-			res.intersections.push_back(Coord(x,y));
+			res.intersections.push_back(Coord<double>(x,y));
 			res.colisiones += 1;
 		}
 

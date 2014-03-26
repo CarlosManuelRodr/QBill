@@ -24,7 +24,7 @@ struct QBillParams
 	double min_phi, max_phi, phi_step;
 	double (*disturbance)(double, double);
 	bool real_collision, skip_same, normalize;
-	bool log;
+	bool bresenham, log;
 };
 
 
@@ -70,7 +70,8 @@ public:
 
     GridElement** GetGrid();
     GridElement& GetGridElement(const double x, const double y);
-    Coord GetCoord(const double x, const double y);
+    Coord<int> GetGridCoord(const double x, const double y);
+    Coord<double> GetBilliardCoord(const int x, const int y);
     int GetSize();
 
     Grid Normalize(double max_value = 1);		///< Normalize all elements of the grid to values ranging from 0 to max_value.

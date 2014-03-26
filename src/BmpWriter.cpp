@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include "BmpWriter.h"
+#include "BinaryOps.h"
 using namespace std;
 
 BMPPixel::BMPPixel()

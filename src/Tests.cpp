@@ -24,9 +24,9 @@ double Square_Test_Linear(double x, double unused1)
 	if(x < 2.0) return 1.0;
 	else return -1.0;
 }
-vector<Coord> Generate_Test_Coords(Coord first, Coord last, int iterations)
+vector< Coord<double> > Generate_Test_Coords(Coord<double> first, Coord<double> last, int iterations)
 {
-	vector<Coord> out;
+	vector< Coord<double> > out;
 	if(iterations % 2 == 0) iterations++;
 
 	for(unsigned i=0; i<iterations; i++)
@@ -180,13 +180,13 @@ void Test_Grid()
 	double x1 = -1.0;
 	double x2 = 1.0;
 	double stepX = abs(x2-x1)*delta;
-	Coord cd, prev;
+	Coord<int> cd, prev;
 	int repeat = 0;
 	vector<int> coord_repeat;
 
 	for(double xPos = x1; xPos <= x2; xPos += stepX)
 	{
-		cd = gd.GetCoord(xPos, 0.0);
+		cd = gd.GetGridCoord(xPos, 0.0);
 		if(cd == prev || xPos == x1) { repeat++; }
 		else
 		{
@@ -204,7 +204,7 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 	Simres test;
 
 	// Horizontal test.
-	test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord<double>(-1.0, 0.0), Coord<double>(1.0, 0.0), params.iter);
 	q_params.disturbance = &Square_Test_Sin;
 	q_params.real_collision = false;
 	q_params.log = false;
@@ -218,7 +218,7 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 		cout << "Test Quantum: Horizontal test FAILED with mean error: " << num_to_string(h_test_error) << endl;
 
 	// Vertical test.
-	test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0, 1.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord<double>(0.0, -1.0), Coord<double>(0.0, 1.0), params.iter);
 	gd = Quantum_Bill(test, q_params, NULL);
 	bool v_test = Test_Quantum_Grid(gd);
 	double v_test_error = Test_Quantum_Grid_Error(gd);
@@ -229,7 +229,7 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 		cout << "Test Quantum: Vertical test FAILED with mean error: " << num_to_string(v_test_error) << endl;
 
 	// Diagonal north-east test.
-	test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 1.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord<double>(0.0, 0.0), Coord<double>(1.0, 1.0), params.iter);
 	q_params.disturbance = &Square_Diag_Test_Sin;
 	gd = Quantum_Bill(test, q_params, NULL);
 	bool dne_test = Test_Quantum_Grid(gd);
@@ -241,7 +241,7 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 		cout << "Test Quantum: Diagonal north-east test FAILED with mean error: " << num_to_string(dne_test_error) << endl;
 
 	// Diagonal south-east test.
-	test.intersections = Generate_Test_Coords(Coord(0.0, 1.0), Coord(1.0, 0.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord<double>(0.0, 1.0), Coord<double>(1.0, 0.0), params.iter);
 	q_params.disturbance = &Square_Diag_Test_Sin;
 	gd = Quantum_Bill(test, q_params, NULL);
 	bool dse_test = Test_Quantum_Grid(gd);
@@ -254,7 +254,7 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 
 	// High slope.
 	q_params.disturbance = &Square_Test_Sin;
-	test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0000001, 1.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord<double>(0.0, -1.0), Coord<double>(0.0000001, 1.0), params.iter);
 	gd = Quantum_Bill(test, q_params, NULL);
 	bool hs_test = Test_Quantum_Grid(gd);
 	double hs_test_error = Test_Quantum_Grid_Error(gd);
@@ -266,7 +266,7 @@ void Test_Quantum(QBillParams q_params, BillParams params)
 
 	// Linear test.
 	q_params.disturbance = &Square_Test_Linear;
-	test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), params.iter);
+	test.intersections = Generate_Test_Coords(Coord<double>(-1.0, 0.0), Coord<double>(1.0, 0.0), params.iter);
 	gd = Quantum_Bill(test, q_params, NULL);
 	bool l_test = Test_Quantum_Grid(gd);
 	double l_test_error = Test_Quantum_Grid_Error(gd);
@@ -285,15 +285,15 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 	q_params.log = false;
 
 	// Horizontal test.
-	vector<Coord> h_error_list;
+	vector< Coord<double> > h_error_list;
 	for(unsigned int i=0; i<=params.iter; i++)
 	{
 		// Check if testable.
 		if(i % 2 != 0)
 		{
-			test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), i);
+			test.intersections = Generate_Test_Coords(Coord<double>(-1.0, 0.0), Coord<double>(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			h_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+			h_error_list.push_back(Coord<double>(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
 
@@ -306,14 +306,14 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 	cout << "Test Quantum Error: Horizontal test error saved to: Log/error_horizontal.csv" << endl;
 
 	// Vertical test.
-	vector<Coord> v_error_list;
+	vector< Coord<double> > v_error_list;
 	for(unsigned int i=0; i<=params.iter; i++)
 	{
 		if(i % 2 != 0)
 		{
-			test.intersections = Generate_Test_Coords(Coord(0.0, -1.0), Coord(0.0, 1.0), i);
+			test.intersections = Generate_Test_Coords(Coord<double>(0.0, -1.0), Coord<double>(0.0, 1.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			v_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+			v_error_list.push_back(Coord<double>(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
 
@@ -327,14 +327,14 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 
 	// Diagonal north-east test.
 	q_params.disturbance = &Square_Diag_Test_Sin;
-	vector<Coord> dne_error_list;
+	vector< Coord<double> > dne_error_list;
 	for(unsigned int i=0; i<=params.iter; i++)
 	{
 		if(i % 2 != 0)
 		{
-			test.intersections = Generate_Test_Coords(Coord(0.0, 0.0), Coord(1.0, 1.0), i);
+			test.intersections = Generate_Test_Coords(Coord<double>(0.0, 0.0), Coord<double>(1.0, 1.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			dne_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+			dne_error_list.push_back(Coord<double>(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
 
@@ -348,14 +348,14 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 
 	// Diagonal south-east test.
 	q_params.disturbance = &Square_Diag_Test_Sin;
-	vector<Coord> dse_error_list;
+	vector< Coord<double> > dse_error_list;
 	for(unsigned int i=0; i<=params.iter; i++)
 	{
 		if(i % 2 != 0)
 		{
-			test.intersections = Generate_Test_Coords(Coord(0.0, 1.0), Coord(1.0, 0.0), i);
+			test.intersections = Generate_Test_Coords(Coord<double>(0.0, 1.0), Coord<double>(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			dse_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+			dse_error_list.push_back(Coord<double>(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
 
@@ -369,14 +369,14 @@ void Plot_Quantum_Error(QBillParams q_params, BillParams params)
 
 	// Linear test.
 	q_params.disturbance = &Square_Test_Linear;
-	vector<Coord> l_error_list;
+	vector< Coord<double> > l_error_list;
 	for(unsigned int i=0; i<=params.iter; i++)
 	{
 		if(i % 2 != 0)
 		{
-			test.intersections = Generate_Test_Coords(Coord(-1.0, 0.0), Coord(1.0, 0.0), i);
+			test.intersections = Generate_Test_Coords(Coord<double>(-1.0, 0.0), Coord<double>(1.0, 0.0), i);
 			Grid gd = Quantum_Bill(test, q_params, NULL);
-			l_error_list.push_back(Coord(i, Test_Quantum_Grid_Error(gd)));
+			l_error_list.push_back(Coord<double>(i, Test_Quantum_Grid_Error(gd)));
 		}
 	}
 

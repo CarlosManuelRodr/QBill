@@ -13,7 +13,6 @@
 #define _PLOTTER
 
 #include "BmpWriter.h"
-#include "Matrix.h"
 #include "Types.h"
 #include <vector>
 #include <string>
@@ -25,7 +24,7 @@ Color CalcColor(unsigned int colorNum);
 
 // Functions.
 void BMPPlot(const std::vector<double> data, const std::string filename);
-void BMPPlot(const std::vector<Coord> data, const std::string filename);
+void BMPPlot(const std::vector< Coord<double> > data, const std::string filename);
 void BMPPlot(Matrix<Color> &data, const std::string filename);
 
 #endif
