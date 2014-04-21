@@ -6,7 +6,7 @@
 * @author Carlos Manuel Rodriguez y Martinez
 * @date 8/13/2013
 *
-* This file is part of CMRMLib: https://github.com/cmrm/CMRMLib
+* This file is part of QBill: https://github.com/cmrm/QBill
 */
 
 #ifndef _PLOTTER

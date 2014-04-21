@@ -1,0 +1,144 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      5267,        135]
+NotebookOptionsPosition[      5029,        122]
+NotebookOutlinePosition[      5367,        137]
+CellTagsIndexPosition[      5324,        134]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetOptions", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"ListDensityPlot", ",", "ParametricPlot"}], "}"}], ",", 
+    RowBox[{"BaseStyle", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"FontSize", "\[Rule]", "14"}], "}"}]}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"range", " ", "=", " ", "Automatic"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Data", " ", "=", " ", 
+   RowBox[{
+   "Import", "[", 
+    "\"\</home/carlos/Documentos/Tesis/Codigo/QBill/Projects/Eclipse/W=0.6/\
+out/csv/csv_0.54.csv\>\"", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dMax", " ", "=", " ", 
+   RowBox[{"Max", "[", 
+    RowBox[{"Data", "[", 
+     RowBox[{"[", 
+      RowBox[{"All", ",", "3"}], "]"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"For", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"j", "=", "1"}], ";", " ", 
+     RowBox[{"scaledData", "=", 
+      RowBox[{"{", "}"}]}]}], ",", 
+    RowBox[{"j", "<", 
+     RowBox[{"Length", "[", "Data", "]"}]}], ",", 
+    RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"scaledData", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Data", "[", 
+          RowBox[{"[", "j", "]"}], "]"}], "[", 
+         RowBox[{"[", "1", "]"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{"Data", "[", 
+          RowBox[{"[", "j", "]"}], "]"}], "[", 
+         RowBox[{"[", "2", "]"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Data", "[", 
+           RowBox[{"[", "j", "]"}], "]"}], "[", 
+          RowBox[{"[", "3", "]"}], "]"}], "^", "2"}]}], "}"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"plot", " ", "=", " ", 
+  RowBox[{"Show", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ListDensityPlot", "[", 
+     RowBox[{"scaledData", ",", "\[IndentingNewLine]", 
+      RowBox[{"PlotRange", "\[Rule]", "range"}], ",", " ", 
+      "\[IndentingNewLine]", 
+      RowBox[{"FrameLabel", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Style", "[", 
+          RowBox[{"\"\<x\>\"", ",", " ", "14"}], "]"}], ",", 
+         RowBox[{"Style", "[", 
+          RowBox[{"\"\<y\>\"", ",", " ", "14"}], "]"}]}], "}"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ColorFunction", "\[Rule]", "\"\<Rainbow\>\""}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PlotLegends", "\[Rule]", "Automatic"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Mesh", "\[Rule]", "Automatic"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"PlotLabel", "\[Rule]", 
+       RowBox[{"Style", "[", 
+        RowBox[{"\"\<\[Phi]=0.54\>\"", ",", "14"}], "]"}]}]}], 
+     "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"ImageSize", "\[Rule]", "300"}]}], "\[IndentingNewLine]", 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.6029573257085657`*^9, 3.6029573733130817`*^9}, {
+   3.602957607629591*^9, 3.60295760773281*^9}, {3.6029576833720837`*^9, 
+   3.602957689397476*^9}, {3.6041077885627527`*^9, 3.604107810282341*^9}, {
+   3.604107904814636*^9, 3.60410794775204*^9}, {3.604107996164344*^9, 
+   3.604108003472563*^9}, {3.604108035344882*^9, 3.6041080962562237`*^9}, {
+   3.604108126982633*^9, 3.604108131143471*^9}, {3.604108178619657*^9, 
+   3.604108178882374*^9}, {3.6041082583019323`*^9, 3.604108263211553*^9}, {
+   3.604108299523555*^9, 3.604108304152259*^9}, {3.604108544825427*^9, 
+   3.604108546616296*^9}, {3.604108578596415*^9, 3.604108579054057*^9}, {
+   3.606591435537655*^9, 3.606591465906435*^9}, {3.606592129319014*^9, 
+   3.606592185445472*^9}, {3.6065922279612913`*^9, 3.606592239503231*^9}, {
+   3.606592723080427*^9, 3.606592723159306*^9}, {3.606593341873506*^9, 
+   3.606593344880287*^9}, {3.606593411845845*^9, 3.606593414739676*^9}, {
+   3.6065939208822327`*^9, 3.606593933562099*^9}, 3.606594215363122*^9, {
+   3.6065942462541933`*^9, 3.6065942468668633`*^9}, {3.606594323824834*^9, 
+   3.606594330061516*^9}, 3.60659451783383*^9, 3.606595705206924*^9, {
+   3.6065957746588593`*^9, 3.6065957778361387`*^9}, 3.606673358821925*^9, {
+   3.606673685181192*^9, 3.606673685664806*^9}, {3.606673838525299*^9, 
+   3.606673860567646*^9}, {3.606675223449348*^9, 3.606675262560178*^9}, {
+   3.606675300659176*^9, 3.606675301850194*^9}, 3.606762439882593*^9, {
+   3.606762487942151*^9, 3.6067624880115747`*^9}, {3.6070473935961523`*^9, 
+   3.607047393936364*^9}}]
+},
+WindowSize->{928, 745},
+WindowMargins->{{274, Automatic}, {Automatic, -8}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 4468, 100, 392, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -31,33 +31,33 @@ string format_inside_quotes(const string in)
 // System calls.
 void mkdir(const string arg)
 {
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     string exec = string("mkdir -p \"") + arg + "\"";
     int r = system(exec.c_str()); assert(r >= 0);
-#elif _WIN32
-	string exec = string("mkdir \"") + format_path(arg) + "\"";
-	int r = system(exec.c_str()); assert(r >= 0);
+#elif defined(_WIN32)
+    string exec = string("mkdir \"") + format_path(arg) + "\"";
+    int r = system(exec.c_str()); assert(r >= 0);
 #endif
 }
 void rm(const string arg)
 {
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     string exec = string("rm -rf ") + format_inside_quotes(arg);
     int r = system(exec.c_str()); assert(r >= 0);
-#elif _WIN32
+#elif defined(_WIN32)
     std::ifstream infile(arg);
     if(infile.good())
     {
-		infile.close();
-		string exec = string("del ") + format_path(format_inside_quotes(arg));
-		int r = system(exec.c_str()); assert(r >= 0);
+        infile.close();
+        string exec = string("del ") + format_path(format_inside_quotes(arg));
+        int r = system(exec.c_str()); assert(r >= 0);
     }
 #endif
 }
 bool directory_exist( string dir )
 {
-	const char* pzPath = dir.c_str();
-#ifdef __linux__
+    const char* pzPath = dir.c_str();
+#if defined(__linux__) || defined(__APPLE__)
     if ( pzPath == NULL) return false;
 
     DIR *pDir;
@@ -72,7 +72,7 @@ bool directory_exist( string dir )
     }
 
     return bExists;
-#elif _WIN32
+#elif defined(_WIN32)
     DWORD ftyp = GetFileAttributesA(pzPath);
     if (ftyp == INVALID_FILE_ATTRIBUTES)
     return false;
@@ -90,35 +90,35 @@ bool file_exist(const char *fileName)
 }
 void Setup_Directories(double omega)
 {
-	string temp;
-	string omega_folder = string("W=") + num_to_string(omega);
-	if(directory_exist(omega_folder))
-	{
-		temp = omega_folder + "/out/colorPlots";
-		if(directory_exist(temp)) { rm(temp); }
+    string temp;
+    string omega_folder = string("W=") + num_to_string(omega);
+    if(directory_exist(omega_folder))
+    {
+        temp = omega_folder + "/out/colorPlots";
+        if(directory_exist(temp)) { rm(temp); }
 
-		temp = omega_folder + "/out/nModesPlots";
-		if(directory_exist(temp)) { rm(temp); }
+        temp = omega_folder + "/out/nModesPlots";
+        if(directory_exist(temp)) { rm(temp); }
 
-		temp = omega_folder + "/out/csv";
-		if(directory_exist(temp)) { rm(temp); }
+        temp = omega_folder + "/out/csv";
+        if(directory_exist(temp)) { rm(temp); }
 
-		temp = omega_folder + "/out/plots3d";
-		if(directory_exist(temp)) { rm(temp); }
+        temp = omega_folder + "/out/plots3d";
+        if(directory_exist(temp)) { rm(temp); }
 
-		mkdir(omega_folder + "/out/colorPlots");
-		mkdir(omega_folder + "/out/nModesPlots");
-		mkdir(omega_folder + "/out/csv");
-		mkdir(omega_folder + "/out/plots3d");
-	}
-	else
-	{
-		mkdir(omega_folder);
-		mkdir(omega_folder + "/out/colorPlots");
-		mkdir(omega_folder + "/out/nModesPlots");
-		mkdir(omega_folder + "/out/csv");
-		mkdir(omega_folder + "/out/plots3d");
-	}
+        mkdir(omega_folder + "/out/colorPlots");
+        mkdir(omega_folder + "/out/nModesPlots");
+        mkdir(omega_folder + "/out/csv");
+        mkdir(omega_folder + "/out/plots3d");
+    }
+    else
+    {
+        mkdir(omega_folder);
+        mkdir(omega_folder + "/out/colorPlots");
+        mkdir(omega_folder + "/out/nModesPlots");
+        mkdir(omega_folder + "/out/csv");
+        mkdir(omega_folder + "/out/plots3d");
+    }
 }
 
 
@@ -134,16 +134,24 @@ const string GetCurrentDateTime()
     return buf;
 }
 
-void Print(double W, string in)
+void Print(string in)
 {
-	if(!silent) cout << "[W=" << num_to_string(W) << "] " << in << endl;
+    if(!silent)
+    {
+        time_t     now = time(0);
+        struct tm  tstruct;
+        char        buf[80];
+        tstruct = *localtime(&now);
+        strftime(buf, sizeof(buf), "%X", &tstruct);
+        cout << "[" << buf << "] " << in << endl;
+    }
 }
 
 // Process has done i out of n rounds,
 // and we want a bar of width w and resolution r.
 void LoadBar(int x, int n, int r, int w, double phi)
 {
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     // Only update r times.
     if ( x % (n/r) != 0 ) return;
 
@@ -165,15 +173,15 @@ void LoadBar(int x, int n, int r, int w, double phi)
     // previous line and clear it.
     if(phi != numeric_limits<double>::infinity())
     {
-    	cout << "] Phi: " << phi;
+        cout << "] Phi: " << phi;
     }
     else
     {
-    	cout << "]";
+        cout << "]";
     }
     printf("\n\033[F\033[J");
-#else
-	system("cls");
-	cout << 100*(x/(float)n) << " %   Phi: " << phi << endl;
+#elif defined(_WIN32)
+    system("cls");
+    cout << 100*(x/(float)n) << " %   Phi: " << phi << endl;
 #endif
 }

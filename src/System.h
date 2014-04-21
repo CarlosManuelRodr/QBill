@@ -18,7 +18,7 @@
 extern bool silent;
 
 const std::string GetCurrentDateTime();
-void Print(double W, std::string in);
+void Print(std::string in);
 void LoadBar(int x, int n, int r, int w, double phi);
 void Setup_Directories(double omega);
 

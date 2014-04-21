@@ -32,13 +32,9 @@ For[i=1, i<=Length[csvFiles], i++,
 	Data = Import[csvFiles[[i]]];
 
 	scaledData = {};
-	If[$ScriptCommandLine[[3]] == "True",
-		dMax = Max[Data[[All, 3]]];
-		For[j = 1, j < Length[Data], j++,
-			AppendTo[scaledData, {Data[[j]][[1]], Data[[j]][[2]], Data[[j]][[3]]/dMax}]
-		];,
-
-		scaledData = Data;
+	dMax = Max[Data[[All, 3]]];
+	For[j = 1, j < Length[Data], j++,
+		AppendTo[scaledData, {Data[[j]][[1]], Data[[j]][[2]], Data[[j]][[3]]/dMax}]
 	];
 
 	label = "\[Phi] = " <> ToString[phis[[i]]];

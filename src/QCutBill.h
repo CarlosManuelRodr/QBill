@@ -20,11 +20,11 @@
 
 struct QBillParams
 {
-	unsigned int grid_size;
-	double min_phi, max_phi, phi_step;
-	double (*disturbance)(double, double);
-	bool real_collision, skip_same, normalize;
-	bool bresenham, log;
+    unsigned int grid_size;
+    double min_phi, max_phi, phi_step;
+    double (*disturbance)(double, double);
+    bool real_collision, skip_same, normalize;
+    bool bresenham, log;
 };
 
 
@@ -36,7 +36,7 @@ struct QBillParams
 class GridElement
 {
 public:
-	double m_x, m_y;
+    double m_x, m_y;
     double m_amplitude;
     double m_time;
     int m_assignations;
@@ -56,10 +56,10 @@ public:
 class Grid
 {
     GridElement** m_grid;
-    double m_epsilon;		///< Size of the grid element.
-    double m_minx, m_maxx, m_miny, m_maxy;		///< Coordinates of the grid.
-    double m_xfactor, m_yfactor;		///< Conversion factors: Coordinates <==> Grid element.
-    unsigned int m_size;		///< Size of the grid. Number of elements in a row or column.
+    double m_epsilon;                          ///< Size of the grid element.
+    double m_minx, m_maxx, m_miny, m_maxy;     ///< Coordinates of the grid.
+    double m_xfactor, m_yfactor;               ///< Conversion factors: Coordinates <==> Grid element.
+    unsigned int m_size;                       ///< Size of the grid. Number of elements in a row or column.
 
 public:
     Grid(const int size);
@@ -74,8 +74,8 @@ public:
     Coord<double> GetBilliardCoord(const int x, const int y);
     int GetSize();
 
-    Grid Normalize(double max_value = 1);		///< Normalize all elements of the grid to values ranging from 0 to max_value.
-    Grid Absolute();		///< Return a grid with no negatives.
+    Grid Normalize(double max_value = 1);        ///< Normalize all elements of the grid to values ranging from 0 to max_value.
+    Grid Absolute();                             ///< Return a grid with no negatives.
 
     Grid& operator=(const Grid& other);
     GridElement*& operator[](const unsigned int pos);
@@ -84,6 +84,5 @@ public:
 };
 
 Grid Quantum_Bill(Simres tray, QBillParams q_params, std::ostream *out = NULL);
-Grid Quantum_Wave(BillParams params, QBillParams q_params, std::ostream *out = NULL);
 
 #endif
