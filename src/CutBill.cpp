@@ -170,10 +170,19 @@ Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
             // Pasar al marco de referencia rotado
             vxp = vx*cos(omega) + vy*sin(omega);
             vyp = -vx*sin(omega) + vy*cos(omega);
+
             // Ángulo de colisión
-            if(vyp > 0) theta = acos(vyp/sqrt(vxp*vxp+vyp*vyp));
-            else theta = acos(-vyp/sqrt(vxp*vxp+vyp*vyp));
-            p = cos(theta);
+            if(vyp > 0)
+            {
+            	theta = acos(vyp/sqrt(vxp*vxp+vyp*vyp));
+            	p = cos(theta);
+            }
+            else
+            {
+            	theta = acos(-vyp/sqrt(vxp*vxp+vyp*vyp));
+            	p = -cos(theta);
+            }
+
             // Invertir velocidad normal a la frontera
             vxp *= -1;
             // Regresar al marco original
@@ -226,10 +235,19 @@ Simres Simulate(bool log=false,bool cerrado=false, bool silent=true)
             vyp = -vx*sin(alpha) + vy*cos(alpha);
             // Invertir velocidad normal a la frontera
             vxp *= -1;
+
             // Ángulo de colisión
-            if(vyp > 0) theta = acos(vyp/sqrt(vxp*vxp+vyp*vyp));
-            else theta = acos(-vyp/sqrt(vxp*vxp+vyp*vyp));
-            p = cos(theta);
+            if(vyp > 0)
+            {
+            	theta = acos(vyp/sqrt(vxp*vxp+vyp*vyp));
+            	p = cos(theta);
+            }
+            else
+            {
+            	theta = acos(-vyp/sqrt(vxp*vxp+vyp*vyp));
+            	p = -cos(theta);
+            }
+
             // Regresar al marco original
             vx = vxp*cos(alpha) - vyp*sin(alpha);
             vy = vxp*sin(alpha) + vyp*cos(alpha);

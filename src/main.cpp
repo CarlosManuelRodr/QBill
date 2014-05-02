@@ -61,7 +61,7 @@ void Write_Csv(Grid& gd, double omega, string phi = "", string prefix = "", bool
         {
             if(skip_empty)
             {
-                if(gd[i][j].m_amplitude != 0)
+                if(gd[i][j].m_assignations != 0)
                     cw.Push(gd[i][j].m_x, gd[i][j].m_y, gd[i][j].m_amplitude);
             }
             else
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
             }
         }
         if(colorOutput || absoluteOutput) { csvOutput = true; }
-        if(sim_mode == "Single" || sim_mode == "MeasureArea" || sim_mode == "Lyapunov")
+        if(sim_mode == "Single" || sim_mode == "MeasureArea" || sim_mode == "Lyapunov" || sim_mode == "Birkhoff")
         {
             default_directories = false;
         }
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
             Grid qb = Quantum_Bill(result, q_params, &file);    // Quantum grid.
 
             // Standard output.
-            if(csvOutput) { Write_Csv(qb, param.W, num_to_string(phi)); }
+            if(csvOutput) { Write_Csv(qb, param.W, num_to_string(phi), "", skipEmpty); }
 
             // Internal color plot.
             if(colorOutput && colorPlotter == "Internal") { Write_Bitmap(qb, param.W, num_to_string(phi)); }
@@ -386,7 +386,7 @@ int main(int argc, char *argv[])
 
             for(double ph = min_phi; ph < max_phi; ph += phi_step)
             {
-                if( (min_phi != max_phi) && !silent) { LoadBar(iter, steps, steps, 30, ph); }
+                if((min_phi != max_phi) && !silent) { LoadBar(iter, steps, steps, 30, ph); }
 
                 if(calculate_first)
                 {
@@ -417,6 +417,19 @@ int main(int argc, char *argv[])
                 iter++;
             }
             cw.Close();
+        }
+        else if(sim_mode == "Birkhoff")
+        {
+        	param.phi = phi;
+        	CsvWriter cw("Birkhoff.csv");
+        	Simres result = Sim_Billiard(param);
+
+        	for(int i=0; i<result.birkhoff.size()-1; i++)
+			{
+        		cw.Push(result.birkhoff[i].m_x, result.birkhoff[i].m_y);
+			}
+
+        	cw.Close();
         }
         else
         {
